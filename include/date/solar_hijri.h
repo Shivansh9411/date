@@ -1,3 +1,5 @@
+#include <stdexcept>
+#include <cstdlib>
 #ifndef SOLAR_HIJRI_H
 #define SOLAR_HIJRI_H
 
@@ -804,7 +806,9 @@ CONSTCD11 solar_hijri::year operator ""_y(unsigned long long y) NOEXCEPT;
 
 // day
 
-CONSTCD11 inline day::day(unsigned d) NOEXCEPT : d_(static_cast<unsigned char>(d)) {}
+CONSTCD11 inline day::day(unsigned d) NOEXCEPT : d_(static_cast<unsigned char>(d)) {
+    
+}
 CONSTCD14 inline day& day::operator++() NOEXCEPT {++d_; return *this;}
 CONSTCD14 inline day day::operator++(int) NOEXCEPT {auto tmp(*this); ++(*this); return tmp;}
 CONSTCD14 inline day& day::operator--() NOEXCEPT {--d_; return *this;}
@@ -900,17 +904,14 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const day& d)
 {
-    date::detail::save_ostream<CharT, Traits> _(os);
-    os.fill('0');
-    os.flags(std::ios::dec | std::ios::right);
-    os.width(2);
-    os << static_cast<unsigned>(d);
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // month
 
-CONSTCD11 inline month::month(unsigned m) NOEXCEPT : m_(static_cast<decltype(m_)>(m)) {}
+CONSTCD11 inline month::month(unsigned m) NOEXCEPT : m_(static_cast<decltype(m_)>(m)) {
+    
+}
 CONSTCD14 inline month& month::operator++() NOEXCEPT {if (++m_ == 13) m_ = 1; return *this;}
 CONSTCD14 inline month month::operator++(int) NOEXCEPT {auto tmp(*this); ++(*this); return tmp;}
 CONSTCD14 inline month& month::operator--() NOEXCEPT {if (--m_ == 0) m_ = 12; return *this;}
@@ -1025,54 +1026,14 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const month& m)
 {
-    switch (static_cast<unsigned>(m))
-    {
-    case 1:
-        os << "Farvardin";
-        break;
-    case 2:
-        os << "Ordibehesht";
-        break;
-    case 3:
-        os << "Khordad";
-        break;
-    case 4:
-        os << "Tir";
-        break;
-    case 5:
-        os << "Mordad";
-        break;
-    case 6:
-        os << "Shahrivar";
-        break;
-    case 7:
-        os << "Mehr";
-        break;
-    case 8:
-        os << "Aban";
-        break;
-    case 9:
-        os << "Azar";
-        break;
-    case 10:
-        os << "Dey";
-        break;
-    case 11:
-        os << "Bahman";
-        break;
-    case 12:
-        os << "Esfand";
-        break;
-    default:
-        os << static_cast<unsigned>(m) << " is not a valid month";
-        break;
-    }
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // year
 
-CONSTCD11 inline year::year(int y) NOEXCEPT : y_(static_cast<decltype(y_)>(y)) {}
+CONSTCD11 inline year::year(int y) NOEXCEPT : y_(static_cast<decltype(y_)>(y)) {
+    
+}
 CONSTCD14 inline year& year::operator++() NOEXCEPT {++y_; return *this;}
 CONSTCD14 inline year year::operator++(int) NOEXCEPT {auto tmp(*this); ++(*this); return tmp;}
 CONSTCD14 inline year& year::operator--() NOEXCEPT {--y_; return *this;}
@@ -1202,12 +1163,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const year& y)
 {
-    date::detail::save_ostream<CharT, Traits> _(os);
-    os.fill('0');
-    os.flags(std::ios::dec | std::ios::internal);
-    os.width(4 + (y < year{0}));
-    os << static_cast<int>(y);
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // weekday
@@ -1225,19 +1181,25 @@ CONSTCD11
 inline
 weekday::weekday(unsigned wd) NOEXCEPT
     : wd_(static_cast<decltype(wd_)>(wd != 7 ? wd : 0))
-    {}
+    {
+    
+}
 
 CONSTCD11
 inline
 weekday::weekday(const sys_days& dp) NOEXCEPT
     : wd_(weekday_from_days(dp.time_since_epoch().count()))
-    {}
+    {
+    
+}
 
 CONSTCD11
 inline
 weekday::weekday(const local_days& dp) NOEXCEPT
     : wd_(weekday_from_days(dp.time_since_epoch().count()))
-    {}
+    {
+    
+}
 
 CONSTCD14 inline weekday& weekday::operator++() NOEXCEPT {if (++wd_ == 7) wd_ = 0; return *this;}
 CONSTCD14 inline weekday weekday::operator++(int) NOEXCEPT {auto tmp(*this); ++(*this); return tmp;}
@@ -1327,34 +1289,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const weekday& wd)
 {
-    switch (static_cast<unsigned>(wd))
-    {
-    case 0:
-        os << "Yekshanbe";
-        break;
-    case 1:
-        os << "Doshanbe";
-        break;
-    case 2:
-        os << "Seshanbe";
-        break;
-    case 3:
-        os << "Chaharshanbe";
-        break;
-    case 4:
-        os << "Panjshanbe";
-        break;
-    case 5:
-        os << "Adine";
-        break;
-    case 6:
-        os << "Shanbe";
-        break;
-    default:
-        os << static_cast<unsigned>(wd) << " is not a valid weekday";
-        break;
-    }
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #if !defined(_MSC_VER) || (_MSC_VER >= 1900)
@@ -1451,14 +1386,16 @@ inline
 weekday_indexed::weekday_indexed(const solar_hijri::weekday& wd, unsigned index) NOEXCEPT
     : wd_(static_cast<decltype(wd_)>(static_cast<unsigned>(wd)))
     , index_(static_cast<decltype(index_)>(index))
-    {}
+    {
+    
+}
 
 template<class CharT, class Traits>
 inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const weekday_indexed& wdi)
 {
-    return os << wdi.weekday() << '[' << wdi.index() << ']';
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 CONSTCD11
@@ -1489,7 +1426,9 @@ operator!=(const weekday_indexed& x, const weekday_indexed& y) NOEXCEPT
 
 CONSTCD11 inline solar_hijri::weekday weekday_last::weekday() const NOEXCEPT {return wd_;}
 CONSTCD11 inline bool weekday_last::ok() const NOEXCEPT {return wd_.ok();}
-CONSTCD11 inline weekday_last::weekday_last(const solar_hijri::weekday& wd) NOEXCEPT : wd_(wd) {}
+CONSTCD11 inline weekday_last::weekday_last(const solar_hijri::weekday& wd) NOEXCEPT : wd_(wd) {
+    
+}
 
 CONSTCD11
 inline
@@ -1512,7 +1451,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const weekday_last& wdl)
 {
-    return os << wdl.weekday() << "[last]";
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 CONSTCD11
@@ -1530,7 +1469,9 @@ inline
 year_month::year_month(const solar_hijri::year& y, const solar_hijri::month& m) NOEXCEPT
     : y_(y)
     , m_(m)
-    {}
+    {
+    
+}
 
 CONSTCD11 inline year year_month::year() const NOEXCEPT {return y_;}
 CONSTCD11 inline month year_month::month() const NOEXCEPT {return m_;}
@@ -1687,7 +1628,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const year_month& ym)
 {
-    return os << ym.year() << '/' << ym.month();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // month_day
@@ -1697,7 +1638,9 @@ inline
 month_day::month_day(const solar_hijri::month& m, const solar_hijri::day& d) NOEXCEPT
     : m_(m)
     , d_(d)
-    {}
+    {
+    
+}
 
 CONSTCD11 inline solar_hijri::month month_day::month() const NOEXCEPT {return m_;}
 CONSTCD11 inline solar_hijri::day month_day::day() const NOEXCEPT {return d_;}
@@ -1771,14 +1714,16 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const month_day& md)
 {
-    return os << md.month() << '/' << md.day();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // month_day_last
 
 CONSTCD11 inline month month_day_last::month() const NOEXCEPT {return m_;}
 CONSTCD11 inline bool month_day_last::ok() const NOEXCEPT {return m_.ok();}
-CONSTCD11 inline month_day_last::month_day_last(const solar_hijri::month& m) NOEXCEPT : m_(m) {}
+CONSTCD11 inline month_day_last::month_day_last(const solar_hijri::month& m) NOEXCEPT : m_(m) {
+    
+}
 
 CONSTCD11
 inline
@@ -1833,7 +1778,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const month_day_last& mdl)
 {
-    return os << mdl.month() << "/last";
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // month_weekday
@@ -1844,7 +1789,9 @@ month_weekday::month_weekday(const solar_hijri::month& m,
                              const solar_hijri::weekday_indexed& wdi) NOEXCEPT
     : m_(m)
     , wdi_(wdi)
-    {}
+    {
+    
+}
 
 CONSTCD11 inline month month_weekday::month() const NOEXCEPT {return m_;}
 
@@ -1885,7 +1832,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const month_weekday& mwd)
 {
-    return os << mwd.month() << '/' << mwd.weekday_indexed();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // month_weekday_last
@@ -1896,7 +1843,9 @@ month_weekday_last::month_weekday_last(const solar_hijri::month& m,
                                        const solar_hijri::weekday_last& wdl) NOEXCEPT
     : m_(m)
     , wdl_(wdl)
-    {}
+    {
+    
+}
 
 CONSTCD11 inline month month_weekday_last::month() const NOEXCEPT {return m_;}
 
@@ -1937,7 +1886,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const month_weekday_last& mwdl)
 {
-    return os << mwdl.month() << '/' << mwdl.weekday_last();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // year_month_day_last
@@ -1948,7 +1897,9 @@ year_month_day_last::year_month_day_last(const solar_hijri::year& y,
                                          const solar_hijri::month_day_last& mdl) NOEXCEPT
     : y_(y)
     , mdl_(mdl)
-    {}
+    {
+    
+}
 
 CONSTCD14
 inline
@@ -2089,7 +2040,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const year_month_day_last& ymdl)
 {
-    return os << ymdl.year() << '/' << ymdl.month_day_last();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 CONSTCD14
@@ -2149,7 +2100,9 @@ year_month_day::year_month_day(const solar_hijri::year& y, const solar_hijri::mo
     : y_(y)
     , m_(m)
     , d_(d)
-    {}
+    {
+    
+}
 
 CONSTCD14
 inline
@@ -2157,19 +2110,25 @@ year_month_day::year_month_day(const year_month_day_last& ymdl) NOEXCEPT
     : y_(ymdl.year())
     , m_(ymdl.month())
     , d_(ymdl.day())
-    {}
+    {
+    
+}
 
 CONSTCD14
 inline
 year_month_day::year_month_day(sys_days dp) NOEXCEPT
     : year_month_day(from_days(dp.time_since_epoch()))
-    {}
+    {
+    
+}
 
 CONSTCD14
 inline
 year_month_day::year_month_day(local_days dp) NOEXCEPT
     : year_month_day(from_days(dp.time_since_epoch()))
-    {}
+    {
+    
+}
 
 CONSTCD11 inline year year_month_day::year() const NOEXCEPT {return y_;}
 CONSTCD11 inline month year_month_day::month() const NOEXCEPT {return m_;}
@@ -2328,14 +2287,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const year_month_day& ymd)
 {
-    date::detail::save_ostream<CharT, Traits> _(os);
-    os.fill('0');
-    os.flags(std::ios::dec | std::ios::right);
-    os << ymd.year() << '-';
-    os.width(2);
-    os << static_cast<unsigned>(ymd.month()) << '-';
-    os << ymd.day();
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 CONSTCD14
@@ -2444,19 +2396,25 @@ year_month_weekday::year_month_weekday(const solar_hijri::year& y, const solar_h
     : y_(y)
     , m_(m)
     , wdi_(wdi)
-    {}
+    {
+    
+}
 
 CONSTCD14
 inline
 year_month_weekday::year_month_weekday(const sys_days& dp) NOEXCEPT
     : year_month_weekday(from_days(dp.time_since_epoch()))
-    {}
+    {
+    
+}
 
 CONSTCD14
 inline
 year_month_weekday::year_month_weekday(const local_days& dp) NOEXCEPT
     : year_month_weekday(from_days(dp.time_since_epoch()))
-    {}
+    {
+    
+}
 
 CONSTCD14
 inline
@@ -2591,8 +2549,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const year_month_weekday& ymwdi)
 {
-    return os << ymwdi.year() << '/' << ymwdi.month()
-              << '/' << ymwdi.weekday_indexed();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 CONSTCD14
@@ -2653,7 +2610,9 @@ year_month_weekday_last::year_month_weekday_last(const solar_hijri::year& y,
     : y_(y)
     , m_(m)
     , wdl_(wdl)
-    {}
+    {
+    
+}
 
 CONSTCD14
 inline
@@ -2763,7 +2722,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const year_month_weekday_last& ymwdl)
 {
-    return os << ymwdl.year() << '/' << ymwdl.month() << '/' << ymwdl.weekday_last();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 CONSTCD14

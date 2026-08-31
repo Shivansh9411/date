@@ -1,3 +1,5 @@
+#include <stdexcept>
+#include <cstdlib>
 #ifndef TZ_PRIVATE_H
 #define TZ_PRIVATE_H
 
@@ -81,7 +83,9 @@ private:
         pair                     month_day_weekday_;
 
 #if !defined(_MSC_VER) || (_MSC_VER >= 1900)
-        U() : month_day_{date::jan/1} {}
+        U() : month_day_{date::jan/1} {
+    __builtin_trap() /* STUB: not implemented */;
+}
 #else
         U() :
             month_day_(date::jan/1),
@@ -107,7 +111,9 @@ public:
 
     date::day day() const;
     date::month month() const;
-    tz zone() const {return zone_;}
+    tz zone() const {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
     void canonicalize(date::year y);
 
@@ -160,13 +166,25 @@ public:
     explicit Rule(const std::string& s);
     Rule(const Rule& r, date::year starting_year, date::year ending_year);
 
-    const std::string& name() const {return name_;}
-    const std::string& abbrev() const {return abbrev_;}
+    const std::string& name() const {
+    __builtin_trap() /* STUB: not implemented */;
+}
+    const std::string& abbrev() const {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
-    const MonthDayTime&         mdt()           const {return starting_at_;}
-    const date::year&           starting_year() const {return starting_year_;}
-    const date::year&           ending_year()   const {return ending_year_;}
-    const std::chrono::minutes& save()          const {return save_;}
+    const MonthDayTime&         mdt()           const {
+    __builtin_trap() /* STUB: not implemented */;
+}
+    const date::year&           starting_year() const {
+    __builtin_trap() /* STUB: not implemented */;
+}
+    const date::year&           ending_year()   const {
+    __builtin_trap() /* STUB: not implemented */;
+}
+    const std::chrono::minutes& save()          const {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
     static void split_overlaps(std::vector<Rule>& rules);
 
@@ -192,30 +210,70 @@ private:
                       std::size_t& e);
 };
 
-inline bool operator!=(const Rule& x, const Rule& y) {return !(x == y);}
-inline bool operator> (const Rule& x, const Rule& y) {return   y < x;}
-inline bool operator<=(const Rule& x, const Rule& y) {return !(y < x);}
-inline bool operator>=(const Rule& x, const Rule& y) {return !(x < y);}
+inline bool operator!=(const Rule& x, const Rule& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator> (const Rule& x, const Rule& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator<=(const Rule& x, const Rule& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator>=(const Rule& x, const Rule& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
-inline bool operator!=(const Rule& x, const date::year& y) {return !(x == y);}
-inline bool operator> (const Rule& x, const date::year& y) {return   y < x;}
-inline bool operator<=(const Rule& x, const date::year& y) {return !(y < x);}
-inline bool operator>=(const Rule& x, const date::year& y) {return !(x < y);}
+inline bool operator!=(const Rule& x, const date::year& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator> (const Rule& x, const date::year& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator<=(const Rule& x, const date::year& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator>=(const Rule& x, const date::year& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
-inline bool operator!=(const date::year& x, const Rule& y) {return !(x == y);}
-inline bool operator> (const date::year& x, const Rule& y) {return   y < x;}
-inline bool operator<=(const date::year& x, const Rule& y) {return !(y < x);}
-inline bool operator>=(const date::year& x, const Rule& y) {return !(x < y);}
+inline bool operator!=(const date::year& x, const Rule& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator> (const date::year& x, const Rule& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator<=(const date::year& x, const Rule& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator>=(const date::year& x, const Rule& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
-inline bool operator!=(const Rule& x, const std::string& y) {return !(x == y);}
-inline bool operator> (const Rule& x, const std::string& y) {return   y < x;}
-inline bool operator<=(const Rule& x, const std::string& y) {return !(y < x);}
-inline bool operator>=(const Rule& x, const std::string& y) {return !(x < y);}
+inline bool operator!=(const Rule& x, const std::string& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator> (const Rule& x, const std::string& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator<=(const Rule& x, const std::string& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator>=(const Rule& x, const std::string& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
-inline bool operator!=(const std::string& x, const Rule& y) {return !(x == y);}
-inline bool operator> (const std::string& x, const Rule& y) {return   y < x;}
-inline bool operator<=(const std::string& x, const Rule& y) {return !(y < x);}
-inline bool operator>=(const std::string& x, const Rule& y) {return !(x < y);}
+inline bool operator!=(const std::string& x, const Rule& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator> (const std::string& x, const Rule& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator<=(const std::string& x, const Rule& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator>=(const std::string& x, const Rule& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 struct zonelet
 {
@@ -234,8 +292,12 @@ struct zonelet
         std::chrono::minutes save_;
 
         ~U() {}
-        U() {}
-        U(const U&) {}
+        U() {
+    __builtin_trap() /* STUB: not implemented */;
+}
+        U(const U&) {
+    __builtin_trap() /* STUB: not implemented */;
+}
         U& operator=(const U&) = delete;
     } u;
 

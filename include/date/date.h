@@ -1056,9 +1056,8 @@ public:
         , tie_(is.tie(nullptr))
         , loc_(is.getloc())
         {
-            if (tie_ != nullptr)
-                tie_->flush();
-        }
+    __builtin_trap() /* STUB: not implemented */;
+}
 };
 
 template<class CharT, class Traits = std::char_traits<CharT>>
@@ -1084,7 +1083,8 @@ public:
     explicit save_ostream(std::basic_ios<CharT, Traits>& os)
         : save_istream<CharT, Traits>(os)
         {
-        }
+    __builtin_trap() /* STUB: not implemented */;
+}
 };
 
 template <class T>
@@ -1421,7 +1421,9 @@ trunc(const std::chrono::time_point<Clock, FromDuration>& tp)
 
 // day
 
-CONSTCD11 inline day::day(unsigned d) NOEXCEPT : d_(static_cast<decltype(d_)>(d)) {}
+CONSTCD11 inline day::day(unsigned d) NOEXCEPT : d_(static_cast<decltype(d_)>(d)) {
+    
+}
 CONSTCD14 inline day& day::operator++() NOEXCEPT {++d_; return *this;}
 CONSTCD14 inline day day::operator++(int) NOEXCEPT {auto tmp(*this); ++(*this); return tmp;}
 CONSTCD14 inline day& day::operator--() NOEXCEPT {--d_; return *this;}
@@ -1519,12 +1521,7 @@ template<class CharT, class Traits>
 std::basic_ostream<CharT, Traits>&
 low_level_fmt(std::basic_ostream<CharT, Traits>& os, const day& d)
 {
-    detail::save_ostream<CharT, Traits> _(os);
-    os.fill('0');
-    os.flags(std::ios::dec | std::ios::right);
-    os.width(2);
-    os << static_cast<unsigned>(d);
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // namespace detail
@@ -1534,15 +1531,14 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const day& d)
 {
-    detail::low_level_fmt(os, d);
-    if (!d.ok())
-        os << " is not a valid day";
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // month
 
-CONSTCD11 inline month::month(unsigned m) NOEXCEPT : m_(static_cast<decltype(m_)>(m)) {}
+CONSTCD11 inline month::month(unsigned m) NOEXCEPT : m_(static_cast<decltype(m_)>(m)) {
+    
+}
 CONSTCD14 inline month& month::operator++() NOEXCEPT {*this += months{1}; return *this;}
 CONSTCD14 inline month month::operator++(int) NOEXCEPT {auto tmp(*this); ++(*this); return tmp;}
 CONSTCD14 inline month& month::operator--() NOEXCEPT {*this -= months{1}; return *this;}
@@ -1659,14 +1655,7 @@ template<class CharT, class Traits>
 std::basic_ostream<CharT, Traits>&
 low_level_fmt(std::basic_ostream<CharT, Traits>& os, const month& m)
 {
-    if (m.ok())
-    {
-        CharT fmt[] = {'%', 'b', 0};
-        os << format(os.getloc(), fmt, m);
-    }
-    else
-        os << static_cast<unsigned>(m);
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // namespace detail
@@ -1676,15 +1665,14 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const month& m)
 {
-    detail::low_level_fmt(os, m);
-    if (!m.ok())
-        os << " is not a valid month";
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // year
 
-CONSTCD11 inline year::year(int y) NOEXCEPT : y_(static_cast<decltype(y_)>(y)) {}
+CONSTCD11 inline year::year(int y) NOEXCEPT : y_(static_cast<decltype(y_)>(y)) {
+    
+}
 CONSTCD14 inline year& year::operator++() NOEXCEPT {++y_; return *this;}
 CONSTCD14 inline year year::operator++(int) NOEXCEPT {auto tmp(*this); ++(*this); return tmp;}
 CONSTCD14 inline year& year::operator--() NOEXCEPT {--y_; return *this;}
@@ -1799,13 +1787,7 @@ template<class CharT, class Traits>
 std::basic_ostream<CharT, Traits>&
 low_level_fmt(std::basic_ostream<CharT, Traits>& os, const year& y)
 {
-    detail::save_ostream<CharT, Traits> _(os);
-    os.fill('0');
-    os.flags(std::ios::dec | std::ios::internal);
-    os.width(4 + (y < year{0}));
-    os.imbue(std::locale::classic());
-    os << static_cast<int>(y);
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // namespace detail
@@ -1815,10 +1797,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const year& y)
 {
-    detail::low_level_fmt(os, y);
-    if (!y.ok())
-        os << " is not a valid year";
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // weekday
@@ -1836,19 +1815,25 @@ CONSTCD11
 inline
 weekday::weekday(unsigned wd) NOEXCEPT
     : wd_(static_cast<decltype(wd_)>(wd != 7 ? wd : 0))
-    {}
+    {
+    
+}
 
 CONSTCD14
 inline
 weekday::weekday(const sys_days& dp) NOEXCEPT
     : wd_(weekday_from_days(dp.time_since_epoch().count()))
-    {}
+    {
+    
+}
 
 CONSTCD14
 inline
 weekday::weekday(const local_days& dp) NOEXCEPT
     : wd_(weekday_from_days(dp.time_since_epoch().count()))
-    {}
+    {
+    
+}
 
 CONSTCD14 inline weekday& weekday::operator++() NOEXCEPT {*this += days{1}; return *this;}
 CONSTCD14 inline weekday weekday::operator++(int) NOEXCEPT {auto tmp(*this); ++(*this); return tmp;}
@@ -1948,14 +1933,7 @@ template<class CharT, class Traits>
 std::basic_ostream<CharT, Traits>&
 low_level_fmt(std::basic_ostream<CharT, Traits>& os, const weekday& wd)
 {
-    if (wd.ok())
-    {
-        CharT fmt[] = {'%', 'a', 0};
-        os << format(fmt, wd);
-    }
-    else
-        os << wd.c_encoding();
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // namespace detail
@@ -1965,10 +1943,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const weekday& wd)
 {
-    detail::low_level_fmt(os, wd);
-    if (!wd.ok())
-        os << " is not a valid weekday";
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #if !defined(_MSC_VER) || (_MSC_VER >= 1900)
@@ -2070,7 +2045,9 @@ inline
 weekday_indexed::weekday_indexed(const date::weekday& wd, unsigned index) NOEXCEPT
     : wd_(static_cast<decltype(wd_)>(static_cast<unsigned>(wd.wd_)))
     , index_(static_cast<decltype(index_)>(index))
-    {}
+    {
+    
+}
 
 #ifdef __GNUC__
 #  pragma GCC diagnostic pop
@@ -2083,7 +2060,7 @@ template<class CharT, class Traits>
 std::basic_ostream<CharT, Traits>&
 low_level_fmt(std::basic_ostream<CharT, Traits>& os, const weekday_indexed& wdi)
 {
-    return low_level_fmt(os, wdi.weekday()) << '[' << wdi.index() << ']';
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // namespace detail
@@ -2093,10 +2070,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const weekday_indexed& wdi)
 {
-    detail::low_level_fmt(os, wdi);
-    if (!wdi.ok())
-        os << " is not a valid weekday_indexed";
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 CONSTCD11
@@ -2127,7 +2101,9 @@ operator!=(const weekday_indexed& x, const weekday_indexed& y) NOEXCEPT
 
 CONSTCD11 inline date::weekday weekday_last::weekday() const NOEXCEPT {return wd_;}
 CONSTCD11 inline bool weekday_last::ok() const NOEXCEPT {return wd_.ok();}
-CONSTCD11 inline weekday_last::weekday_last(const date::weekday& wd) NOEXCEPT : wd_(wd) {}
+CONSTCD11 inline weekday_last::weekday_last(const date::weekday& wd) NOEXCEPT : wd_(wd) {
+    
+}
 
 CONSTCD11
 inline
@@ -2152,7 +2128,7 @@ template<class CharT, class Traits>
 std::basic_ostream<CharT, Traits>&
 low_level_fmt(std::basic_ostream<CharT, Traits>& os, const weekday_last& wdl)
 {
-    return low_level_fmt(os, wdl.weekday()) << "[last]";
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // namespace detail
@@ -2162,10 +2138,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const weekday_last& wdl)
 {
-    detail::low_level_fmt(os, wdl);
-    if (!wdl.ok())
-        os << " is not a valid weekday_last";
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 CONSTCD11
@@ -2183,7 +2156,9 @@ inline
 year_month::year_month(const date::year& y, const date::month& m) NOEXCEPT
     : y_(y)
     , m_(m)
-    {}
+    {
+    
+}
 
 CONSTCD11 inline year year_month::year() const NOEXCEPT {return y_;}
 CONSTCD11 inline month year_month::month() const NOEXCEPT {return m_;}
@@ -2347,8 +2322,7 @@ template<class CharT, class Traits>
 std::basic_ostream<CharT, Traits>&
 low_level_fmt(std::basic_ostream<CharT, Traits>& os, const year_month& ym)
 {
-    low_level_fmt(os, ym.year()) << '/';
-    return low_level_fmt(os, ym.month());
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // namespace detail
@@ -2358,10 +2332,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const year_month& ym)
 {
-    detail::low_level_fmt(os, ym);
-    if (!ym.ok())
-        os << " is not a valid year_month";
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // month_day
@@ -2371,7 +2342,9 @@ inline
 month_day::month_day(const date::month& m, const date::day& d) NOEXCEPT
     : m_(m)
     , d_(d)
-    {}
+    {
+    
+}
 
 CONSTCD11 inline date::month month_day::month() const NOEXCEPT {return m_;}
 CONSTCD11 inline date::day month_day::day() const NOEXCEPT {return d_;}
@@ -2448,8 +2421,7 @@ template<class CharT, class Traits>
 std::basic_ostream<CharT, Traits>&
 low_level_fmt(std::basic_ostream<CharT, Traits>& os, const month_day& md)
 {
-    low_level_fmt(os, md.month()) << '/';
-    return low_level_fmt(os, md.day());
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // namespace detail
@@ -2459,17 +2431,16 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const month_day& md)
 {
-    detail::low_level_fmt(os, md);
-    if (!md.ok())
-        os << " is not a valid month_day";
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // month_day_last
 
 CONSTCD11 inline month month_day_last::month() const NOEXCEPT {return m_;}
 CONSTCD11 inline bool month_day_last::ok() const NOEXCEPT {return m_.ok();}
-CONSTCD11 inline month_day_last::month_day_last(const date::month& m) NOEXCEPT : m_(m) {}
+CONSTCD11 inline month_day_last::month_day_last(const date::month& m) NOEXCEPT : m_(m) {
+    
+}
 
 CONSTCD11
 inline
@@ -2526,7 +2497,7 @@ template<class CharT, class Traits>
 std::basic_ostream<CharT, Traits>&
 low_level_fmt(std::basic_ostream<CharT, Traits>& os, const month_day_last& mdl)
 {
-    return low_level_fmt(os, mdl.month()) << "/last";
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // namespace detail
@@ -2536,10 +2507,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const month_day_last& mdl)
 {
-    detail::low_level_fmt(os, mdl);
-    if (!mdl.ok())
-        os << " is not a valid month_day_last";
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // month_weekday
@@ -2550,7 +2518,9 @@ month_weekday::month_weekday(const date::month& m,
                              const date::weekday_indexed& wdi) NOEXCEPT
     : m_(m)
     , wdi_(wdi)
-    {}
+    {
+    
+}
 
 CONSTCD11 inline month month_weekday::month() const NOEXCEPT {return m_;}
 
@@ -2593,8 +2563,7 @@ template<class CharT, class Traits>
 std::basic_ostream<CharT, Traits>&
 low_level_fmt(std::basic_ostream<CharT, Traits>& os, const month_weekday& mwd)
 {
-    low_level_fmt(os, mwd.month()) << '/';
-    return low_level_fmt(os, mwd.weekday_indexed());
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // namespace detail
@@ -2604,10 +2573,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const month_weekday& mwd)
 {
-    detail::low_level_fmt(os, mwd);
-    if (!mwd.ok())
-        os << " is not a valid month_weekday";
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // month_weekday_last
@@ -2618,7 +2584,9 @@ month_weekday_last::month_weekday_last(const date::month& m,
                                        const date::weekday_last& wdl) NOEXCEPT
     : m_(m)
     , wdl_(wdl)
-    {}
+    {
+    
+}
 
 CONSTCD11 inline month month_weekday_last::month() const NOEXCEPT {return m_;}
 
@@ -2661,8 +2629,7 @@ template<class CharT, class Traits>
 std::basic_ostream<CharT, Traits>&
 low_level_fmt(std::basic_ostream<CharT, Traits>& os, const month_weekday_last& mwdl)
 {
-    low_level_fmt(os, mwdl.month()) << '/';
-    return low_level_fmt(os, mwdl.weekday_last());
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // namespace detail
@@ -2672,10 +2639,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const month_weekday_last& mwdl)
 {
-    detail::low_level_fmt(os, mwdl);
-    if (!mwdl.ok())
-        os << " is not a valid month_weekday_last";
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // year_month_day_last
@@ -2686,7 +2650,9 @@ year_month_day_last::year_month_day_last(const date::year& y,
                                          const date::month_day_last& mdl) NOEXCEPT
     : y_(y)
     , mdl_(mdl)
-    {}
+    {
+    
+}
 
 template<class>
 CONSTCD14
@@ -2832,8 +2798,7 @@ template<class CharT, class Traits>
 std::basic_ostream<CharT, Traits>&
 low_level_fmt(std::basic_ostream<CharT, Traits>& os, const year_month_day_last& ymdl)
 {
-    low_level_fmt(os, ymdl.year()) << '/';
-    return low_level_fmt(os, ymdl.month_day_last());
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // namespace detail
@@ -2843,10 +2808,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const year_month_day_last& ymdl)
 {
-    detail::low_level_fmt(os, ymdl);
-    if (!ymdl.ok())
-        os << " is not a valid year_month_day_last";
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template<class>
@@ -2909,7 +2871,9 @@ year_month_day::year_month_day(const date::year& y, const date::month& m,
     : y_(y)
     , m_(m)
     , d_(d)
-    {}
+    {
+    
+}
 
 CONSTCD14
 inline
@@ -2917,19 +2881,25 @@ year_month_day::year_month_day(const year_month_day_last& ymdl) NOEXCEPT
     : y_(ymdl.year())
     , m_(ymdl.month())
     , d_(ymdl.day())
-    {}
+    {
+    
+}
 
 CONSTCD14
 inline
 year_month_day::year_month_day(sys_days dp) NOEXCEPT
     : year_month_day(from_days(dp.time_since_epoch()))
-    {}
+    {
+    
+}
 
 CONSTCD14
 inline
 year_month_day::year_month_day(local_days dp) NOEXCEPT
     : year_month_day(from_days(dp.time_since_epoch()))
-    {}
+    {
+    
+}
 
 CONSTCD11 inline year year_month_day::year() const NOEXCEPT {return y_;}
 CONSTCD11 inline month year_month_day::month() const NOEXCEPT {return m_;}
@@ -3073,18 +3043,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const year_month_day& ymd)
 {
-    detail::save_ostream<CharT, Traits> _(os);
-    os.fill('0');
-    os.flags(std::ios::dec | std::ios::right);
-    os.imbue(std::locale::classic());
-    os << static_cast<int>(ymd.year()) << '-';
-    os.width(2);
-    os << static_cast<unsigned>(ymd.month()) << '-';
-    os.width(2);
-    os << static_cast<unsigned>(ymd.day());
-    if (!ymd.ok())
-        os << " is not a valid year_month_day";
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 CONSTCD14
@@ -3169,19 +3128,25 @@ year_month_weekday::year_month_weekday(const date::year& y, const date::month& m
     : y_(y)
     , m_(m)
     , wdi_(wdi)
-    {}
+    {
+    
+}
 
 CONSTCD14
 inline
 year_month_weekday::year_month_weekday(const sys_days& dp) NOEXCEPT
     : year_month_weekday(from_days(dp.time_since_epoch()))
-    {}
+    {
+    
+}
 
 CONSTCD14
 inline
 year_month_weekday::year_month_weekday(const local_days& dp) NOEXCEPT
     : year_month_weekday(from_days(dp.time_since_epoch()))
-    {}
+    {
+    
+}
 
 template<class>
 CONSTCD14
@@ -3319,12 +3284,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const year_month_weekday& ymwdi)
 {
-    detail::low_level_fmt(os, ymwdi.year()) << '/';
-    detail::low_level_fmt(os, ymwdi.month()) << '/';
-    detail::low_level_fmt(os, ymwdi.weekday_indexed());
-    if (!ymwdi.ok())
-        os << " is not a valid year_month_weekday";
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template<class>
@@ -3388,7 +3348,9 @@ year_month_weekday_last::year_month_weekday_last(const date::year& y,
     : y_(y)
     , m_(m)
     , wdl_(wdl)
-    {}
+    {
+    
+}
 
 template<class>
 CONSTCD14
@@ -3500,12 +3462,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const year_month_weekday_last& ymwdl)
 {
-    detail::low_level_fmt(os, ymwdl.year()) << '/';
-    detail::low_level_fmt(os, ymwdl.month()) << '/';
-    detail::low_level_fmt(os, ymwdl.weekday_last());
-    if (!ymwdl.ok())
-        os << " is not a valid year_month_weekday_last";
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template<class>
@@ -3971,12 +3928,16 @@ public:
     CONSTCD11 decimal_format_seconds()
         : s_()
         , sub_s_()
-        {}
+        {
+    
+}
 
     CONSTCD11 explicit decimal_format_seconds(const Duration& d) NOEXCEPT
         : s_(std::chrono::duration_cast<std::chrono::seconds>(d))
         , sub_s_(std::chrono::duration_cast<precision>(d - s_))
-        {}
+        {
+    
+}
 
     CONSTCD14 std::chrono::seconds& seconds() NOEXCEPT {return s_;}
     CONSTCD11 std::chrono::seconds seconds() const NOEXCEPT {return s_;}
@@ -3997,45 +3958,22 @@ public:
     std::basic_ostream<CharT, Traits>&
     operator<<(std::basic_ostream<CharT, Traits>& os, const decimal_format_seconds& x)
     {
-        return x.print(os, std::chrono::treat_as_floating_point<rep>{});
-    }
+    __builtin_trap() /* STUB: not implemented */;
+}
 
     template <class CharT, class Traits>
     std::basic_ostream<CharT, Traits>&
     print(std::basic_ostream<CharT, Traits>& os, std::true_type) const
     {
-        date::detail::save_ostream<CharT, Traits> _(os);
-        std::chrono::duration<rep> d = s_ + sub_s_;
-        if (d < std::chrono::seconds{10})
-            os << '0';
-        os.precision(width+6);
-        os << std::fixed << d.count();
-        return os;
-    }
+    __builtin_trap() /* STUB: not implemented */;
+}
 
     template <class CharT, class Traits>
     std::basic_ostream<CharT, Traits>&
     print(std::basic_ostream<CharT, Traits>& os, std::false_type) const
     {
-        date::detail::save_ostream<CharT, Traits> _(os);
-        os.fill('0');
-        os.flags(std::ios::dec | std::ios::right);
-        os.width(2);
-        os << s_.count();
-        if (width > 0)
-        {
-#if !ONLY_C_LOCALE
-            os << std::use_facet<std::numpunct<CharT>>(os.getloc()).decimal_point();
-#else
-            os << '.';
-#endif
-            date::detail::save_ostream<CharT, Traits> _s(os);
-            os.imbue(std::locale::classic());
-            os.width(width);
-            os << sub_s_.count();
-        }
-        return os;
-    }
+    __builtin_trap() /* STUB: not implemented */;
+}
 };
 
 template <class Rep, class Period>
@@ -4083,14 +4021,18 @@ public:
 
     CONSTCD11 hh_mm_ss() NOEXCEPT
         : hh_mm_ss(Duration::zero())
-        {}
+        {
+    
+}
 
     CONSTCD11 explicit hh_mm_ss(Duration d) NOEXCEPT
         : h_(std::chrono::duration_cast<std::chrono::hours>(detail::abs(d)))
         , m_(std::chrono::duration_cast<std::chrono::minutes>(detail::abs(d)) - h_)
         , s_(detail::abs(d) - h_ - m_)
         , neg_(d < Duration::zero())
-        {}
+        {
+    
+}
 
     CONSTCD11 std::chrono::hours hours() const NOEXCEPT {return h_;}
     CONSTCD11 std::chrono::minutes minutes() const NOEXCEPT {return m_;}
@@ -4799,22 +4741,36 @@ struct fields
     fields() = default;
 #endif
 
-    fields(year_month_day ymd_) : ymd(ymd_) {}
-    fields(weekday wd_) : wd(wd_) {}
-    fields(hh_mm_ss<Duration> tod_) : tod(tod_), has_tod(true) {}
+    fields(year_month_day ymd_) : ymd(ymd_) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+    fields(weekday wd_) : wd(wd_) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+    fields(hh_mm_ss<Duration> tod_) : tod(tod_), has_tod(true) {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
-    fields(year_month_day ymd_, weekday wd_) : ymd(ymd_), wd(wd_) {}
+    fields(year_month_day ymd_, weekday wd_) : ymd(ymd_), wd(wd_) {
+    __builtin_trap() /* STUB: not implemented */;
+}
     fields(year_month_day ymd_, hh_mm_ss<Duration> tod_) : ymd(ymd_), tod(tod_),
-                                                           has_tod(true) {}
+                                                           has_tod(true) {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
-    fields(weekday wd_, hh_mm_ss<Duration> tod_) : wd(wd_), tod(tod_), has_tod(true) {}
+    fields(weekday wd_, hh_mm_ss<Duration> tod_) : wd(wd_), tod(tod_), has_tod(true) {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
     fields(year_month_day ymd_, weekday wd_, hh_mm_ss<Duration> tod_)
         : ymd(ymd_)
         , wd(wd_)
         , tod(tod_)
         , has_tod(true)
-        {}
+        {
+    __builtin_trap() /* STUB: not implemented */;
+}
 };
 
 namespace detail
@@ -4824,39 +4780,14 @@ template <class CharT, class Traits, class Duration>
 unsigned
 extract_weekday(std::basic_ostream<CharT, Traits>& os, const fields<Duration>& fds)
 {
-    if (!fds.ymd.ok() && !fds.wd.ok())
-    {
-        // fds does not contain a valid weekday
-        os.setstate(std::ios::failbit);
-        return 8;
-    }
-    weekday wd;
-    if (fds.ymd.ok())
-    {
-        wd = weekday{sys_days(fds.ymd)};
-        if (fds.wd.ok() && wd != fds.wd)
-        {
-            // fds.ymd and fds.wd are inconsistent
-            os.setstate(std::ios::failbit);
-            return 8;
-        }
-    }
-    else
-        wd = fds.wd;
-    return static_cast<unsigned>((wd - Sunday).count());
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits, class Duration>
 unsigned
 extract_month(std::basic_ostream<CharT, Traits>& os, const fields<Duration>& fds)
 {
-    if (!fds.ymd.month().ok())
-    {
-        // fds does not contain a valid month
-        os.setstate(std::ios::failbit);
-        return 0;
-    }
-    return static_cast<unsigned>(fds.ymd.month());
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // namespace detail
@@ -5050,1083 +4981,7 @@ to_stream(std::basic_ostream<CharT, Traits>& os, const CharT* fmt,
           const fields<Duration>& fds, const std::string* abbrev,
           const std::chrono::seconds* offset_sec)
 {
-#if ONLY_C_LOCALE
-    using detail::weekday_names;
-    using detail::month_names;
-    using detail::ampm_names;
-#endif
-    using detail::save_ostream;
-    using detail::get_units;
-    using detail::extract_weekday;
-    using detail::extract_month;
-    using std::ios;
-    using std::chrono::duration_cast;
-    using std::chrono::seconds;
-    using std::chrono::minutes;
-    using std::chrono::hours;
-    date::detail::save_ostream<CharT, Traits> ss(os);
-    os.fill(' ');
-    os.flags(std::ios::skipws | std::ios::dec);
-    os.width(0);
-    tm tm{};
-    bool insert_negative = fds.has_tod && fds.tod.to_duration() < Duration::zero();
-#if !ONLY_C_LOCALE
-    auto& facet = std::use_facet<std::time_put<CharT>>(os.getloc());
-#endif
-    const CharT* command = nullptr;
-    CharT modified = CharT{};
-    for (; *fmt; ++fmt)
-    {
-        switch (*fmt)
-        {
-        case 'a':
-        case 'A':
-            if (command)
-            {
-                if (modified == CharT{})
-                {
-                    tm.tm_wday = static_cast<int>(extract_weekday(os, fds));
-                    if (os.fail())
-                        return os;
-#if !ONLY_C_LOCALE
-                    const CharT f[] = {'%', *fmt};
-                    facet.put(os, os, os.fill(), &tm, std::begin(f), std::end(f));
-#else  // ONLY_C_LOCALE
-                    os << weekday_names().first[tm.tm_wday+7*(*fmt == 'a')];
-#endif  // ONLY_C_LOCALE
-                }
-                else
-                {
-                    os << CharT{'%'} << modified << *fmt;
-                    modified = CharT{};
-                }
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'b':
-        case 'B':
-        case 'h':
-            if (command)
-            {
-                if (modified == CharT{})
-                {
-                    tm.tm_mon = static_cast<int>(extract_month(os, fds)) - 1;
-#if !ONLY_C_LOCALE
-                    const CharT f[] = {'%', *fmt};
-                    facet.put(os, os, os.fill(), &tm, std::begin(f), std::end(f));
-#else  // ONLY_C_LOCALE
-                    os << month_names().first[tm.tm_mon+12*(*fmt != 'B')];
-#endif  // ONLY_C_LOCALE
-                }
-                else
-                {
-                    os << CharT{'%'} << modified << *fmt;
-                    modified = CharT{};
-                }
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'c':
-        case 'x':
-            if (command)
-            {
-                if (modified == CharT{'O'})
-                    os << CharT{'%'} << modified << *fmt;
-                else
-                {
-                    if (!fds.ymd.ok())
-                        os.setstate(std::ios::failbit);
-                    if (*fmt == 'c' && !fds.has_tod)
-                        os.setstate(std::ios::failbit);
-#if !ONLY_C_LOCALE
-                    tm = std::tm{};
-                    auto const& ymd = fds.ymd;
-                    auto ld = local_days(ymd);
-                    if (*fmt == 'c')
-                    {
-                        tm.tm_sec = static_cast<int>(fds.tod.seconds().count());
-                        tm.tm_min = static_cast<int>(fds.tod.minutes().count());
-                        tm.tm_hour = static_cast<int>(fds.tod.hours().count());
-                    }
-                    tm.tm_mday = static_cast<int>(static_cast<unsigned>(ymd.day()));
-                    tm.tm_mon = static_cast<int>(extract_month(os, fds) - 1);
-                    tm.tm_year = static_cast<int>(ymd.year()) - 1900;
-                    tm.tm_wday = static_cast<int>(extract_weekday(os, fds));
-                    if (os.fail())
-                        return os;
-                    tm.tm_yday = static_cast<int>((ld - local_days(ymd.year()/1/1)).count());
-                    CharT f[3] = {'%'};
-                    auto fe = std::begin(f) + 1;
-                    if (modified == CharT{'E'})
-                        *fe++ = modified;
-                    *fe++ = *fmt;
-                    facet.put(os, os, os.fill(), &tm, std::begin(f), fe);
-#else  // ONLY_C_LOCALE
-                    if (*fmt == 'c')
-                    {
-                        auto wd = static_cast<int>(extract_weekday(os, fds));
-                        os << weekday_names().first[static_cast<unsigned>(wd)+7]
-                           << ' ';
-                        os << month_names().first[extract_month(os, fds)-1+12] << ' ';
-                        auto d = static_cast<int>(static_cast<unsigned>(fds.ymd.day()));
-                        if (d < 10)
-                            os << ' ';
-                        os << d << ' '
-                           << make_time(duration_cast<seconds>(fds.tod.to_duration()))
-                           << ' ' << fds.ymd.year();
-
-                    }
-                    else  // *fmt == 'x'
-                    {
-                        auto const& ymd = fds.ymd;
-                        save_ostream<CharT, Traits> _(os);
-                        os.fill('0');
-                        os.flags(std::ios::dec | std::ios::right);
-                        os.width(2);
-                        os << static_cast<unsigned>(ymd.month()) << CharT{'/'};
-                        os.width(2);
-                        os << static_cast<unsigned>(ymd.day()) << CharT{'/'};
-                        os.width(2);
-                        os << static_cast<int>(ymd.year()) % 100;
-                    }
-#endif  // ONLY_C_LOCALE
-                }
-                command = nullptr;
-                modified = CharT{};
-            }
-            else
-                os << *fmt;
-            break;
-        case 'C':
-            if (command)
-            {
-                if (modified == CharT{'O'})
-                    os << CharT{'%'} << modified << *fmt;
-                else
-                {
-                    if (!fds.ymd.year().ok())
-                        os.setstate(std::ios::failbit);
-                    auto y = static_cast<int>(fds.ymd.year());
-#if !ONLY_C_LOCALE
-                    if (modified == CharT{})
-#endif
-                    {
-                        save_ostream<CharT, Traits> _(os);
-                        os.fill('0');
-                        os.flags(std::ios::dec | std::ios::right);
-                        if (y >= 0)
-                        {
-                            os.width(2);
-                            os << y/100;
-                        }
-                        else
-                        {
-                            os << CharT{'-'};
-                            os.width(2);
-                            os << -(y-99)/100;
-                        }
-                    }
-#if !ONLY_C_LOCALE
-                    else if (modified == CharT{'E'})
-                    {
-                        tm.tm_year = y - 1900;
-                        CharT f[3] = {'%', 'E', 'C'};
-                        facet.put(os, os, os.fill(), &tm, std::begin(f), std::end(f));
-                    }
-#endif
-                }
-                command = nullptr;
-                modified = CharT{};
-            }
-            else
-                os << *fmt;
-            break;
-        case 'd':
-        case 'e':
-            if (command)
-            {
-                if (modified == CharT{'E'})
-                    os << CharT{'%'} << modified << *fmt;
-                else
-                {
-                    if (!fds.ymd.day().ok())
-                        os.setstate(std::ios::failbit);
-                    auto d = static_cast<int>(static_cast<unsigned>(fds.ymd.day()));
-#if !ONLY_C_LOCALE
-                    if (modified == CharT{})
-#endif
-                    {
-                        save_ostream<CharT, Traits> _(os);
-                        if (*fmt == CharT{'d'})
-                            os.fill('0');
-                        else
-                            os.fill(' ');
-                        os.flags(std::ios::dec | std::ios::right);
-                        os.width(2);
-                        os << d;
-                    }
-#if !ONLY_C_LOCALE
-                    else if (modified == CharT{'O'})
-                    {
-                        tm.tm_mday = d;
-                        CharT f[3] = {'%', 'O', *fmt};
-                        facet.put(os, os, os.fill(), &tm, std::begin(f), std::end(f));
-                    }
-#endif
-                }
-                command = nullptr;
-                modified = CharT{};
-            }
-            else
-                os << *fmt;
-            break;
-        case 'D':
-            if (command)
-            {
-                if (modified == CharT{})
-                {
-                    if (!fds.ymd.ok())
-                        os.setstate(std::ios::failbit);
-                    auto const& ymd = fds.ymd;
-                    save_ostream<CharT, Traits> _(os);
-                    os.fill('0');
-                    os.flags(std::ios::dec | std::ios::right);
-                    os.width(2);
-                    os << static_cast<unsigned>(ymd.month()) << CharT{'/'};
-                    os.width(2);
-                    os << static_cast<unsigned>(ymd.day()) << CharT{'/'};
-                    os.width(2);
-                    os << static_cast<int>(ymd.year()) % 100;
-                }
-                else
-                {
-                    os << CharT{'%'} << modified << *fmt;
-                    modified = CharT{};
-                }
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'F':
-            if (command)
-            {
-                if (modified == CharT{})
-                {
-                    if (!fds.ymd.ok())
-                        os.setstate(std::ios::failbit);
-                    auto const& ymd = fds.ymd;
-                    save_ostream<CharT, Traits> _(os);
-                    os.imbue(std::locale::classic());
-                    os.fill('0');
-                    os.flags(std::ios::dec | std::ios::right);
-                    os.width(4);
-                    os << static_cast<int>(ymd.year()) << CharT{'-'};
-                    os.width(2);
-                    os << static_cast<unsigned>(ymd.month()) << CharT{'-'};
-                    os.width(2);
-                    os << static_cast<unsigned>(ymd.day());
-                }
-                else
-                {
-                    os << CharT{'%'} << modified << *fmt;
-                    modified = CharT{};
-                }
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'g':
-        case 'G':
-            if (command)
-            {
-                if (modified == CharT{})
-                {
-                    if (!fds.ymd.ok())
-                        os.setstate(std::ios::failbit);
-                    auto ld = local_days(fds.ymd);
-                    auto y = year_month_day{ld + days{3}}.year();
-                    auto start = local_days((y-years{1})/December/Thursday[last]) +
-                                 (Monday-Thursday);
-                    if (ld < start)
-                        --y;
-                    if (*fmt == CharT{'G'})
-                        os << y;
-                    else
-                    {
-                        save_ostream<CharT, Traits> _(os);
-                        os.fill('0');
-                        os.flags(std::ios::dec | std::ios::right);
-                        os.width(2);
-                        os << std::abs(static_cast<int>(y)) % 100;
-                    }
-                }
-                else
-                {
-                    os << CharT{'%'} << modified << *fmt;
-                    modified = CharT{};
-                }
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'H':
-        case 'I':
-            if (command)
-            {
-                if (modified == CharT{'E'})
-                    os << CharT{'%'} << modified << *fmt;
-                else
-                {
-                    if (!fds.has_tod)
-                        os.setstate(std::ios::failbit);
-                    if (insert_negative)
-                    {
-                        os << '-';
-                        insert_negative = false;
-                    }
-                    auto hms = fds.tod;
-#if !ONLY_C_LOCALE
-                    if (modified == CharT{})
-#endif
-                    {
-                        auto h = *fmt == CharT{'I'} ? date::make12(hms.hours()) : hms.hours();
-                        if (h < hours{10})
-                            os << CharT{'0'};
-                        os << h.count();
-                    }
-#if !ONLY_C_LOCALE
-                    else if (modified == CharT{'O'})
-                    {
-                        const CharT f[] = {'%', modified, *fmt};
-                        tm.tm_hour = static_cast<int>(hms.hours().count());
-                        facet.put(os, os, os.fill(), &tm, std::begin(f), std::end(f));
-                    }
-#endif
-                }
-                modified = CharT{};
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'j':
-            if (command)
-            {
-                if (modified == CharT{})
-                {
-                    if (fds.ymd.ok() || fds.has_tod)
-                    {
-                        days doy;
-                        if (fds.ymd.ok())
-                        {
-                            auto ld = local_days(fds.ymd);
-                            auto y = fds.ymd.year();
-                            doy = ld - local_days(y/January/1) + days{1};
-                        }
-                        else
-                        {
-                            doy = duration_cast<days>(fds.tod.to_duration());
-                        }
-                        save_ostream<CharT, Traits> _(os);
-                        os.fill('0');
-                        os.flags(std::ios::dec | std::ios::right);
-                        os.width(3);
-                        os << doy.count();
-                    }
-                    else
-                    {
-                        os.setstate(std::ios::failbit);
-                    }
-                }
-                else
-                {
-                    os << CharT{'%'} << modified << *fmt;
-                    modified = CharT{};
-                }
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'm':
-            if (command)
-            {
-                if (modified == CharT{'E'})
-                    os << CharT{'%'} << modified << *fmt;
-                else
-                {
-                    if (!fds.ymd.month().ok())
-                        os.setstate(std::ios::failbit);
-                    auto m = static_cast<unsigned>(fds.ymd.month());
-#if !ONLY_C_LOCALE
-                    if (modified == CharT{})
-#endif
-                    {
-                        if (m < 10)
-                            os << CharT{'0'};
-                        os << m;
-                    }
-#if !ONLY_C_LOCALE
-                    else if (modified == CharT{'O'})
-                    {
-                        const CharT f[] = {'%', modified, *fmt};
-                        tm.tm_mon = static_cast<int>(m-1);
-                        facet.put(os, os, os.fill(), &tm, std::begin(f), std::end(f));
-                    }
-#endif
-                }
-                modified = CharT{};
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'M':
-            if (command)
-            {
-                if (modified == CharT{'E'})
-                    os << CharT{'%'} << modified << *fmt;
-                else
-                {
-                    if (!fds.has_tod)
-                        os.setstate(std::ios::failbit);
-                    if (insert_negative)
-                    {
-                        os << '-';
-                        insert_negative = false;
-                    }
-#if !ONLY_C_LOCALE
-                    if (modified == CharT{})
-#endif
-                    {
-                        if (fds.tod.minutes() < minutes{10})
-                            os << CharT{'0'};
-                        os << fds.tod.minutes().count();
-                    }
-#if !ONLY_C_LOCALE
-                    else if (modified == CharT{'O'})
-                    {
-                        const CharT f[] = {'%', modified, *fmt};
-                        tm.tm_min = static_cast<int>(fds.tod.minutes().count());
-                        facet.put(os, os, os.fill(), &tm, std::begin(f), std::end(f));
-                    }
-#endif
-                }
-                modified = CharT{};
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'n':
-            if (command)
-            {
-                if (modified == CharT{})
-                    os << CharT{'\n'};
-                else
-                {
-                    os << CharT{'%'} << modified << *fmt;
-                    modified = CharT{};
-                }
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'p':
-            if (command)
-            {
-                if (modified == CharT{})
-                {
-                    if (!fds.has_tod)
-                        os.setstate(std::ios::failbit);
-#if !ONLY_C_LOCALE
-                    const CharT f[] = {'%', *fmt};
-                    tm.tm_hour = static_cast<int>(fds.tod.hours().count());
-                    facet.put(os, os, os.fill(), &tm, std::begin(f), std::end(f));
-#else
-                    if (date::is_am(fds.tod.hours()))
-                        os << ampm_names().first[0];
-                    else
-                        os << ampm_names().first[1];
-#endif
-                }
-                else
-                {
-                    os << CharT{'%'} << modified << *fmt;
-                }
-                modified = CharT{};
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'Q':
-        case 'q':
-            if (command)
-            {
-                if (modified == CharT{})
-                {
-                    if (!fds.has_tod)
-                        os.setstate(std::ios::failbit);
-                    auto d = fds.tod.to_duration();
-                    if (*fmt == 'q')
-                        os << get_units<CharT>(typename decltype(d)::period::type{});
-                    else
-                        os << d.count();
-                }
-                else
-                {
-                    os << CharT{'%'} << modified << *fmt;
-                }
-                modified = CharT{};
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'r':
-            if (command)
-            {
-                if (modified == CharT{})
-                {
-                    if (!fds.has_tod)
-                        os.setstate(std::ios::failbit);
-#if !ONLY_C_LOCALE
-                    const CharT f[] = {'%', *fmt};
-                    tm.tm_hour = static_cast<int>(fds.tod.hours().count());
-                    tm.tm_min = static_cast<int>(fds.tod.minutes().count());
-                    tm.tm_sec = static_cast<int>(fds.tod.seconds().count());
-                    facet.put(os, os, os.fill(), &tm, std::begin(f), std::end(f));
-#else
-                    hh_mm_ss<seconds> tod(duration_cast<seconds>(fds.tod.to_duration()));
-                    save_ostream<CharT, Traits> _(os);
-                    os.fill('0');
-                    os.width(2);
-                    os << date::make12(tod.hours()).count() << CharT{':'};
-                    os.width(2);
-                    os << tod.minutes().count() << CharT{':'};
-                    os.width(2);
-                    os << tod.seconds().count() << CharT{' '};
-                    if (date::is_am(tod.hours()))
-                        os << ampm_names().first[0];
-                    else
-                        os << ampm_names().first[1];
-#endif
-                }
-                else
-                {
-                    os << CharT{'%'} << modified << *fmt;
-                }
-                modified = CharT{};
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'R':
-            if (command)
-            {
-                if (modified == CharT{})
-                {
-                    if (!fds.has_tod)
-                        os.setstate(std::ios::failbit);
-                    if (fds.tod.hours() < hours{10})
-                        os << CharT{'0'};
-                    os << fds.tod.hours().count() << CharT{':'};
-                    if (fds.tod.minutes() < minutes{10})
-                        os << CharT{'0'};
-                    os << fds.tod.minutes().count();
-                }
-                else
-                {
-                    os << CharT{'%'} << modified << *fmt;
-                    modified = CharT{};
-                }
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'S':
-            if (command)
-            {
-                if (modified == CharT{'E'})
-                    os << CharT{'%'} << modified << *fmt;
-                else
-                {
-                    if (!fds.has_tod)
-                        os.setstate(std::ios::failbit);
-                    if (insert_negative)
-                    {
-                        os << '-';
-                        insert_negative = false;
-                    }
-#if !ONLY_C_LOCALE
-                    if (modified == CharT{})
-#endif
-                    {
-                        os << fds.tod.s_;
-                    }
-#if !ONLY_C_LOCALE
-                    else if (modified == CharT{'O'})
-                    {
-                        const CharT f[] = {'%', modified, *fmt};
-                        tm.tm_sec = static_cast<int>(fds.tod.s_.seconds().count());
-                        facet.put(os, os, os.fill(), &tm, std::begin(f), std::end(f));
-                    }
-#endif
-                }
-                modified = CharT{};
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 't':
-            if (command)
-            {
-                if (modified == CharT{})
-                    os << CharT{'\t'};
-                else
-                {
-                    os << CharT{'%'} << modified << *fmt;
-                    modified = CharT{};
-                }
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'T':
-            if (command)
-            {
-                if (modified == CharT{})
-                {
-                    if (!fds.has_tod)
-                        os.setstate(std::ios::failbit);
-                    os << fds.tod;
-                }
-                else
-                {
-                    os << CharT{'%'} << modified << *fmt;
-                    modified = CharT{};
-                }
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'u':
-            if (command)
-            {
-                if (modified == CharT{'E'})
-                    os << CharT{'%'} << modified << *fmt;
-                else
-                {
-                    auto wd = extract_weekday(os, fds);
-#if !ONLY_C_LOCALE
-                    if (modified == CharT{})
-#endif
-                    {
-                        os << (wd != 0 ? wd : 7u);
-                    }
-#if !ONLY_C_LOCALE
-                    else if (modified == CharT{'O'})
-                    {
-                        const CharT f[] = {'%', modified, *fmt};
-                        tm.tm_wday = static_cast<int>(wd);
-                        facet.put(os, os, os.fill(), &tm, std::begin(f), std::end(f));
-                    }
-#endif
-                }
-                modified = CharT{};
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'U':
-            if (command)
-            {
-                if (modified == CharT{'E'})
-                    os << CharT{'%'} << modified << *fmt;
-                else
-                {
-                    auto const& ymd = fds.ymd;
-                    if (!ymd.ok())
-                        os.setstate(std::ios::failbit);
-                    auto ld = local_days(ymd);
-#if !ONLY_C_LOCALE
-                    if (modified == CharT{})
-#endif
-                    {
-                        auto st = local_days(Sunday[1]/January/ymd.year());
-                        if (ld < st)
-                            os << CharT{'0'} << CharT{'0'};
-                        else
-                        {
-                            auto wn = duration_cast<weeks>(ld - st).count() + 1;
-                            if (wn < 10)
-                                os << CharT{'0'};
-                            os << wn;
-                        }
-                   }
- #if !ONLY_C_LOCALE
-                    else if (modified == CharT{'O'})
-                    {
-                        const CharT f[] = {'%', modified, *fmt};
-                        tm.tm_year = static_cast<int>(ymd.year()) - 1900;
-                        tm.tm_wday = static_cast<int>(extract_weekday(os, fds));
-                        if (os.fail())
-                            return os;
-                        tm.tm_yday = static_cast<int>((ld - local_days(ymd.year()/1/1)).count());
-                        facet.put(os, os, os.fill(), &tm, std::begin(f), std::end(f));
-                    }
-#endif
-                }
-                modified = CharT{};
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'V':
-            if (command)
-            {
-                if (modified == CharT{'E'})
-                    os << CharT{'%'} << modified << *fmt;
-                else
-                {
-                    if (!fds.ymd.ok())
-                        os.setstate(std::ios::failbit);
-                    auto ld = local_days(fds.ymd);
-#if !ONLY_C_LOCALE
-                    if (modified == CharT{})
-#endif
-                    {
-                        auto y = year_month_day{ld + days{3}}.year();
-                        auto st = local_days((y-years{1})/12/Thursday[last]) +
-                                  (Monday-Thursday);
-                        if (ld < st)
-                        {
-                            --y;
-                            st = local_days((y - years{1})/12/Thursday[last]) +
-                                 (Monday-Thursday);
-                        }
-                        auto wn = duration_cast<weeks>(ld - st).count() + 1;
-                        if (wn < 10)
-                            os << CharT{'0'};
-                        os << wn;
-                    }
-#if !ONLY_C_LOCALE
-                    else if (modified == CharT{'O'})
-                    {
-                        const CharT f[] = {'%', modified, *fmt};
-                        auto const& ymd = fds.ymd;
-                        tm.tm_year = static_cast<int>(ymd.year()) - 1900;
-                        tm.tm_wday = static_cast<int>(extract_weekday(os, fds));
-                        if (os.fail())
-                            return os;
-                        tm.tm_yday = static_cast<int>((ld - local_days(ymd.year()/1/1)).count());
-                        facet.put(os, os, os.fill(), &tm, std::begin(f), std::end(f));
-                    }
-#endif
-                }
-                modified = CharT{};
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'w':
-            if (command)
-            {
-                auto wd = extract_weekday(os, fds);
-                if (os.fail())
-                    return os;
-#if !ONLY_C_LOCALE
-                if (modified == CharT{})
-#else
-                if (modified != CharT{'E'})
-#endif
-                {
-                    os << wd;
-                }
-#if !ONLY_C_LOCALE
-                else if (modified == CharT{'O'})
-                {
-                    const CharT f[] = {'%', modified, *fmt};
-                    tm.tm_wday = static_cast<int>(wd);
-                    facet.put(os, os, os.fill(), &tm, std::begin(f), std::end(f));
-                }
-#endif
-                else
-                {
-                    os << CharT{'%'} << modified << *fmt;
-                }
-                modified = CharT{};
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'W':
-            if (command)
-            {
-                if (modified == CharT{'E'})
-                    os << CharT{'%'} << modified << *fmt;
-                else
-                {
-                    auto const& ymd = fds.ymd;
-                    if (!ymd.ok())
-                        os.setstate(std::ios::failbit);
-                    auto ld = local_days(ymd);
-#if !ONLY_C_LOCALE
-                    if (modified == CharT{})
-#endif
-                    {
-                        auto st = local_days(Monday[1]/January/ymd.year());
-                        if (ld < st)
-                            os << CharT{'0'} << CharT{'0'};
-                        else
-                        {
-                            auto wn = duration_cast<weeks>(ld - st).count() + 1;
-                            if (wn < 10)
-                                os << CharT{'0'};
-                            os << wn;
-                        }
-                    }
-#if !ONLY_C_LOCALE
-                    else if (modified == CharT{'O'})
-                    {
-                        const CharT f[] = {'%', modified, *fmt};
-                        tm.tm_year = static_cast<int>(ymd.year()) - 1900;
-                        tm.tm_wday = static_cast<int>(extract_weekday(os, fds));
-                        if (os.fail())
-                            return os;
-                        tm.tm_yday = static_cast<int>((ld - local_days(ymd.year()/1/1)).count());
-                        facet.put(os, os, os.fill(), &tm, std::begin(f), std::end(f));
-                    }
-#endif
-                }
-                modified = CharT{};
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'X':
-            if (command)
-            {
-                if (modified == CharT{'O'})
-                    os << CharT{'%'} << modified << *fmt;
-                else
-                {
-                    if (!fds.has_tod)
-                        os.setstate(std::ios::failbit);
-#if !ONLY_C_LOCALE
-                    tm = std::tm{};
-                    tm.tm_sec = static_cast<int>(fds.tod.seconds().count());
-                    tm.tm_min = static_cast<int>(fds.tod.minutes().count());
-                    tm.tm_hour = static_cast<int>(fds.tod.hours().count());
-                    CharT f[3] = {'%'};
-                    auto fe = std::begin(f) + 1;
-                    if (modified == CharT{'E'})
-                        *fe++ = modified;
-                    *fe++ = *fmt;
-                    facet.put(os, os, os.fill(), &tm, std::begin(f), fe);
-#else
-                    os << fds.tod;
-#endif
-                }
-                command = nullptr;
-                modified = CharT{};
-            }
-            else
-                os << *fmt;
-            break;
-        case 'y':
-            if (command)
-            {
-                if (!fds.ymd.year().ok())
-                    os.setstate(std::ios::failbit);
-                auto y = static_cast<int>(fds.ymd.year());
-#if !ONLY_C_LOCALE
-                if (modified == CharT{})
-                {
-#endif
-                    y = std::abs(y) % 100;
-                    if (y < 10)
-                        os << CharT{'0'};
-                    os << y;
-#if !ONLY_C_LOCALE
-                }
-                else
-                {
-                    const CharT f[] = {'%', modified, *fmt};
-                    tm.tm_year = y - 1900;
-                    facet.put(os, os, os.fill(), &tm, std::begin(f), std::end(f));
-                }
-#endif
-                modified = CharT{};
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'Y':
-            if (command)
-            {
-                if (modified == CharT{'O'})
-                    os << CharT{'%'} << modified << *fmt;
-                else
-                {
-                    if (!fds.ymd.year().ok())
-                        os.setstate(std::ios::failbit);
-                    auto y = fds.ymd.year();
-#if !ONLY_C_LOCALE
-                    if (modified == CharT{})
-#endif
-                    {
-                        save_ostream<CharT, Traits> _(os);
-                        os.imbue(std::locale::classic());
-                        os << y;
-                    }
-#if !ONLY_C_LOCALE
-                    else if (modified == CharT{'E'})
-                    {
-                        const CharT f[] = {'%', modified, *fmt};
-                        tm.tm_year = static_cast<int>(y) - 1900;
-                        facet.put(os, os, os.fill(), &tm, std::begin(f), std::end(f));
-                    }
-#endif
-                }
-                modified = CharT{};
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'z':
-            if (command)
-            {
-                if (offset_sec == nullptr)
-                {
-                    // Can not format %z with unknown offset
-                    os.setstate(ios::failbit);
-                    return os;
-                }
-                auto m = duration_cast<minutes>(*offset_sec);
-                auto neg = m < minutes{0};
-                m = date::abs(m);
-                auto h = duration_cast<hours>(m);
-                m -= h;
-                if (neg)
-                    os << CharT{'-'};
-                else
-                    os << CharT{'+'};
-                if (h < hours{10})
-                    os << CharT{'0'};
-                os << h.count();
-                if (modified != CharT{})
-                    os << CharT{':'};
-                if (m < minutes{10})
-                    os << CharT{'0'};
-                os << m.count();
-                command = nullptr;
-                modified = CharT{};
-            }
-            else
-                os << *fmt;
-            break;
-        case 'Z':
-            if (command)
-            {
-                if (modified == CharT{})
-                {
-                    if (abbrev == nullptr)
-                    {
-                        // Can not format %Z with unknown time_zone
-                        os.setstate(ios::failbit);
-                        return os;
-                    }
-                    for (auto c : *abbrev)
-                        os << CharT(c);
-                }
-                else
-                {
-                    os << CharT{'%'} << modified << *fmt;
-                    modified = CharT{};
-                }
-                command = nullptr;
-            }
-            else
-                os << *fmt;
-            break;
-        case 'E':
-        case 'O':
-            if (command)
-            {
-                if (modified == CharT{})
-                {
-                    modified = *fmt;
-                }
-                else
-                {
-                    os << CharT{'%'} << modified << *fmt;
-                    command = nullptr;
-                    modified = CharT{};
-                }
-            }
-            else
-                os << *fmt;
-            break;
-        case '%':
-            if (command)
-            {
-                if (modified == CharT{})
-                {
-                    os << CharT{'%'};
-                    command = nullptr;
-                }
-                else
-                {
-                    os << CharT{'%'} << modified << CharT{'%'};
-                    command = nullptr;
-                    modified = CharT{};
-                }
-            }
-            else
-                command = fmt;
-            break;
-        default:
-            if (command)
-            {
-                os << CharT{'%'};
-                command = nullptr;
-            }
-            if (modified != CharT{})
-            {
-                os << modified;
-                modified = CharT{};
-            }
-            os << *fmt;
-            break;
-        }
-    }
-    if (command)
-        os << CharT{'%'};
-    if (modified != CharT{})
-        os << modified;
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits>
@@ -6134,9 +4989,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 to_stream(std::basic_ostream<CharT, Traits>& os, const CharT* fmt, const year& y)
 {
-    using CT = std::chrono::seconds;
-    fields<CT> fds{y/0/0};
-    return to_stream(os, fmt, fds);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits>
@@ -6144,9 +4997,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 to_stream(std::basic_ostream<CharT, Traits>& os, const CharT* fmt, const month& m)
 {
-    using CT = std::chrono::seconds;
-    fields<CT> fds{m/0/nanyear};
-    return to_stream(os, fmt, fds);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits>
@@ -6154,9 +5005,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 to_stream(std::basic_ostream<CharT, Traits>& os, const CharT* fmt, const day& d)
 {
-    using CT = std::chrono::seconds;
-    fields<CT> fds{d/0/nanyear};
-    return to_stream(os, fmt, fds);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits>
@@ -6164,9 +5013,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 to_stream(std::basic_ostream<CharT, Traits>& os, const CharT* fmt, const weekday& wd)
 {
-    using CT = std::chrono::seconds;
-    fields<CT> fds{wd};
-    return to_stream(os, fmt, fds);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits>
@@ -6174,9 +5021,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 to_stream(std::basic_ostream<CharT, Traits>& os, const CharT* fmt, const year_month& ym)
 {
-    using CT = std::chrono::seconds;
-    fields<CT> fds{ym/0};
-    return to_stream(os, fmt, fds);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits>
@@ -6184,9 +5029,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 to_stream(std::basic_ostream<CharT, Traits>& os, const CharT* fmt, const month_day& md)
 {
-    using CT = std::chrono::seconds;
-    fields<CT> fds{md/nanyear};
-    return to_stream(os, fmt, fds);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits>
@@ -6195,9 +5038,7 @@ std::basic_ostream<CharT, Traits>&
 to_stream(std::basic_ostream<CharT, Traits>& os, const CharT* fmt,
           const year_month_day& ymd)
 {
-    using CT = std::chrono::seconds;
-    fields<CT> fds{ymd};
-    return to_stream(os, fmt, fds);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits, class Rep, class Period>
@@ -6206,10 +5047,7 @@ std::basic_ostream<CharT, Traits>&
 to_stream(std::basic_ostream<CharT, Traits>& os, const CharT* fmt,
           const std::chrono::duration<Rep, Period>& d)
 {
-    using Duration = std::chrono::duration<Rep, Period>;
-    using CT = typename std::common_type<Duration, std::chrono::seconds>::type;
-    fields<CT> fds{hh_mm_ss<CT>{d}};
-    return to_stream(os, fmt, fds);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits, class Duration>
@@ -6218,15 +5056,7 @@ to_stream(std::basic_ostream<CharT, Traits>& os, const CharT* fmt,
           const local_time<Duration>& tp, const std::string* abbrev = nullptr,
           const std::chrono::seconds* offset_sec = nullptr)
 {
-    using CT = typename std::common_type<Duration, std::chrono::seconds>::type;
-    auto ld = std::chrono::time_point_cast<days>(tp);
-    fields<CT> fds;
-    if (ld <= tp)
-        fds = fields<CT>{year_month_day{ld}, hh_mm_ss<CT>{tp-local_seconds{ld}}};
-    else
-        fds = fields<CT>{year_month_day{ld - days{1}},
-                         hh_mm_ss<CT>{days{1} - (local_seconds{ld} - tp)}};
-    return to_stream(os, fmt, fds, abbrev, offset_sec);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits, class Duration>
@@ -6234,18 +5064,7 @@ std::basic_ostream<CharT, Traits>&
 to_stream(std::basic_ostream<CharT, Traits>& os, const CharT* fmt,
           const sys_time<Duration>& tp)
 {
-    using std::chrono::seconds;
-    using CT = typename std::common_type<Duration, seconds>::type;
-    const std::string abbrev("UTC");
-    CONSTDATA seconds offset{0};
-    auto sd = std::chrono::time_point_cast<days>(tp);
-    fields<CT> fds;
-    if (sd <= tp)
-        fds = fields<CT>{year_month_day{sd}, hh_mm_ss<CT>{tp-sys_seconds{sd}}};
-    else
-        fds = fields<CT>{year_month_day{sd - days{1}},
-                         hh_mm_ss<CT>{days{1} - (sys_seconds{sd} - tp)}};
-    return to_stream(os, fmt, fds, &abbrev, &offset);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // format
@@ -6256,11 +5075,7 @@ format(const std::locale& loc, const CharT* fmt, const Streamable& tp)
     -> decltype(to_stream(std::declval<std::basic_ostream<CharT>&>(), fmt, tp),
                 std::basic_string<CharT>{})
 {
-    std::basic_ostringstream<CharT> os;
-    os.exceptions(std::ios::failbit | std::ios::badbit);
-    os.imbue(loc);
-    to_stream(os, fmt, tp);
-    return os.str();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Streamable>
@@ -6269,10 +5084,7 @@ format(const CharT* fmt, const Streamable& tp)
     -> decltype(to_stream(std::declval<std::basic_ostream<CharT>&>(), fmt, tp),
                 std::basic_string<CharT>{})
 {
-    std::basic_ostringstream<CharT> os;
-    os.exceptions(std::ios::failbit | std::ios::badbit);
-    to_stream(os, fmt, tp);
-    return os.str();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits, class Alloc, class Streamable>
@@ -6282,11 +5094,7 @@ format(const std::locale& loc, const std::basic_string<CharT, Traits, Alloc>& fm
     -> decltype(to_stream(std::declval<std::basic_ostream<CharT, Traits>&>(), fmt.c_str(), tp),
                 std::basic_string<CharT, Traits, Alloc>{})
 {
-    std::basic_ostringstream<CharT, Traits, Alloc> os;
-    os.exceptions(std::ios::failbit | std::ios::badbit);
-    os.imbue(loc);
-    to_stream(os, fmt.c_str(), tp);
-    return os.str();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits, class Alloc, class Streamable>
@@ -6295,10 +5103,7 @@ format(const std::basic_string<CharT, Traits, Alloc>& fmt, const Streamable& tp)
     -> decltype(to_stream(std::declval<std::basic_ostream<CharT, Traits>&>(), fmt.c_str(), tp),
                 std::basic_string<CharT, Traits, Alloc>{})
 {
-    std::basic_ostringstream<CharT, Traits, Alloc> os;
-    os.exceptions(std::ios::failbit | std::ios::badbit);
-    to_stream(os, fmt.c_str(), tp);
-    return os.str();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // parse
@@ -6310,121 +5115,28 @@ template <class CharT, class Traits>
 bool
 read_char(std::basic_istream<CharT, Traits>& is, CharT fmt, std::ios::iostate& err)
 {
-    auto ic = is.get();
-    if (Traits::eq_int_type(ic, Traits::eof()) ||
-       !Traits::eq(Traits::to_char_type(ic), fmt))
-    {
-        err |= std::ios::failbit;
-        is.setstate(std::ios::failbit);
-        return false;
-    }
-    return true;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits>
 unsigned
 read_unsigned(std::basic_istream<CharT, Traits>& is, unsigned m = 1, unsigned M = 10)
 {
-    unsigned x = 0;
-    unsigned count = 0;
-    while (true)
-    {
-        auto ic = is.peek();
-        if (Traits::eq_int_type(ic, Traits::eof()))
-            break;
-        auto c = static_cast<char>(Traits::to_char_type(ic));
-        if (!('0' <= c && c <= '9'))
-            break;
-        (void)is.get();
-        ++count;
-        x = 10*x + static_cast<unsigned>(c - '0');
-        if (count == M)
-            break;
-    }
-    if (count < m)
-        is.setstate(std::ios::failbit);
-    return x;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits>
 int
 read_signed(std::basic_istream<CharT, Traits>& is, unsigned m = 1, unsigned M = 10)
 {
-    auto ic = is.peek();
-    if (!Traits::eq_int_type(ic, Traits::eof()))
-    {
-        auto c = static_cast<char>(Traits::to_char_type(ic));
-        if (('0' <= c && c <= '9') || c == '-' || c == '+')
-        {
-            if (c == '-' || c == '+')
-            {
-                (void)is.get();
-                --M;
-            }
-            auto x = static_cast<int>(read_unsigned(is, std::max(m, 1u), M));
-            if (!is.fail())
-            {
-                if (c == '-')
-                    x = -x;
-                return x;
-            }
-        }
-    }
-    if (m > 0)
-        is.setstate(std::ios::failbit);
-    return 0;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits>
 long double
 read_long_double(std::basic_istream<CharT, Traits>& is, unsigned m = 1, unsigned M = 10)
 {
-    unsigned count = 0;
-    unsigned fcount = 0;
-    unsigned long long i = 0;
-    unsigned long long f = 0;
-    bool parsing_fraction = false;
-#if ONLY_C_LOCALE
-    typename Traits::int_type decimal_point = '.';
-#else
-    auto decimal_point = Traits::to_int_type(
-        std::use_facet<std::numpunct<CharT>>(is.getloc()).decimal_point());
-#endif
-    while (true)
-    {
-        auto ic = is.peek();
-        if (Traits::eq_int_type(ic, Traits::eof()))
-            break;
-        if (Traits::eq_int_type(ic, decimal_point))
-        {
-            decimal_point = Traits::eof();
-            parsing_fraction = true;
-        }
-        else
-        {
-            auto c = static_cast<char>(Traits::to_char_type(ic));
-            if (!('0' <= c && c <= '9'))
-                break;
-            if (!parsing_fraction)
-            {
-                i = 10*i + static_cast<unsigned>(c - '0');
-            }
-            else
-            {
-                f = 10*f + static_cast<unsigned>(c - '0');
-                ++fcount;
-            }
-        }
-        (void)is.get();
-        if (++count == M)
-            break;
-    }
-    if (count < m)
-    {
-        is.setstate(std::ios::failbit);
-        return 0;
-    }
-    return static_cast<long double>(i) + static_cast<long double>(f)/std::pow(10.L, fcount);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 struct rs
@@ -6452,6 +5164,7 @@ template <class CharT, class Traits>
 void
 read(std::basic_istream<CharT, Traits>&)
 {
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits, class ...Args>
@@ -6478,85 +5191,35 @@ template <class CharT, class Traits, class ...Args>
 void
 read(std::basic_istream<CharT, Traits>& is, CharT a0, Args&& ...args)
 {
-    // No-op if a0 == CharT{}
-    if (a0 != CharT{})
-    {
-        auto ic = is.peek();
-        if (Traits::eq_int_type(ic, Traits::eof()))
-        {
-            is.setstate(std::ios::failbit | std::ios::eofbit);
-            return;
-        }
-        if (!Traits::eq(Traits::to_char_type(ic), a0))
-        {
-            is.setstate(std::ios::failbit);
-            return;
-        }
-        (void)is.get();
-    }
-    read(is, std::forward<Args>(args)...);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits, class ...Args>
 void
 read(std::basic_istream<CharT, Traits>& is, rs a0, Args&& ...args)
 {
-    auto x = read_signed(is, a0.m, a0.M);
-    if (is.fail())
-        return;
-    a0.i = x;
-    read(is, std::forward<Args>(args)...);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits, class ...Args>
 void
 read(std::basic_istream<CharT, Traits>& is, ru a0, Args&& ...args)
 {
-    auto x = read_unsigned(is, a0.m, a0.M);
-    if (is.fail())
-        return;
-    a0.i = static_cast<int>(x);
-    read(is, std::forward<Args>(args)...);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits, class ...Args>
 void
 read(std::basic_istream<CharT, Traits>& is, int a0, Args&& ...args)
 {
-    if (a0 != -1)
-    {
-        auto u = static_cast<unsigned>(a0);
-        CharT buf[std::numeric_limits<unsigned>::digits10+2u] = {};
-        auto e = buf;
-        do
-        {
-            *e++ = static_cast<CharT>(CharT(u % 10) + CharT{'0'});
-            u /= 10;
-        } while (u > 0);
-#if defined(__GNUC__) && __GNUC__ >= 11
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wstringop-overflow"
-#endif
-        std::reverse(buf, e);
-#if defined(__GNUC__) && __GNUC__ >= 11
-#pragma GCC diagnostic pop
-#endif
-        for (auto p = buf; p != e && is.rdstate() == std::ios::goodbit; ++p)
-            read(is, *p);
-    }
-    if (is.rdstate() == std::ios::goodbit)
-        read(is, std::forward<Args>(args)...);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits, class ...Args>
 void
 read(std::basic_istream<CharT, Traits>& is, rld a0, Args&& ...args)
 {
-    auto x = read_long_double(is, a0.m, a0.M);
-    if (is.fail())
-        return;
-    a0.i = x;
-    read(is, std::forward<Args>(args)...);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class T, class CharT, class Traits>
@@ -6564,13 +5227,7 @@ inline
 void
 checked_set(T& value, T from, T not_a_value, std::basic_ios<CharT, Traits>& is)
 {
-    if (!is.fail())
-    {
-        if (value == not_a_value)
-            value = std::move(from);
-        else if (value != from)
-            is.setstate(std::ios::failbit);
-    }
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // namespace detail;
@@ -6581,1340 +5238,7 @@ from_stream(std::basic_istream<CharT, Traits>& is, const CharT* fmt,
             fields<Duration>& fds, std::basic_string<CharT, Traits, Alloc>* abbrev,
             std::chrono::minutes* offset)
 {
-    using std::numeric_limits;
-    using std::ios;
-    using std::chrono::duration;
-    using std::chrono::duration_cast;
-    using std::chrono::seconds;
-    using std::chrono::minutes;
-    using std::chrono::hours;
-    using detail::round_i;
-    typename std::basic_istream<CharT, Traits>::sentry ok{is, true};
-    if (ok)
-    {
-        date::detail::save_istream<CharT, Traits> ss(is);
-        is.fill(' ');
-        is.flags(std::ios::skipws | std::ios::dec);
-        is.width(0);
-#if !ONLY_C_LOCALE
-        auto& f = std::use_facet<std::time_get<CharT>>(is.getloc());
-        std::tm tm{};
-#endif
-        const CharT* command = nullptr;
-        auto modified = CharT{};
-        auto width = -1;
-
-        CONSTDATA int not_a_year = numeric_limits<short>::min();
-        CONSTDATA int not_a_2digit_year = 100;
-        CONSTDATA int not_a_century = numeric_limits<int>::min();
-        CONSTDATA int not_a_month = 0;
-        CONSTDATA int not_a_day = 0;
-        CONSTDATA int not_a_hour = numeric_limits<int>::min();
-        CONSTDATA int not_a_hour_12_value = 0;
-        CONSTDATA int not_a_minute = not_a_hour;
-        CONSTDATA Duration not_a_second = Duration::min();
-        CONSTDATA int not_a_doy = -1;
-        CONSTDATA int not_a_weekday = 8;
-        CONSTDATA int not_a_week_num = 100;
-        CONSTDATA int not_a_ampm = -1;
-        CONSTDATA minutes not_a_offset = minutes::min();
-
-        int Y = not_a_year;             // c, F, Y                   *
-        int y = not_a_2digit_year;      // D, x, y                   *
-        int g = not_a_2digit_year;      // g                         *
-        int G = not_a_year;             // G                         *
-        int C = not_a_century;          // C                         *
-        int m = not_a_month;            // b, B, h, m, c, D, F, x    *
-        int d = not_a_day;              // c, d, D, e, F, x          *
-        int j = not_a_doy;              // j                         *
-        int wd = not_a_weekday;         // a, A, u, w                *
-        int H = not_a_hour;             // c, H, R, T, X             *
-        int I = not_a_hour_12_value;    // I, r                      *
-        int p = not_a_ampm;             // p, r                      *
-        int M = not_a_minute;           // c, M, r, R, T, X          *
-        Duration s = not_a_second;      // c, r, S, T, X             *
-        int U = not_a_week_num;         // U                         *
-        int V = not_a_week_num;         // V                         *
-        int W = not_a_week_num;         // W                         *
-        std::basic_string<CharT, Traits, Alloc> temp_abbrev;  // Z   *
-        minutes temp_offset = not_a_offset;  // z                    *
-
-        using detail::read;
-        using detail::rs;
-        using detail::ru;
-        using detail::rld;
-        using detail::checked_set;
-        for (; *fmt != CharT{} && !is.fail(); ++fmt)
-        {
-            switch (*fmt)
-            {
-            case 'a':
-            case 'A':
-            case 'u':
-            case 'w':  // wd:  a, A, u, w
-                if (command)
-                {
-                    int trial_wd = not_a_weekday;
-                    if (*fmt == 'a' || *fmt == 'A')
-                    {
-                        if (modified == CharT{})
-                        {
-#if !ONLY_C_LOCALE
-                            ios::iostate err = ios::goodbit;
-                            f.get(is, nullptr, is, err, &tm, command, fmt+1);
-                            is.setstate(err);
-                            if (!is.fail())
-                                trial_wd = tm.tm_wday;
-#else
-                            auto nm = detail::weekday_names();
-                            auto i = detail::scan_keyword(is, nm.first, nm.second) - nm.first;
-                            if (!is.fail())
-                                trial_wd = i % 7;
-#endif
-                        }
-                        else
-                            read(is, CharT{'%'}, width, modified, *fmt);
-                    }
-                    else  // *fmt == 'u' || *fmt == 'w'
-                    {
-#if !ONLY_C_LOCALE
-                        if (modified == CharT{})
-#else
-                        if (modified != CharT{'E'})
-#endif
-                        {
-                            read(is, ru{trial_wd, 1, width == -1 ?
-                                                      1u : static_cast<unsigned>(width)});
-                            if (!is.fail())
-                            {
-                                if (*fmt == 'u')
-                                {
-                                    if (!(1 <= trial_wd && trial_wd <= 7))
-                                    {
-                                        trial_wd = not_a_weekday;
-                                        is.setstate(ios::failbit);
-                                    }
-                                    else if (trial_wd == 7)
-                                        trial_wd = 0;
-                                }
-                                else  // *fmt == 'w'
-                                {
-                                    if (!(0 <= trial_wd && trial_wd <= 6))
-                                    {
-                                        trial_wd = not_a_weekday;
-                                        is.setstate(ios::failbit);
-                                    }
-                                }
-                            }
-                        }
-#if !ONLY_C_LOCALE
-                        else if (modified == CharT{'O'})
-                        {
-                            ios::iostate err = ios::goodbit;
-                            f.get(is, nullptr, is, err, &tm, command, fmt+1);
-                            is.setstate(err);
-                            if (!is.fail())
-                                trial_wd = tm.tm_wday;
-                        }
-#endif
-                        else
-                            read(is, CharT{'%'}, width, modified, *fmt);
-                    }
-                    if (trial_wd != not_a_weekday)
-                        checked_set(wd, trial_wd, not_a_weekday, is);
-                }
-                else  // !command
-                    read(is, *fmt);
-                command = nullptr;
-                width = -1;
-                modified = CharT{};
-                break;
-            case 'b':
-            case 'B':
-            case 'h':
-                if (command)
-                {
-                    if (modified == CharT{})
-                    {
-                        int ttm = not_a_month;
-#if !ONLY_C_LOCALE
-                        ios::iostate err = ios::goodbit;
-                        f.get(is, nullptr, is, err, &tm, command, fmt+1);
-                        if ((err & ios::failbit) == 0)
-                            ttm = tm.tm_mon + 1;
-                        is.setstate(err);
-#else
-                        auto nm = detail::month_names();
-                        auto i = detail::scan_keyword(is, nm.first, nm.second) - nm.first;
-                        if (!is.fail())
-                            ttm = i % 12 + 1;
-#endif
-                        checked_set(m, ttm, not_a_month, is);
-                    }
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'c':
-                if (command)
-                {
-                    if (modified != CharT{'O'})
-                    {
-#if !ONLY_C_LOCALE
-                        ios::iostate err = ios::goodbit;
-                        f.get(is, nullptr, is, err, &tm, command, fmt+1);
-                        if ((err & ios::failbit) == 0)
-                        {
-                            checked_set(Y, tm.tm_year + 1900, not_a_year, is);
-                            checked_set(m, tm.tm_mon + 1, not_a_month, is);
-                            checked_set(d, tm.tm_mday, not_a_day, is);
-                            checked_set(H, tm.tm_hour, not_a_hour, is);
-                            checked_set(M, tm.tm_min, not_a_minute, is);
-                            checked_set(s, duration_cast<Duration>(seconds{tm.tm_sec}),
-                                        not_a_second, is);
-                        }
-                        is.setstate(err);
-#else
-                        // "%a %b %e %T %Y"
-                        auto nm = detail::weekday_names();
-                        auto i = detail::scan_keyword(is, nm.first, nm.second) - nm.first;
-                        checked_set(wd, static_cast<int>(i % 7), not_a_weekday, is);
-                        ws(is);
-                        nm = detail::month_names();
-                        i = detail::scan_keyword(is, nm.first, nm.second) - nm.first;
-                        checked_set(m, static_cast<int>(i % 12 + 1), not_a_month, is);
-                        ws(is);
-                        int td = not_a_day;
-                        read(is, ru{td, 1, 2});
-                        checked_set(d, td, not_a_day, is);
-                        ws(is);
-                        using dfs = detail::decimal_format_seconds<Duration>;
-                        CONSTDATA auto w = Duration::period::den == 1 ? 2 : 3 + dfs::width;
-                        int tH;
-                        int tM;
-                        long double S{};
-                        read(is, ru{tH, 1, 2}, CharT{':'}, ru{tM, 1, 2},
-                                               CharT{':'}, rld{S, 1, w});
-                        checked_set(H, tH, not_a_hour, is);
-                        checked_set(M, tM, not_a_minute, is);
-                        checked_set(s, round_i<Duration>(duration<long double>{S}),
-                                    not_a_second, is);
-                        ws(is);
-                        int tY = not_a_year;
-                        // No need for `rs` here, negative years can't parse
-                        // with "%c" since `width` is hardcoded to 4
-                        read(is, ru{tY, 1, 4u});
-                        checked_set(Y, tY, not_a_year, is);
-#endif
-                    }
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'x':
-                if (command)
-                {
-                    if (modified != CharT{'O'})
-                    {
-#if !ONLY_C_LOCALE
-                        ios::iostate err = ios::goodbit;
-                        f.get(is, nullptr, is, err, &tm, command, fmt+1);
-                        if ((err & ios::failbit) == 0)
-                        {
-                            checked_set(Y, tm.tm_year + 1900, not_a_year, is);
-                            checked_set(m, tm.tm_mon + 1, not_a_month, is);
-                            checked_set(d, tm.tm_mday, not_a_day, is);
-                        }
-                        is.setstate(err);
-#else
-                        // "%m/%d/%y"
-                        int ty = not_a_2digit_year;
-                        int tm = not_a_month;
-                        int td = not_a_day;
-                        read(is, ru{tm, 1, 2}, CharT{'/'}, ru{td, 1, 2}, CharT{'/'},
-                                 ru{ty, 1, 2});
-                        checked_set(y, ty, not_a_2digit_year, is);
-                        checked_set(m, tm, not_a_month, is);
-                        checked_set(d, td, not_a_day, is);
-#endif
-                    }
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'X':
-                if (command)
-                {
-                    if (modified != CharT{'O'})
-                    {
-#if !ONLY_C_LOCALE
-                        ios::iostate err = ios::goodbit;
-                        f.get(is, nullptr, is, err, &tm, command, fmt+1);
-                        if ((err & ios::failbit) == 0)
-                        {
-                            checked_set(H, tm.tm_hour, not_a_hour, is);
-                            checked_set(M, tm.tm_min, not_a_minute, is);
-                            checked_set(s, duration_cast<Duration>(seconds{tm.tm_sec}),
-                                        not_a_second, is);
-                        }
-                        is.setstate(err);
-#else
-                        // "%T"
-                        using dfs = detail::decimal_format_seconds<Duration>;
-                        CONSTDATA auto w = Duration::period::den == 1 ? 2 : 3 + dfs::width;
-                        int tH = not_a_hour;
-                        int tM = not_a_minute;
-                        long double S{};
-                        read(is, ru{tH, 1, 2}, CharT{':'}, ru{tM, 1, 2},
-                                               CharT{':'}, rld{S, 1, w});
-                        checked_set(H, tH, not_a_hour, is);
-                        checked_set(M, tM, not_a_minute, is);
-                        checked_set(s, round_i<Duration>(duration<long double>{S}),
-                                    not_a_second, is);
-#endif
-                    }
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'C':
-                if (command)
-                {
-                    int tC = not_a_century;
-#if !ONLY_C_LOCALE
-                    if (modified == CharT{})
-                    {
-#endif
-                        read(is, rs{tC, 1, width == -1 ? 2u : static_cast<unsigned>(width)});
-#if !ONLY_C_LOCALE
-                    }
-                    else
-                    {
-                        ios::iostate err = ios::goodbit;
-                        f.get(is, nullptr, is, err, &tm, command, fmt+1);
-                        if ((err & ios::failbit) == 0)
-                        {
-                            auto tY = tm.tm_year + 1900;
-                            tC = (tY >= 0 ? tY : tY-99) / 100;
-                        }
-                        is.setstate(err);
-                    }
-#endif
-                    checked_set(C, tC, not_a_century, is);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'D':
-                if (command)
-                {
-                    if (modified == CharT{})
-                    {
-                        int tn = not_a_month;
-                        int td = not_a_day;
-                        int ty = not_a_2digit_year;
-                        read(is, ru{tn, 1, 2}, CharT{'\0'}, CharT{'/'}, CharT{'\0'},
-                                 ru{td, 1, 2}, CharT{'\0'}, CharT{'/'}, CharT{'\0'},
-                                 ru{ty, 1, 2});
-                        checked_set(y, ty, not_a_2digit_year, is);
-                        checked_set(m, tn, not_a_month, is);
-                        checked_set(d, td, not_a_day, is);
-                    }
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'F':
-                if (command)
-                {
-                    if (modified == CharT{})
-                    {
-                        int tY = not_a_year;
-                        int tn = not_a_month;
-                        int td = not_a_day;
-                        read(is, rs{tY, 1, width == -1 ? 4u : static_cast<unsigned>(width)},
-                                 CharT{'-'}, ru{tn, 1, 2}, CharT{'-'}, ru{td, 1, 2});
-                        checked_set(Y, tY, not_a_year, is);
-                        checked_set(m, tn, not_a_month, is);
-                        checked_set(d, td, not_a_day, is);
-                    }
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'd':
-            case 'e':
-                if (command)
-                {
-#if !ONLY_C_LOCALE
-                    if (modified == CharT{})
-#else
-                    if (modified != CharT{'E'})
-#endif
-                    {
-                        int td = not_a_day;
-                        read(is, ru{td, 1, width == -1 ? 2u : static_cast<unsigned>(width)});
-                        checked_set(d, td, not_a_day, is);
-                    }
-#if !ONLY_C_LOCALE
-                    else if (modified == CharT{'O'})
-                    {
-                        ios::iostate err = ios::goodbit;
-                        f.get(is, nullptr, is, err, &tm, command, fmt+1);
-                        command = nullptr;
-                        width = -1;
-                        modified = CharT{};
-                        if ((err & ios::failbit) == 0)
-                            checked_set(d, tm.tm_mday, not_a_day, is);
-                        is.setstate(err);
-                    }
-#endif
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'H':
-                if (command)
-                {
-#if !ONLY_C_LOCALE
-                    if (modified == CharT{})
-#else
-                    if (modified != CharT{'E'})
-#endif
-                    {
-                        int tH = not_a_hour;
-                        read(is, ru{tH, 1, width == -1 ? 2u : static_cast<unsigned>(width)});
-                        checked_set(H, tH, not_a_hour, is);
-                    }
-#if !ONLY_C_LOCALE
-                    else if (modified == CharT{'O'})
-                    {
-                        ios::iostate err = ios::goodbit;
-                        f.get(is, nullptr, is, err, &tm, command, fmt+1);
-                        if ((err & ios::failbit) == 0)
-                            checked_set(H, tm.tm_hour, not_a_hour, is);
-                        is.setstate(err);
-                    }
-#endif
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'I':
-                if (command)
-                {
-                    if (modified == CharT{})
-                    {
-                        int tI = not_a_hour_12_value;
-                        // reads in an hour into I, but most be in [1, 12]
-                        read(is, ru{tI, 1, width == -1 ? 2u : static_cast<unsigned>(width)});
-                        if (!(1 <= tI && tI <= 12))
-                            is.setstate(ios::failbit);
-                        checked_set(I, tI, not_a_hour_12_value, is);
-                    }
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-               break;
-            case 'j':
-                if (command)
-                {
-                    if (modified == CharT{})
-                    {
-                        int tj = not_a_doy;
-                        read(is, ru{tj, 1, width == -1 ? 3u : static_cast<unsigned>(width)});
-                        checked_set(j, tj, not_a_doy, is);
-                    }
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'M':
-                if (command)
-                {
-#if !ONLY_C_LOCALE
-                    if (modified == CharT{})
-#else
-                    if (modified != CharT{'E'})
-#endif
-                    {
-                        int tM = not_a_minute;
-                        read(is, ru{tM, 1, width == -1 ? 2u : static_cast<unsigned>(width)});
-                        checked_set(M, tM, not_a_minute, is);
-                    }
-#if !ONLY_C_LOCALE
-                    else if (modified == CharT{'O'})
-                    {
-                        ios::iostate err = ios::goodbit;
-                        f.get(is, nullptr, is, err, &tm, command, fmt+1);
-                        if ((err & ios::failbit) == 0)
-                            checked_set(M, tm.tm_min, not_a_minute, is);
-                        is.setstate(err);
-                    }
-#endif
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'm':
-                if (command)
-                {
-#if !ONLY_C_LOCALE
-                    if (modified == CharT{})
-#else
-                    if (modified != CharT{'E'})
-#endif
-                    {
-                        int tn = not_a_month;
-                        read(is, ru{tn, 1, width == -1 ? 2u : static_cast<unsigned>(width)});
-                        checked_set(m, tn, not_a_month, is);
-                    }
-#if !ONLY_C_LOCALE
-                    else if (modified == CharT{'O'})
-                    {
-                        ios::iostate err = ios::goodbit;
-                        f.get(is, nullptr, is, err, &tm, command, fmt+1);
-                        if ((err & ios::failbit) == 0)
-                            checked_set(m, tm.tm_mon + 1, not_a_month, is);
-                        is.setstate(err);
-                    }
-#endif
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'n':
-            case 't':
-                if (command)
-                {
-                    if (modified == CharT{})
-                    {
-                        // %n matches a single white space character
-                        // %t matches 0 or 1 white space characters
-                        auto ic = is.peek();
-                        if (Traits::eq_int_type(ic, Traits::eof()))
-                        {
-                            ios::iostate err = ios::eofbit;
-                            if (*fmt == 'n')
-                                err |= ios::failbit;
-                            is.setstate(err);
-                            break;
-                        }
-                        if (isspace(ic))
-                        {
-                            (void)is.get();
-                        }
-                        else if (*fmt == 'n')
-                            is.setstate(ios::failbit);
-                    }
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'p':
-                if (command)
-                {
-                    if (modified == CharT{})
-                    {
-                        int tp = not_a_ampm;
-#if !ONLY_C_LOCALE
-                        tm = std::tm{};
-                        tm.tm_isdst = -1;
-                        tm.tm_hour = 1;
-                        ios::iostate err = ios::goodbit;
-                        f.get(is, nullptr, is, err, &tm, command, fmt+1);
-                        is.setstate(err);
-                        if (tm.tm_hour == 1)
-                            tp = 0;
-                        else if (tm.tm_hour == 13)
-                            tp = 1;
-                        else
-                            is.setstate(err);
-#else
-                        auto nm = detail::ampm_names();
-                        auto i = detail::scan_keyword(is, nm.first, nm.second) - nm.first;
-                        tp = static_cast<decltype(tp)>(i);
-#endif
-                        checked_set(p, tp, not_a_ampm, is);
-                    }
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-
-               break;
-            case 'r':
-                if (command)
-                {
-                    if (modified == CharT{})
-                    {
-#if !ONLY_C_LOCALE
-                        ios::iostate err = ios::goodbit;
-                        f.get(is, nullptr, is, err, &tm, command, fmt+1);
-                        if ((err & ios::failbit) == 0)
-                        {
-                            checked_set(H, tm.tm_hour, not_a_hour, is);
-                            checked_set(M, tm.tm_min, not_a_hour, is);
-                            checked_set(s, duration_cast<Duration>(seconds{tm.tm_sec}),
-                                        not_a_second, is);
-                        }
-                        is.setstate(err);
-#else
-                        // "%I:%M:%S %p"
-                        using dfs = detail::decimal_format_seconds<Duration>;
-                        CONSTDATA auto w = Duration::period::den == 1 ? 2 : 3 + dfs::width;
-                        long double S{};
-                        int tI = not_a_hour_12_value;
-                        int tM = not_a_minute;
-                        read(is, ru{tI, 1, 2}, CharT{':'}, ru{tM, 1, 2},
-                                               CharT{':'}, rld{S, 1, w});
-                        checked_set(I, tI, not_a_hour_12_value, is);
-                        checked_set(M, tM, not_a_minute, is);
-                        checked_set(s, round_i<Duration>(duration<long double>{S}),
-                                    not_a_second, is);
-                        ws(is);
-                        auto nm = detail::ampm_names();
-                        auto i = detail::scan_keyword(is, nm.first, nm.second) - nm.first;
-                        checked_set(p, static_cast<int>(i), not_a_ampm, is);
-#endif
-                    }
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'R':
-                if (command)
-                {
-                    if (modified == CharT{})
-                    {
-                        int tH = not_a_hour;
-                        int tM = not_a_minute;
-                        read(is, ru{tH, 1, 2}, CharT{'\0'}, CharT{':'}, CharT{'\0'},
-                                 ru{tM, 1, 2}, CharT{'\0'});
-                        checked_set(H, tH, not_a_hour, is);
-                        checked_set(M, tM, not_a_minute, is);
-                    }
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'S':
-                if (command)
-                {
- #if !ONLY_C_LOCALE
-                   if (modified == CharT{})
-#else
-                   if (modified != CharT{'E'})
-#endif
-                    {
-                        using dfs = detail::decimal_format_seconds<Duration>;
-                        CONSTDATA auto w = Duration::period::den == 1 ? 2 : 3 + dfs::width;
-                        long double S{};
-                        read(is, rld{S, 1, width == -1 ? w : static_cast<unsigned>(width)});
-                        checked_set(s, round_i<Duration>(duration<long double>{S}),
-                                    not_a_second, is);
-                    }
-#if !ONLY_C_LOCALE
-                    else if (modified == CharT{'O'})
-                    {
-                        ios::iostate err = ios::goodbit;
-                        f.get(is, nullptr, is, err, &tm, command, fmt+1);
-                        if ((err & ios::failbit) == 0)
-                            checked_set(s, duration_cast<Duration>(seconds{tm.tm_sec}),
-                                        not_a_second, is);
-                        is.setstate(err);
-                    }
-#endif
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'T':
-                if (command)
-                {
-                    if (modified == CharT{})
-                    {
-                        using dfs = detail::decimal_format_seconds<Duration>;
-                        CONSTDATA auto w = Duration::period::den == 1 ? 2 : 3 + dfs::width;
-                        int tH = not_a_hour;
-                        int tM = not_a_minute;
-                        long double S{};
-                        read(is, ru{tH, 1, 2}, CharT{':'}, ru{tM, 1, 2},
-                                               CharT{':'}, rld{S, 1, w});
-                        checked_set(H, tH, not_a_hour, is);
-                        checked_set(M, tM, not_a_minute, is);
-                        checked_set(s, round_i<Duration>(duration<long double>{S}),
-                                    not_a_second, is);
-                    }
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'Y':
-                if (command)
-                {
-#if !ONLY_C_LOCALE
-                    if (modified == CharT{})
-#else
-                    if (modified != CharT{'O'})
-#endif
-                    {
-                        int tY = not_a_year;
-                        read(is, rs{tY, 1, width == -1 ? 4u : static_cast<unsigned>(width)});
-                        checked_set(Y, tY, not_a_year, is);
-                    }
-#if !ONLY_C_LOCALE
-                    else if (modified == CharT{'E'})
-                    {
-                        ios::iostate err = ios::goodbit;
-                        f.get(is, nullptr, is, err, &tm, command, fmt+1);
-                        if ((err & ios::failbit) == 0)
-                            checked_set(Y, tm.tm_year + 1900, not_a_year, is);
-                        is.setstate(err);
-                    }
-#endif
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'y':
-                if (command)
-                {
-#if !ONLY_C_LOCALE
-                    if (modified == CharT{})
-#endif
-                    {
-                        int ty = not_a_2digit_year;
-                        read(is, ru{ty, 1, width == -1 ? 2u : static_cast<unsigned>(width)});
-                        checked_set(y, ty, not_a_2digit_year, is);
-                    }
-#if !ONLY_C_LOCALE
-                    else
-                    {
-                        ios::iostate err = ios::goodbit;
-                        f.get(is, nullptr, is, err, &tm, command, fmt+1);
-                        if ((err & ios::failbit) == 0)
-                            checked_set(Y, tm.tm_year + 1900, not_a_year, is);
-                        is.setstate(err);
-                    }
-#endif
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'g':
-                if (command)
-                {
-                    if (modified == CharT{})
-                    {
-                        int tg = not_a_2digit_year;
-                        read(is, ru{tg, 1, width == -1 ? 2u : static_cast<unsigned>(width)});
-                        checked_set(g, tg, not_a_2digit_year, is);
-                    }
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'G':
-                if (command)
-                {
-                    if (modified == CharT{})
-                    {
-                        int tG = not_a_year;
-                        read(is, rs{tG, 1, width == -1 ? 4u : static_cast<unsigned>(width)});
-                        checked_set(G, tG, not_a_year, is);
-                    }
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'U':
-                if (command)
-                {
-                    if (modified == CharT{})
-                    {
-                        int tU = not_a_week_num;
-                        read(is, ru{tU, 1, width == -1 ? 2u : static_cast<unsigned>(width)});
-                        checked_set(U, tU, not_a_week_num, is);
-                    }
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'V':
-                if (command)
-                {
-                    if (modified == CharT{})
-                    {
-                        int tV = not_a_week_num;
-                        read(is, ru{tV, 1, width == -1 ? 2u : static_cast<unsigned>(width)});
-                        checked_set(V, tV, not_a_week_num, is);
-                    }
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'W':
-                if (command)
-                {
-                    if (modified == CharT{})
-                    {
-                        int tW = not_a_week_num;
-                        read(is, ru{tW, 1, width == -1 ? 2u : static_cast<unsigned>(width)});
-                        checked_set(W, tW, not_a_week_num, is);
-                    }
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'E':
-            case 'O':
-                if (command)
-                {
-                    if (modified == CharT{})
-                    {
-                        modified = *fmt;
-                    }
-                    else
-                    {
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                        command = nullptr;
-                        width = -1;
-                        modified = CharT{};
-                    }
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case '%':
-                if (command)
-                {
-                    if (modified == CharT{})
-                        read(is, *fmt);
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    command = fmt;
-                break;
-            case 'z':
-                if (command)
-                {
-                    int tH, tM;
-                    minutes toff = not_a_offset;
-                    bool neg = false;
-                    auto ic = is.peek();
-                    if (!Traits::eq_int_type(ic, Traits::eof()))
-                    {
-                        auto c = static_cast<char>(Traits::to_char_type(ic));
-                        if (c == '-')
-                        {
-                            neg = true;
-                            (void)is.get();
-                        }
-                        else if (c == '+')
-                            (void)is.get();
-                    }
-                    if (modified == CharT{})
-                    {
-                        read(is, ru{tH, 2, 2});
-                        if (!is.fail())
-                            toff = hours{std::abs(tH)};
-                        if (is.good())
-                        {
-                            ic = is.peek();
-                            if (!Traits::eq_int_type(ic, Traits::eof()))
-                            {
-                                auto c = static_cast<char>(Traits::to_char_type(ic));
-                                if ('0' <= c && c <= '9')
-                                {
-                                    read(is, ru{tM, 2, 2});
-                                    if (!is.fail())
-                                        toff += minutes{tM};
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        read(is, ru{tH, 1, 2});
-                        if (!is.fail())
-                            toff = hours{std::abs(tH)};
-                        if (is.good())
-                        {
-                            ic = is.peek();
-                            if (!Traits::eq_int_type(ic, Traits::eof()))
-                            {
-                                auto c = static_cast<char>(Traits::to_char_type(ic));
-                                if (c == ':')
-                                {
-                                    (void)is.get();
-                                    read(is, ru{tM, 2, 2});
-                                    if (!is.fail())
-                                        toff += minutes{tM};
-                                }
-                            }
-                        }
-                    }
-                    if (neg && !is.fail())
-                        toff = -toff;
-                    checked_set(temp_offset, toff, not_a_offset, is);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            case 'Z':
-                if (command)
-                {
-                    if (modified == CharT{})
-                    {
-                        std::basic_string<CharT, Traits, Alloc> buf;
-                        while (is.rdstate() == std::ios::goodbit)
-                        {
-                            auto i = is.rdbuf()->sgetc();
-                            if (Traits::eq_int_type(i, Traits::eof()))
-                            {
-                                is.setstate(ios::eofbit);
-                                break;
-                            }
-                            auto wc = Traits::to_char_type(i);
-                            auto c = static_cast<char>(wc);
-                            // is c a valid time zone name or abbreviation character?
-                            if (!(CharT{1} < wc && wc < CharT{127}) || !(isalnum(c) ||
-                                    c == '_' || c == '/' || c == '-' || c == '+'))
-                                break;
-                            buf.push_back(c);
-                            is.rdbuf()->sbumpc();
-                        }
-                        if (buf.empty())
-                            is.setstate(ios::failbit);
-                        checked_set(temp_abbrev, buf, {}, is);
-                    }
-                    else
-                        read(is, CharT{'%'}, width, modified, *fmt);
-                    command = nullptr;
-                    width = -1;
-                    modified = CharT{};
-                }
-                else
-                    read(is, *fmt);
-                break;
-            default:
-                if (command)
-                {
-                    if (width == -1 && modified == CharT{} && '0' <= *fmt && *fmt <= '9')
-                    {
-                        width = static_cast<char>(*fmt) - '0';
-                        while ('0' <= fmt[1] && fmt[1] <= '9')
-                            width = 10*width + static_cast<char>(*++fmt) - '0';
-                    }
-                    else
-                    {
-                        if (modified == CharT{})
-                            read(is, CharT{'%'}, width, *fmt);
-                        else
-                            read(is, CharT{'%'}, width, modified, *fmt);
-                        command = nullptr;
-                        width = -1;
-                        modified = CharT{};
-                    }
-                }
-                else  // !command
-                {
-                    if (isspace(static_cast<unsigned char>(*fmt)))
-                    {
-                        // space matches 0 or more white space characters
-                        if (is.good())
-                           ws(is);
-                    }
-                    else
-                        read(is, *fmt);
-                }
-                break;
-            }
-        }
-        // is.fail() || *fmt == CharT{}
-        if (is.rdstate() == ios::goodbit && command)
-        {
-            if (modified == CharT{})
-                read(is, CharT{'%'}, width);
-            else
-                read(is, CharT{'%'}, width, modified);
-        }
-        if (!is.fail())
-        {
-            if (y != not_a_2digit_year)
-            {
-                // Convert y and an optional C to Y
-                if (!(0 <= y && y <= 99))
-                    goto broken;
-                if (C == not_a_century)
-                {
-                    if (Y == not_a_year)
-                    {
-                        if (y >= 69)
-                            C = 19;
-                        else
-                            C = 20;
-                    }
-                    else
-                    {
-                        C = (Y >= 0 ? Y : Y-100) / 100;
-                    }
-                }
-                int tY;
-                if (C >= 0)
-                    tY = 100*C + y;
-                else
-                    tY = 100*(C+1) - (y == 0 ? 100 : y);
-                if (Y != not_a_year && Y != tY)
-                    goto broken;
-                Y = tY;
-            }
-            if (g != not_a_2digit_year)
-            {
-                // Convert g and an optional C to G
-                if (!(0 <= g && g <= 99))
-                    goto broken;
-                if (C == not_a_century)
-                {
-                    if (G == not_a_year)
-                    {
-                        if (g >= 69)
-                            C = 19;
-                        else
-                            C = 20;
-                    }
-                    else
-                    {
-                        C = (G >= 0 ? G : G-100) / 100;
-                    }
-                }
-                int tG;
-                if (C >= 0)
-                    tG = 100*C + g;
-                else
-                    tG = 100*(C+1) - (g == 0 ? 100 : g);
-                if (G != not_a_year && G != tG)
-                    goto broken;
-                G = tG;
-            }
-            if (Y < static_cast<int>(year::min()) || Y > static_cast<int>(year::max()))
-                Y = not_a_year;
-            bool computed = false;
-            if (G != not_a_year && V != not_a_week_num && wd != not_a_weekday)
-            {
-                year_month_day ymd_trial = sys_days(year{G-1}/December/Thursday[last]) +
-                                           (Monday-Thursday) + weeks{V-1} +
-                                           (weekday{static_cast<unsigned>(wd)}-Monday);
-                if (Y == not_a_year)
-                    Y = static_cast<int>(ymd_trial.year());
-                else if (year{Y} != ymd_trial.year())
-                    goto broken;
-                if (m == not_a_month)
-                    m = static_cast<int>(static_cast<unsigned>(ymd_trial.month()));
-                else if (month(static_cast<unsigned>(m)) != ymd_trial.month())
-                    goto broken;
-                if (d == not_a_day)
-                    d = static_cast<int>(static_cast<unsigned>(ymd_trial.day()));
-                else if (day(static_cast<unsigned>(d)) != ymd_trial.day())
-                    goto broken;
-                computed = true;
-            }
-            if (Y != not_a_year && U != not_a_week_num && wd != not_a_weekday)
-            {
-                year_month_day ymd_trial = sys_days(year{Y}/January/Sunday[1]) +
-                                           weeks{U-1} +
-                                           (weekday{static_cast<unsigned>(wd)} - Sunday);
-                if (year{Y} != ymd_trial.year())
-                    goto broken;
-                if (m == not_a_month)
-                    m = static_cast<int>(static_cast<unsigned>(ymd_trial.month()));
-                else if (month(static_cast<unsigned>(m)) != ymd_trial.month())
-                    goto broken;
-                if (d == not_a_day)
-                    d = static_cast<int>(static_cast<unsigned>(ymd_trial.day()));
-                else if (day(static_cast<unsigned>(d)) != ymd_trial.day())
-                    goto broken;
-                computed = true;
-            }
-            if (Y != not_a_year && W != not_a_week_num && wd != not_a_weekday)
-            {
-                year_month_day ymd_trial = sys_days(year{Y}/January/Monday[1]) +
-                                           weeks{W-1} +
-                                           (weekday{static_cast<unsigned>(wd)} - Monday);
-                if (year{Y} != ymd_trial.year())
-                    goto broken;
-                if (m == not_a_month)
-                    m = static_cast<int>(static_cast<unsigned>(ymd_trial.month()));
-                else if (month(static_cast<unsigned>(m)) != ymd_trial.month())
-                    goto broken;
-                if (d == not_a_day)
-                    d = static_cast<int>(static_cast<unsigned>(ymd_trial.day()));
-                else if (day(static_cast<unsigned>(d)) != ymd_trial.day())
-                    goto broken;
-                computed = true;
-            }
-            if (j != not_a_doy && Y != not_a_year)
-            {
-                auto ymd_trial = year_month_day{local_days(year{Y}/1/1) + days{j-1}};
-                if (m == not_a_month)
-                    m = static_cast<int>(static_cast<unsigned>(ymd_trial.month()));
-                else if (month(static_cast<unsigned>(m)) != ymd_trial.month())
-                    goto broken;
-                if (d == not_a_day)
-                    d = static_cast<int>(static_cast<unsigned>(ymd_trial.day()));
-                else if (day(static_cast<unsigned>(d)) != ymd_trial.day())
-                    goto broken;
-                j = not_a_doy;
-            }
-            auto ymd = year{Y}/m/d;
-            if (ymd.ok())
-            {
-                if (wd == not_a_weekday)
-                    wd = static_cast<int>((weekday(sys_days(ymd)) - Sunday).count());
-                else if (wd != static_cast<int>((weekday(sys_days(ymd)) - Sunday).count()))
-                    goto broken;
-                if (!computed)
-                {
-                    if (G != not_a_year || V != not_a_week_num)
-                    {
-                        sys_days sd = ymd;
-                        auto G_trial = year_month_day{sd + days{3}}.year();
-                        auto start = sys_days((G_trial - years{1})/December/Thursday[last]) +
-                                     (Monday - Thursday);
-                        if (sd < start)
-                        {
-                            --G_trial;
-                            if (V != not_a_week_num)
-                                start = sys_days((G_trial - years{1})/December/Thursday[last])
-                                        + (Monday - Thursday);
-                        }
-                        if (G != not_a_year && G != static_cast<int>(G_trial))
-                            goto broken;
-                        if (V != not_a_week_num)
-                        {
-                            auto V_trial = duration_cast<weeks>(sd - start).count() + 1;
-                            if (V != V_trial)
-                                goto broken;
-                        }
-                    }
-                    if (U != not_a_week_num)
-                    {
-                        auto start = sys_days(Sunday[1]/January/ymd.year());
-                        auto U_trial = floor<weeks>(sys_days(ymd) - start).count() + 1;
-                        if (U != U_trial)
-                            goto broken;
-                    }
-                    if (W != not_a_week_num)
-                    {
-                        auto start = sys_days(Monday[1]/January/ymd.year());
-                        auto W_trial = floor<weeks>(sys_days(ymd) - start).count() + 1;
-                        if (W != W_trial)
-                            goto broken;
-                    }
-                }
-            }
-            fds.ymd = ymd;
-            if (I != not_a_hour_12_value)
-            {
-                if (!(1 <= I && I <= 12))
-                    goto broken;
-                if (p != not_a_ampm)
-                {
-                    // p is in [0, 1] == [AM, PM]
-                    // Store trial H in I
-                    if (I == 12)
-                        --p;
-                    I += p*12;
-                    // Either set H from I or make sure H and I are consistent
-                    if (H == not_a_hour)
-                        H = I;
-                    else if (I != H)
-                        goto broken;
-                }
-                else  // p == not_a_ampm
-                {
-                    // if H, make sure H and I could be consistent
-                    if (H != not_a_hour)
-                    {
-                        if (I == 12)
-                        {
-                            if (H != 0 && H != 12)
-                                goto broken;
-                        }
-                        else if (!(I == H || I == H+12))
-                        {
-                            goto broken;
-                        }
-                    }
-                    else  // I is ambiguous, AM or PM?
-                        goto broken;
-                }
-            }
-            if (H != not_a_hour)
-            {
-                fds.has_tod = true;
-                fds.tod = hh_mm_ss<Duration>{hours{H}};
-            }
-            if (M != not_a_minute)
-            {
-                fds.has_tod = true;
-                fds.tod.m_ = minutes{M};
-            }
-            if (s != not_a_second)
-            {
-                fds.has_tod = true;
-                fds.tod.s_ = detail::decimal_format_seconds<Duration>{s};
-            }
-            if (j != not_a_doy)
-            {
-                fds.has_tod = true;
-                fds.tod.h_ += hours{days{j}};
-            }
-            if (wd != not_a_weekday)
-                fds.wd = weekday{static_cast<unsigned>(wd)};
-            if (abbrev != nullptr)
-                *abbrev = std::move(temp_abbrev);
-            if (offset != nullptr && temp_offset != not_a_offset)
-              *offset = temp_offset;
-        }
-       return is;
-    }
-broken:
-    is.setstate(ios::failbit);
-    return is;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits, class Alloc = std::allocator<CharT>>
@@ -7923,14 +5247,7 @@ from_stream(std::basic_istream<CharT, Traits>& is, const CharT* fmt, year& y,
             std::basic_string<CharT, Traits, Alloc>* abbrev = nullptr,
             std::chrono::minutes* offset = nullptr)
 {
-    using CT = std::chrono::seconds;
-    fields<CT> fds{};
-    date::from_stream(is, fmt, fds, abbrev, offset);
-    if (!fds.ymd.year().ok())
-        is.setstate(std::ios::failbit);
-    if (!is.fail())
-        y = fds.ymd.year();
-    return is;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits, class Alloc = std::allocator<CharT>>
@@ -7939,14 +5256,7 @@ from_stream(std::basic_istream<CharT, Traits>& is, const CharT* fmt, month& m,
             std::basic_string<CharT, Traits, Alloc>* abbrev = nullptr,
             std::chrono::minutes* offset = nullptr)
 {
-    using CT = std::chrono::seconds;
-    fields<CT> fds{};
-    date::from_stream(is, fmt, fds, abbrev, offset);
-    if (!fds.ymd.month().ok())
-        is.setstate(std::ios::failbit);
-    if (!is.fail())
-        m = fds.ymd.month();
-    return is;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits, class Alloc = std::allocator<CharT>>
@@ -7955,14 +5265,7 @@ from_stream(std::basic_istream<CharT, Traits>& is, const CharT* fmt, day& d,
             std::basic_string<CharT, Traits, Alloc>* abbrev = nullptr,
             std::chrono::minutes* offset = nullptr)
 {
-    using CT = std::chrono::seconds;
-    fields<CT> fds{};
-    date::from_stream(is, fmt, fds, abbrev, offset);
-    if (!fds.ymd.day().ok())
-        is.setstate(std::ios::failbit);
-    if (!is.fail())
-        d = fds.ymd.day();
-    return is;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits, class Alloc = std::allocator<CharT>>
@@ -7971,14 +5274,7 @@ from_stream(std::basic_istream<CharT, Traits>& is, const CharT* fmt, weekday& wd
             std::basic_string<CharT, Traits, Alloc>* abbrev = nullptr,
             std::chrono::minutes* offset = nullptr)
 {
-    using CT = std::chrono::seconds;
-    fields<CT> fds{};
-    date::from_stream(is, fmt, fds, abbrev, offset);
-    if (!fds.wd.ok())
-        is.setstate(std::ios::failbit);
-    if (!is.fail())
-        wd = fds.wd;
-    return is;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits, class Alloc = std::allocator<CharT>>
@@ -7987,14 +5283,7 @@ from_stream(std::basic_istream<CharT, Traits>& is, const CharT* fmt, year_month&
             std::basic_string<CharT, Traits, Alloc>* abbrev = nullptr,
             std::chrono::minutes* offset = nullptr)
 {
-    using CT = std::chrono::seconds;
-    fields<CT> fds{};
-    date::from_stream(is, fmt, fds, abbrev, offset);
-    if (!fds.ymd.month().ok())
-        is.setstate(std::ios::failbit);
-    if (!is.fail())
-        ym = fds.ymd.year()/fds.ymd.month();
-    return is;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits, class Alloc = std::allocator<CharT>>
@@ -8003,14 +5292,7 @@ from_stream(std::basic_istream<CharT, Traits>& is, const CharT* fmt, month_day& 
             std::basic_string<CharT, Traits, Alloc>* abbrev = nullptr,
             std::chrono::minutes* offset = nullptr)
 {
-    using CT = std::chrono::seconds;
-    fields<CT> fds{};
-    date::from_stream(is, fmt, fds, abbrev, offset);
-    if (!fds.ymd.month().ok() || !fds.ymd.day().ok())
-        is.setstate(std::ios::failbit);
-    if (!is.fail())
-        md = fds.ymd.month()/fds.ymd.day();
-    return is;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class CharT, class Traits, class Alloc = std::allocator<CharT>>
@@ -8019,14 +5301,7 @@ from_stream(std::basic_istream<CharT, Traits>& is, const CharT* fmt,
             year_month_day& ymd, std::basic_string<CharT, Traits, Alloc>* abbrev = nullptr,
             std::chrono::minutes* offset = nullptr)
 {
-    using CT = std::chrono::seconds;
-    fields<CT> fds{};
-    date::from_stream(is, fmt, fds, abbrev, offset);
-    if (!fds.ymd.ok())
-        is.setstate(std::ios::failbit);
-    if (!is.fail())
-        ymd = fds.ymd;
-    return is;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration, class CharT, class Traits, class Alloc = std::allocator<CharT>>
@@ -8035,28 +5310,7 @@ from_stream(std::basic_istream<CharT, Traits>& is, const CharT* fmt,
             sys_time<Duration>& tp, std::basic_string<CharT, Traits, Alloc>* abbrev = nullptr,
             std::chrono::minutes* offset = nullptr)
 {
-    using CT = typename std::common_type<Duration, std::chrono::seconds>::type;
-    using detail::round_i;
-    std::chrono::minutes offset_local = std::chrono::minutes::min();
-    fields<CT> fds{};
-    fds.has_tod = true;
-    date::from_stream(is, fmt, fds, abbrev, &offset_local);
-    if (!fds.ymd.ok() || !fds.tod.in_conventional_range())
-        is.setstate(std::ios::failbit);
-    if (!is.fail())
-    {
-        if (offset_local != std::chrono::minutes::min())
-        {
-            tp = round_i<Duration>(sys_days(fds.ymd) + fds.tod.to_duration() - offset_local);
-            if (offset != nullptr)
-                *offset = offset_local;
-        }
-        else
-        {
-            tp = round_i<Duration>(sys_days(fds.ymd) + fds.tod.to_duration());
-        }
-    }
-    return is;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration, class CharT, class Traits, class Alloc = std::allocator<CharT>>
@@ -8065,16 +5319,7 @@ from_stream(std::basic_istream<CharT, Traits>& is, const CharT* fmt,
             local_time<Duration>& tp, std::basic_string<CharT, Traits, Alloc>* abbrev = nullptr,
             std::chrono::minutes* offset = nullptr)
 {
-    using CT = typename std::common_type<Duration, std::chrono::seconds>::type;
-    using detail::round_i;
-    fields<CT> fds{};
-    fds.has_tod = true;
-    date::from_stream(is, fmt, fds, abbrev, offset);
-    if (!fds.ymd.ok() || !fds.tod.in_conventional_range())
-        is.setstate(std::ios::failbit);
-    if (!is.fail())
-        tp = round_i<Duration>(local_seconds{local_days(fds.ymd)} + fds.tod.to_duration());
-    return is;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Rep, class Period, class CharT, class Traits, class Alloc = std::allocator<CharT>>
@@ -8084,16 +5329,7 @@ from_stream(std::basic_istream<CharT, Traits>& is, const CharT* fmt,
             std::basic_string<CharT, Traits, Alloc>* abbrev = nullptr,
             std::chrono::minutes* offset = nullptr)
 {
-    using Duration = std::chrono::duration<Rep, Period>;
-    using CT = typename std::common_type<Duration, std::chrono::seconds>::type;
-    using detail::round_i;
-    fields<CT> fds{};
-    date::from_stream(is, fmt, fds, abbrev, offset);
-    if (!fds.has_tod)
-        is.setstate(std::ios::failbit);
-    if (!is.fail())
-        d = round_i<Duration>(fds.tod.to_duration());
-    return is;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Parsable, class CharT, class Traits = std::char_traits<CharT>,
@@ -8113,7 +5349,9 @@ public:
         , tp_(tp)
         , abbrev_(abbrev)
         , offset_(offset)
-        {}
+        {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 #if HAS_STRING_VIEW
     parse_manip(const CharT* format, Parsable& tp,
@@ -8123,7 +5361,9 @@ public:
         , tp_(tp)
         , abbrev_(abbrev)
         , offset_(offset)
-        {}
+        {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
     parse_manip(std::basic_string_view<CharT, Traits> format, Parsable& tp,
                 std::basic_string<CharT, Traits, Alloc>* abbrev = nullptr,
@@ -8132,7 +5372,9 @@ public:
         , tp_(tp)
         , abbrev_(abbrev)
         , offset_(offset)
-        {}
+        {
+    __builtin_trap() /* STUB: not implemented */;
+}
 #endif  // HAS_STRING_VIEW
 };
 
@@ -8248,7 +5490,7 @@ std::basic_istream<CharT, Traits>&
 operator>>(std::basic_istream<CharT, Traits>& is,
            const parse_manip<Parsable, CharT, Traits, Alloc>& x)
 {
-    return from_stream(is, x.format_.c_str(), x.tp_, x.abbrev_, x.offset_);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Parsable, class CharT, class Traits, class Alloc>
@@ -8259,7 +5501,7 @@ parse(const std::basic_string<CharT, Traits, Alloc>& format, Parsable& tp)
                             format.c_str(), tp),
                 parse_manip<Parsable, CharT, Traits, Alloc>{format, tp})
 {
-    return {format, tp};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Parsable, class CharT, class Traits, class Alloc>
@@ -8271,7 +5513,7 @@ parse(const std::basic_string<CharT, Traits, Alloc>& format, Parsable& tp,
                             format.c_str(), tp, &abbrev),
                 parse_manip<Parsable, CharT, Traits, Alloc>{format, tp, &abbrev})
 {
-    return {format, tp, &abbrev};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Parsable, class CharT, class Traits, class Alloc>
@@ -8285,7 +5527,7 @@ parse(const std::basic_string<CharT, Traits, Alloc>& format, Parsable& tp,
                             &offset),
                 parse_manip<Parsable, CharT, Traits, Alloc>{format, tp, nullptr, &offset})
 {
-    return {format, tp, nullptr, &offset};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Parsable, class CharT, class Traits, class Alloc>
@@ -8297,7 +5539,7 @@ parse(const std::basic_string<CharT, Traits, Alloc>& format, Parsable& tp,
                             format.c_str(), tp, &abbrev, &offset),
                 parse_manip<Parsable, CharT, Traits, Alloc>{format, tp, &abbrev, &offset})
 {
-    return {format, tp, &abbrev, &offset};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // const CharT* formats
@@ -8309,7 +5551,7 @@ parse(const CharT* format, Parsable& tp)
     -> decltype(from_stream(std::declval<std::basic_istream<CharT>&>(), format, tp),
                 parse_manip<Parsable, CharT>{format, tp})
 {
-    return {format, tp};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Parsable, class CharT, class Traits, class Alloc>
@@ -8320,7 +5562,7 @@ parse(const CharT* format, Parsable& tp, std::basic_string<CharT, Traits, Alloc>
                             tp, &abbrev),
                 parse_manip<Parsable, CharT, Traits, Alloc>{format, tp, &abbrev})
 {
-    return {format, tp, &abbrev};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Parsable, class CharT>
@@ -8331,7 +5573,7 @@ parse(const CharT* format, Parsable& tp, std::chrono::minutes& offset)
                             tp, std::declval<std::basic_string<CharT>*>(), &offset),
                 parse_manip<Parsable, CharT>{format, tp, nullptr, &offset})
 {
-    return {format, tp, nullptr, &offset};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Parsable, class CharT, class Traits, class Alloc>
@@ -8343,7 +5585,7 @@ parse(const CharT* format, Parsable& tp,
                             tp, &abbrev, &offset),
                 parse_manip<Parsable, CharT, Traits, Alloc>{format, tp, &abbrev, &offset})
 {
-    return {format, tp, &abbrev, &offset};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #endif  // !defined _MSC_VER
@@ -8356,8 +5598,7 @@ std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os,
            const std::chrono::duration<Rep, Period>& d)
 {
-    return os << detail::make_string<CharT, Traits>::from(d.count()) +
-                 detail::get_units<CharT>(typename Period::type{});
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // namespace date

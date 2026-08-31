@@ -1,3 +1,5 @@
+#include <stdexcept>
+#include <cstdlib>
 #ifndef PTZ_H
 #define PTZ_H
 
@@ -122,9 +124,13 @@ class rule
     std::chrono::duration<std::int32_t> time_ = std::chrono::hours{2};
 
 public:
-    rule() : mode_(off) {}
+    rule() : mode_(off) {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
-    bool ok() const {return mode_ != off;}
+    bool ok() const {
+    __builtin_trap() /* STUB: not implemented */;
+}
     chr::local_seconds operator()(chr::year y) const;
     std::string to_string() const;
 
@@ -137,145 +143,35 @@ inline
 bool
 operator==(const rule& x, const rule& y)
 {
-    if (x.mode_ != y.mode_)
-        return false;
-    switch (x.mode_)
-    {
-    case rule::J:
-    case rule::N:
-        return x.n_ == y.n_;
-    case rule::M:
-        return x.m_ == y.m_ && x.n_ == y.n_ && x.wd_ == y.wd_;
-    default:
-        return true;
-    }
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 bool
 operator!=(const rule& x, const rule& y)
 {
-    return !(x == y);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 chr::local_seconds
 rule::operator()(chr::year y) const
 {
-    using chr::local_days;
-    using chr::January;
-    using chr::days;
-    using chr::last;
-    using sec = std::chrono::seconds;
-    chr::local_seconds t;
-    switch (mode_)
-    {
-    case J:
-        t = local_days{y/January/0} + days{n_ + (y.is_leap() && n_ > 59)} + sec{time_};
-        break;
-    case M:
-        t = (n_ == 5 ? local_days{y/m_/wd_[last]} : local_days{y/m_/wd_[n_]}) + sec{time_};
-        break;
-    case N:
-        t = local_days{y/January/1} + days{n_} + sec{time_};
-        break;
-    default:
-        assert(!"rule called with bad mode");
-    }
-    return t;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 std::string
 rule::to_string() const
 {
-    using namespace std::chrono;
-    auto print_offset = [](seconds off)
-        {
-            std::string nm;
-            if (off != hours{2})
-            {
-                chr::hh_mm_ss<seconds> offset{off};
-                nm = '/';
-                nm += std::to_string(offset.hours().count());
-                if (offset.minutes() != minutes{0} || offset.seconds() != seconds{0})
-                {
-                    nm += ':';
-                    if (offset.minutes() < minutes{10})
-                        nm += '0';
-                    nm += std::to_string(offset.minutes().count());
-                    if (offset.seconds() != seconds{0})
-                    {
-                        nm += ':';
-                        if (offset.seconds() < seconds{10})
-                            nm += '0';
-                        nm += std::to_string(offset.seconds().count());
-                    }
-                }
-            }
-            return nm;
-        };
-
-    std::string nm;
-    switch (mode_)
-    {
-    case rule::J:
-        nm = 'J';
-        nm += std::to_string(n_);
-        break;
-    case rule::M:
-        nm = 'M';
-        nm += std::to_string(static_cast<unsigned>(m_));
-        nm += '.';
-        nm += std::to_string(n_);
-        nm += '.';
-        nm += std::to_string(wd_.c_encoding());
-        break;
-    case rule::N:
-        nm = std::to_string(n_);
-        break;
-    default:
-        break;
-    }
-    nm += print_offset(time_);
-    return nm;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 std::ostream&
 operator<<(std::ostream& os, const rule& r)
 {
-    switch (r.mode_)
-    {
-    case rule::J:
-#if HAS_CHRONO_20
-        os << "J " << r.n_ << std::format("{:%T}", r.time_);
-#else
-        os << 'J' << r.n_ << date::format(" %T", r.time_);
-#endif
-        break;
-    case rule::M:
-        if (r.n_ == 5)
-            os << r.m_/r.wd_[chr::last];
-        else
-            os << r.m_/r.wd_[r.n_];
-#if HAS_CHRONO_20
-        os << ' ' << std::format("{:%T}", r.time_);
-#else
-        os << date::format(" %T", r.time_);
-#endif
-        break;
-    case rule::N:
-#if HAS_CHRONO_20
-        os << r.n_ << ' ' << std::format("{:%T}", r.time_);
-#else
-        os << r.n_ << date::format(" %T", r.time_);
-#endif
-        break;
-    default:
-        break;
-    }
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // namespace detail
@@ -311,7 +207,9 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const time_zone& z);
 
-    const time_zone* operator->() const {return this;}
+    const time_zone* operator->() const {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
     std::string name() const;
 
@@ -331,137 +229,55 @@ inline
 chr::sys_seconds
 time_zone::get_start(chr::year y) const
 {
-    return chr::sys_seconds{(start_rule_(y) - offset_).time_since_epoch()};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 chr::sys_seconds
 time_zone::get_prev_start(chr::year y) const
 {
-    return chr::sys_seconds{(start_rule_(--y) - offset_).time_since_epoch()};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 chr::sys_seconds
 time_zone::get_next_start(chr::year y) const
 {
-    return chr::sys_seconds{(start_rule_(++y) - offset_).time_since_epoch()};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 chr::sys_seconds
 time_zone::get_end(chr::year y) const
 {
-    return chr::sys_seconds{(end_rule_(y) - (offset_ + save_)).time_since_epoch()};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 chr::sys_seconds
 time_zone::get_prev_end(chr::year y) const
 {
-    return chr::sys_seconds{(end_rule_(--y) - (offset_ + save_)).time_since_epoch()};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 chr::sys_seconds
 time_zone::get_next_end(chr::year y) const
 {
-    return chr::sys_seconds{(end_rule_(++y) - (offset_ + save_)).time_since_epoch()};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 chr::sys_info
 time_zone::contant_offset() const
 {
-    using chr::year;
-    using chr::sys_info;
-    using chr::sys_days;
-    using chr::January;
-    using chr::December;
-    using chr::last;
-    using chr::days;
-    using std::chrono::minutes;
-    sys_info r;
-    r.begin = sys_days{year::min()/January/1};
-    r.end   = sys_days{year::max()/December/last} + days{1} - std::chrono::seconds{1};
-    if (std_abbrev_.size() > 0)
-    {
-        r.abbrev = std_abbrev_;
-        r.offset = offset_;
-        r.save = {};
-    }
-    else
-    {
-        r.abbrev = dst_abbrev_;
-        r.offset = offset_ + save_;
-        r.save = chr::ceil<minutes>(save_);
-    }
-    return r;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 time_zone::time_zone(const detail::string_t& s)
 {
-    using detail::read_name;
-    using detail::read_signed_time;
-    using detail::throw_invalid;
-    auto i = read_name(s, 0, std_abbrev_);
-    auto std_name_i = i;
-    auto abbrev_name_i = i;
-    i = read_signed_time(s, i, offset_);
-    offset_ = -offset_;
-    if (i != s.size())
-    {
-        i = read_name(s, i, dst_abbrev_);
-        abbrev_name_i = i;
-        if (i != s.size())
-        {
-            if (s[i] != ',')
-            {
-                i = read_signed_time(s, i, save_);
-                save_ = -save_ - offset_;
-            }
-            if (i != s.size())
-            {
-                if (s[i] != ',')
-                    throw_invalid(s, i, "Expecting end of string or ',' to start rule");
-                ++i;
-                i = read_date(s, i, start_rule_);
-                if (i == s.size() || s[i] != ',')
-                    throw_invalid(s, i, "Expecting ',' and then the ending rule");
-                ++i;
-                i = read_date(s, i, end_rule_);
-                if (i != s.size())
-                    throw_invalid(s, i, "Found unexpected trailing characters");
-            }
-        }
-    }
-    if (start_rule_.ok())
-    {
-        if (std_abbrev_.size() < 3)
-            throw_invalid(s, std_name_i, "Zone with rules must have a std"
-                                         " abbreviation of length 3 or greater");
-        if (dst_abbrev_.size() < 3)
-            throw_invalid(s, abbrev_name_i, "Zone with rules must have a daylight"
-                                            " abbreviation of length 3 or greater");
-    }
-    else
-    {
-        if (dst_abbrev_.size() >= 3)
-        {
-            std_abbrev_.clear();
-        }
-        else if (std_abbrev_.size() < 3)
-        {
-            throw_invalid(s, std_name_i, "Zone must have at least one abbreviation"
-                                         " of length 3 or greater");
-        }
-        else
-        {
-            dst_abbrev_.clear();
-            save_ = {};
-        }
-    }
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -671,94 +487,28 @@ inline
 std::ostream&
 operator<<(std::ostream& os, const time_zone& z)
 {
-    using chr::operator<<;
-    os << '{';
-#if HAS_CHRONO_20
-    os << z.std_abbrev_ << ", " << z.dst_abbrev_ << ",  " << std::format("{:%T, }", z.offset_)
-       << std::format("{:%T, [}", z.save_) << z.start_rule_ << ", " << z.end_rule_ << ")}";
-#else
-    os << z.std_abbrev_ << ", " << z.dst_abbrev_ << date::format(", %T, ", z.offset_)
-       << date::format("%T, [", z.save_) << z.start_rule_ << ", " << z.end_rule_ << ")}";
-#endif
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 std::string
 time_zone::name() const
 {
-    using namespace chr;
-    using namespace std::chrono;
-    auto print_abbrev = [](std::string const& nm)
-        {
-            if (std::any_of(nm.begin(), nm.end(),
-                         [](char c)
-                         {
-                             return !std::isalpha(c);
-                         }))
-            {
-                return '<' + nm + '>';
-            }
-            return nm;
-        };
-    auto print_offset = [](seconds off)
-        {
-            std::string nm;
-            chr::hh_mm_ss<seconds> offset{-off};
-            if (offset.is_negative())
-                nm += '-';
-            nm += std::to_string(offset.hours().count());
-            if (offset.minutes() != minutes{0} || offset.seconds() != seconds{0})
-            {
-                nm += ':';
-                if (offset.minutes() < minutes{10})
-                    nm += '0';
-                nm += std::to_string(offset.minutes().count());
-                if (offset.seconds() != seconds{0})
-                {
-                    nm += ':';
-                    if (offset.seconds() < seconds{10})
-                        nm += '0';
-                    nm += std::to_string(offset.seconds().count());
-                }
-            }
-            return nm;
-        };
-    auto nm = print_abbrev(std_abbrev_);
-    nm += print_offset(offset_);
-    if (!dst_abbrev_.empty())
-    {
-        nm += print_abbrev(dst_abbrev_);
-        if (save_ != hours{1})
-            nm += print_offset(offset_+save_);
-        if (start_rule_.ok())
-        {
-            nm += ',';
-            nm += start_rule_.to_string();
-            nm += ',';
-            nm += end_rule_.to_string();
-        }
-    }
-    return nm;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 bool
 operator==(const time_zone& x, const time_zone& y)
 {
-    return x.std_abbrev_ == y.std_abbrev_ &&
-           x.dst_abbrev_ == y. dst_abbrev_ &&
-           x.offset_ == y.offset_ &&
-           x.save_ == y.save_ &&
-           x.start_rule_ == y.start_rule_ &&
-           x.end_rule_ == y.end_rule_;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 bool
 operator!=(const time_zone& x, const time_zone& y)
 {
-    return !(x == y);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 namespace detail
@@ -768,110 +518,21 @@ inline
 void
 throw_invalid(const string_t& s, unsigned i, const string_t& message)
 {
-    throw std::runtime_error(std::string("Invalid time_zone initializer.\n") +
-                             std::string(message) + ":\n" +
-                             std::string(s) + '\n' +
-                             "\x1b[1;32m" +
-                             std::string(i, '~') + '^' +
-                             std::string(i < s.size() ? s.size()-i-1 : 0, '~') +
-                             "\x1b[0m");
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 unsigned
 read_date(const string_t& s, unsigned i, rule& r)
 {
-    using chr::month;
-    using chr::weekday;
-    if (i == s.size())
-        throw_invalid(s, i, "Expected rule but found end of string");
-    if (s[i] == 'J')
-    {
-        ++i;
-        unsigned n;
-        i = read_unsigned(s, i, 3, n, "Expected to find the Julian day [1, 365]");
-        if (!(1 <= n && n <= 365))
-            throw_invalid(s, i-1, "Expected Julian day to be in the range [1, 365]");
-        r.mode_ = rule::J;
-        r.n_ = n;
-    }
-    else if (s[i] == 'M')
-    {
-        ++i;
-        unsigned m;
-        i = read_unsigned(s, i, 2, m, "Expected to find month [1, 12]");
-        if (!(1 <= m && m <= 12))
-            throw_invalid(s, i-1, "Expected month to be in the range [1, 12]");
-        if (i == s.size() || s[i] != '.')
-            throw_invalid(s, i, "Expected '.' after month");
-        ++i;
-        unsigned n;
-        i = read_unsigned(s, i, 1, n, "Expected to find week number [1, 5]");
-        if (!(1 <= n && n <= 5))
-            throw_invalid(s, i-1, "Expected week number to be in the range [1, 5]");
-        if (i == s.size() || s[i] != '.')
-            throw_invalid(s, i, "Expected '.' after weekday index");
-        ++i;
-        unsigned wd;
-        i = read_unsigned(s, i, 1, wd, "Expected to find day of week [0, 6]");
-        if (wd > 6)
-            throw_invalid(s, i-1, "Expected day of week to be in the range [0, 6]");
-        r.mode_ = rule::M;
-        r.m_ = month{m};
-        r.wd_ = weekday{wd};
-        r.n_ = n;
-    }
-    else if (std::isdigit(s[i]))
-    {
-        unsigned n;
-        i = read_unsigned(s, i, 3, n);
-        if (n > 365)
-            throw_invalid(s, i-1, "Expected Julian day to be in the range [0, 365]");
-        r.mode_ = rule::N;
-        r.n_ = n;
-    }
-    else
-        throw_invalid(s, i, "Expected 'J', 'M', or a digit to start rule");
-    if (i != s.size() && s[i] == '/')
-    {
-        ++i;
-        std::chrono::seconds t;
-        i = read_unsigned_time(s, i, t);
-        r.time_ = t;
-    }
-    return i;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 unsigned
 read_name(const string_t& s, unsigned i, std::string& name)
 {
-    if (i == s.size())
-        throw_invalid(s, i, "Expected a name but found end of string");
-    if (s[i] == '<')
-    {
-        ++i;
-        while (true)
-        {
-            if (i == s.size())
-                throw_invalid(s, i,
-                              "Expected to find closing '>', but found end of string");
-            if (s[i] == '>')
-                break;
-            name.push_back(s[i]);
-            ++i;
-        }
-        ++i;
-    }
-    else
-    {
-        while (i != s.size() && std::isalpha(s[i]))
-        {
-            name.push_back(s[i]);
-            ++i;
-        }
-    }
-    return i;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
@@ -879,53 +540,14 @@ unsigned
 read_signed_time(const string_t& s, unsigned i,
                                   std::chrono::seconds& t)
 {
-    if (i == s.size())
-        throw_invalid(s, i, "Expected to read signed time, but found end of string");
-    bool negative = false;
-    if (s[i] == '-')
-    {
-        negative = true;
-        ++i;
-    }
-    else if (s[i] == '+')
-        ++i;
-    i = read_unsigned_time(s, i, t);
-    if (negative)
-        t = -t;
-    return i;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 unsigned
 read_unsigned_time(const string_t& s, unsigned i, std::chrono::seconds& t)
 {
-    using std::chrono::seconds;
-    using std::chrono::minutes;
-    using std::chrono::hours;
-    if (i == s.size())
-        throw_invalid(s, i, "Expected to read unsigned time, but found end of string");
-    unsigned x;
-    i = read_unsigned(s, i, 2, x, "Expected to find hours [0, 24]");
-    if (x > 24)
-        throw_invalid(s, i-1, "Expected hours to be in the range [0, 24]");
-    t = hours{x};
-    if (i != s.size() && s[i] == ':')
-    {
-        ++i;
-        i = read_unsigned(s, i, 2, x, "Expected to find minutes [0, 59]");
-        if (x > 59)
-            throw_invalid(s, i-1, "Expected minutes to be in the range [0, 59]");
-        t += minutes{x};
-        if (i != s.size() && s[i] == ':')
-        {
-            ++i;
-            i = read_unsigned(s, i, 2, x, "Expected to find seconds [0, 59]");
-            if (x > 59)
-                throw_invalid(s, i-1, "Expected seconds to be in the range [0, 59]");
-            t += seconds{x};
-        }
-    }
-    return i;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
@@ -933,13 +555,7 @@ unsigned
 read_unsigned(const string_t& s, unsigned i, unsigned limit, unsigned& u,
               const string_t& message)
 {
-    if (i == s.size() || !std::isdigit(s[i]))
-        throw_invalid(s, i, message);
-    u = static_cast<unsigned>(s[i] - '0');
-    unsigned count = 1;
-    for (++i; count < limit && i != s.size() && std::isdigit(s[i]); ++i, ++count)
-        u = u * 10 + static_cast<unsigned>(s[i] - '0');
-    return i;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // namespace detail
@@ -963,8 +579,8 @@ struct zoned_traits<Posix::time_zone>
     Posix::time_zone
     locate_zone(std::string_view name)
     {
-        return Posix::time_zone{name};
-    }
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 #else  // !HAS_STRING_VIEW
 

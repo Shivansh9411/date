@@ -1,3 +1,4 @@
+#include <stdexcept>
 // The MIT License (MIT)
 //
 // Copyright (c) 2015, 2016, 2017 Howard Hinnant
@@ -297,24 +298,14 @@ static
 std::string
 expand_path(std::string path)
 {
-#      if TARGET_OS_IPHONE
-    return date::iOSUtils::get_tzdata_path();
-#      else  // !TARGET_OS_IPHONE
-    ::wordexp_t w{};
-    std::unique_ptr<::wordexp_t, void(*)(::wordexp_t*)> hold{&w, ::wordfree};
-    ::wordexp(path.c_str(), &w, 0);
-    if (w.we_wordc != 1)
-        throw std::runtime_error("Cannot expand path: " + path);
-    path = w.we_wordv[0];
-    return path;
-#      endif  // !TARGET_OS_IPHONE
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 static
 std::string
 get_download_folder()
 {
-    return expand_path("~/Downloads");
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #    endif // !defined(INSTALL)
@@ -366,42 +357,23 @@ public:
     file_streambuf(const std::string& filename)
         : file_(file_open(filename))
     {
-    }
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 protected:
     virtual
     int_type
     underflow()
     {
-        if (gptr() == egptr() && file_)
-        {
-            const size_t size = ::fread(buffer_, 1, buffer_size_, file_);
-            setg(buffer_, buffer_, buffer_ + size);
-        }
-        return (gptr() == egptr())
-            ? traits_type::eof()
-                : traits_type::to_int_type(*gptr());
-    }
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 private:
     FILE*
     file_open(const std::string& filename)
     {
-#  ifdef _WIN32
-        std::wstring wfilename = convert_utf8_to_utf16(filename);
-        FILE* file = ::_wfopen(wfilename.c_str(), L"r");
-#  else // !_WIN32
-        FILE* file = ::fopen(filename.c_str(), "rb");
-#  endif // _WIN32
-        if (file == NULL)
-        {
-            std::string msg = "Error opening file \"";
-            msg += filename;
-            msg += "\".";
-            throw std::runtime_error(msg);
-        }
-        return file;
-    }
+    __builtin_trap() /* STUB: not implemented */;
+}
 };
 
 #endif  // !USE_OS_TZDB
@@ -420,37 +392,20 @@ static
 std::string&
 access_install()
 {
-    static std::string install
-#ifndef INSTALL
-
-    = get_download_folder() + folder_delimiter + "tzdata";
-
-#else   // !INSTALL
-
-#  define STRINGIZEIMP(x) #x
-#  define STRINGIZE(x) STRINGIZEIMP(x)
-
-    = STRINGIZE(INSTALL) + std::string(1, folder_delimiter) + "tzdata";
-
-    #undef STRINGIZEIMP
-    #undef STRINGIZE
-#endif  // !INSTALL
-
-    return install;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 void
 set_install(const std::string& install)
 {
-    access_install() = install;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 static
 const std::string&
 get_install()
 {
-    static const std::string& ref = access_install();
-    return ref;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #if HAS_REMOTE_API
@@ -458,8 +413,7 @@ static
 std::string
 get_download_gz_file(const std::string& version)
 {
-    auto file = get_install() + version + ".tar.gz";
-    return file;
+    __builtin_trap() /* STUB: not implemented */;
 }
 #endif  // HAS_REMOTE_API
 
@@ -484,65 +438,14 @@ static
 std::string
 discover_tz_dir()
 {
-    struct stat sb;
-    using namespace std;
-#  if defined(ANDROID) || defined(__ANDROID__)
-    CONSTDATA auto tz_dir_default = "/apex/com.android.tzdata/etc/tz";
-    CONSTDATA auto tz_dir_fallback = "/system/usr/share/zoneinfo";
-
-    // Check updatable path first
-    if(stat(tz_dir_default, &sb) == 0 && S_ISDIR(sb.st_mode))
-        return tz_dir_default;
-    else if(stat(tz_dir_fallback, &sb) == 0 && S_ISDIR(sb.st_mode))
-        return tz_dir_fallback;
-    else
-        throw runtime_error("discover_tz_dir failed to find zoneinfo\n");
-#  elif !defined(__APPLE__)
-    CONSTDATA auto tz_dir_default = "/usr/share/zoneinfo";
-    CONSTDATA auto tz_dir_buildroot = "/usr/share/zoneinfo/uclibc";
-
-    // Check special path which is valid for buildroot with uclibc builds
-    if(stat(tz_dir_buildroot, &sb) == 0 && S_ISDIR(sb.st_mode))
-        return tz_dir_buildroot;
-    else if(stat(tz_dir_default, &sb) == 0 && S_ISDIR(sb.st_mode))
-        return tz_dir_default;
-    else
-        throw runtime_error("discover_tz_dir failed to find zoneinfo\n");
-#  else  // __APPLE__
-#      if TARGET_OS_IPHONE
-#          if TARGET_OS_SIMULATOR
-    return "/usr/share/zoneinfo";
-#          else
-    return "/var/db/timezone/zoneinfo";
-#          endif
-#      else
-    CONSTDATA auto timezone = "/etc/localtime";
-    if (!(lstat(timezone, &sb) == 0 && S_ISLNK(sb.st_mode) && sb.st_size > 0))
-        throw runtime_error("discover_tz_dir failed\n");
-    string result;
-    unique_ptr<char[]> rp(new char[sb.st_size]);
-    const auto rp_length = readlink(timezone, rp.get(), sb.st_size);
-    if (rp_length > 0)
-        result = string(rp.get(), rp_length); // readlink doesn't null-terminate
-    else
-        throw system_error(errno, system_category(), "readlink() failed");
-    auto i = result.find("zoneinfo");
-    if (i == string::npos)
-        throw runtime_error("discover_tz_dir failed to find zoneinfo\n");
-    i = result.find('/', i);
-    if (i == string::npos)
-        throw runtime_error("discover_tz_dir failed to find '/'\n");
-    return result.substr(0, i);
-#      endif
-#  endif  // __APPLE__
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 static
 const std::string&
 get_tz_dir()
 {
-    static const std::string tz_dir = discover_tz_dir();
-    return tz_dir;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #endif
@@ -579,41 +482,34 @@ tzdb_list::tzdb_list(tzdb_list&& x) NOEXCEPT
 void
 tzdb_list::push_front(tzdb* tzdb) NOEXCEPT
 {
-    tzdb->next = head_;
-    head_ = tzdb;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 tzdb_list::const_iterator
 tzdb_list::erase_after(const_iterator p) NOEXCEPT
 {
-    auto t = p.p_->next;
-    p.p_->next = p.p_->next->next;
-    delete t;
-    return ++p;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 struct tzdb_list::undocumented_helper
 {
     static void push_front(tzdb_list& db_list, tzdb* tzdb) NOEXCEPT
     {
-        db_list.push_front(tzdb);
-    }
+    __builtin_trap() /* STUB: not implemented */;
+}
 };
 
 static
 tzdb_list
 create_tzdb()
 {
-    tzdb_list tz_db;
-    tzdb_list::undocumented_helper::push_front(tz_db, init_tzdb().release());
-    return tz_db;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 tzdb_list&
 get_tzdb_list()
 {
-    static tzdb_list tz_db = create_tzdb();
-    return tz_db;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #if !defined(ANDROID) && !defined(__ANDROID__)
@@ -622,7 +518,7 @@ static
 char
 tolower(char c)
 {
-    return static_cast<char>(std::tolower(c));
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
@@ -630,8 +526,7 @@ static
 void
 tolower(std::string& s)
 {
-    for (auto& c : s)
-        c = tolower(c);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
@@ -639,11 +534,7 @@ static
 std::string
 get_alpha_word(std::istream& in)
 {
-    ws(in);
-    std::string s;
-    while (!in.eof() && std::isalpha(in.peek()))
-        s.push_back(static_cast<char>(in.get()));
-    return s;
+    __builtin_trap() /* STUB: not implemented */;
 }
 #endif // !defined(ANDROID) && !defined(__ANDROID__)
 
@@ -652,8 +543,7 @@ static
 bool
 is_prefix_of(std::string const& key, std::string const& value)
 {
-    const size_t size = std::min(key.size(), value.size());
-    return key.compare(0, size, value, 0, size) == 0;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #if !defined(ANDROID) && !defined(__ANDROID__)
@@ -661,20 +551,7 @@ static
 unsigned
 parse_month(std::istream& in)
 {
-    static std::string const month_names[] =
-        {"january", "february", "march", "april", "may", "june",
-         "july", "august", "september", "october", "november", "december"};
-    auto s = get_alpha_word(in);
-    tolower(s);
-    auto m = std::find_if(std::begin(month_names), std::end(month_names),
-                 [&s](std::string const& m)
-                 {
-                     return is_prefix_of(s, m);
-                 })
-                  - month_names;
-    if (m >= std::end(month_names) - std::begin(month_names))
-        throw std::runtime_error("oops: bad month name: " + s);
-    return static_cast<unsigned>(++m);
+    __builtin_trap() /* STUB: not implemented */;
 }
 #endif // !defined(ANDROID) && !defined(__ANDROID__)
 
@@ -888,58 +765,21 @@ static
 unsigned
 parse_dow(std::istream& in)
 {
-    static std::string const dow_names[] =
-        {"sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"};
-    auto s = get_alpha_word(in);
-    tolower(s);
-    auto dow = std::find_if(std::begin(dow_names), std::end(dow_names),
-                 [&s](std::string const& dow)
-                 {
-                     return is_prefix_of(s, dow);
-                 })
-                  - dow_names;
-    if (dow >= std::end(dow_names) - std::begin(dow_names))
-        throw std::runtime_error("oops: bad dow name: " + s);
-    return static_cast<unsigned>(dow);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 static
 std::chrono::seconds
 parse_unsigned_time(std::istream& in)
 {
-    using namespace std::chrono;
-    int x;
-    in >> x;
-    auto r = seconds{hours{x}};
-    if (!in.eof() && in.peek() == ':')
-    {
-        in.get();
-        in >> x;
-        r += minutes{x};
-        if (!in.eof() && in.peek() == ':')
-        {
-            in.get();
-            in >> x;
-            r += seconds{x};
-        }
-    }
-    return r;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 static
 std::chrono::seconds
 parse_signed_time(std::istream& in)
 {
-    ws(in);
-    auto sign = 1;
-    if (in.peek() == '-')
-    {
-        sign = -1;
-        in.get();
-    }
-    else if (in.peek() == '+')
-        in.get();
-    return sign * parse_unsigned_time(in);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // MonthDayTime
@@ -947,401 +787,94 @@ parse_signed_time(std::istream& in)
 detail::MonthDayTime::MonthDayTime(local_seconds tp, tz timezone)
     : zone_(timezone)
 {
-    using namespace date;
-    const auto dp = date::floor<days>(tp);
-    const auto hms = make_time(tp - dp);
-    const auto ymd = year_month_day(dp);
-    u = ymd.month() / ymd.day();
-    h_ = hms.hours();
-    m_ = hms.minutes();
-    s_ = hms.seconds();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 detail::MonthDayTime::MonthDayTime(const date::month_day& md, tz timezone)
     : zone_(timezone)
 {
-    u = md;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 date::day
 detail::MonthDayTime::day() const
 {
-    switch (type_)
-    {
-    case month_day:
-        return u.month_day_.day();
-    case month_last_dow:
-        return date::day{31};
-    case lteq:
-    case gteq:
-        break;
-    }
-    return u.month_day_weekday_.month_day_.day();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 date::month
 detail::MonthDayTime::month() const
 {
-    switch (type_)
-    {
-    case month_day:
-        return u.month_day_.month();
-    case month_last_dow:
-        return u.month_weekday_last_.month();
-    case lteq:
-    case gteq:
-        break;
-    }
-    return u.month_day_weekday_.month_day_.month();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 int
 detail::MonthDayTime::compare(date::year y, const MonthDayTime& x, date::year yx,
                       std::chrono::seconds offset, std::chrono::minutes prev_save) const
 {
-    if (zone_ != x.zone_)
-    {
-        auto dp0 = to_sys_days(y);
-        auto dp1 = x.to_sys_days(yx);
-        if (std::abs((dp0-dp1).count()) > 1)
-            return dp0 < dp1 ? -1 : 1;
-        if (zone_ == tz::local)
-        {
-            auto tp0 = to_time_point(y) - prev_save;
-            if (x.zone_ == tz::utc)
-                tp0 -= offset;
-            auto tp1 = x.to_time_point(yx);
-            return tp0 < tp1 ? -1 : tp0 == tp1 ? 0 : 1;
-        }
-        else if (zone_ == tz::standard)
-        {
-            auto tp0 = to_time_point(y);
-            auto tp1 = x.to_time_point(yx);
-            if (x.zone_ == tz::local)
-                tp1 -= prev_save;
-            else
-                tp0 -= offset;
-            return tp0 < tp1 ? -1 : tp0 == tp1 ? 0 : 1;
-        }
-        // zone_ == tz::utc
-        auto tp0 = to_time_point(y);
-        auto tp1 = x.to_time_point(yx);
-        if (x.zone_ == tz::local)
-            tp1 -= offset + prev_save;
-        else
-            tp1 -= offset;
-        return tp0 < tp1 ? -1 : tp0 == tp1 ? 0 : 1;
-    }
-    auto const t0 = to_time_point(y);
-    auto const t1 = x.to_time_point(yx);
-    return t0 < t1 ? -1 : t0 == t1 ? 0 : 1;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 sys_seconds
 detail::MonthDayTime::to_sys(date::year y, std::chrono::seconds offset,
                      std::chrono::seconds save) const
 {
-    using namespace date;
-    using namespace std::chrono;
-    auto until_utc = to_time_point(y);
-    if (zone_ == tz::standard)
-        until_utc -= offset;
-    else if (zone_ == tz::local)
-        until_utc -= offset + save;
-    return until_utc;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 detail::MonthDayTime::U&
 detail::MonthDayTime::U::operator=(const date::month_day& x)
 {
-    month_day_ = x;
-    return *this;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 detail::MonthDayTime::U&
 detail::MonthDayTime::U::operator=(const date::month_weekday_last& x)
 {
-    month_weekday_last_ = x;
-    return *this;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 detail::MonthDayTime::U&
 detail::MonthDayTime::U::operator=(const pair& x)
 {
-    month_day_weekday_ = x;
-    return *this;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 date::sys_days
 detail::MonthDayTime::to_sys_days(date::year y) const
 {
-    using namespace std::chrono;
-    using namespace date;
-    switch (type_)
-    {
-    case month_day:
-        return sys_days(y/u.month_day_);
-    case month_last_dow:
-        return sys_days(y/u.month_weekday_last_);
-    case lteq:
-        {
-            auto const x = y/u.month_day_weekday_.month_day_;
-            auto const wd1 = weekday(static_cast<sys_days>(x));
-            auto const wd0 = u.month_day_weekday_.weekday_;
-            return sys_days(x) - (wd1-wd0);
-        }
-    case gteq:
-        break;
-    }
-    auto const x = y/u.month_day_weekday_.month_day_;
-    auto const wd1 = u.month_day_weekday_.weekday_;
-    auto const wd0 = weekday(static_cast<sys_days>(x));
-    return sys_days(x) + (wd1-wd0);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 sys_seconds
 detail::MonthDayTime::to_time_point(date::year y) const
 {
-    // Add seconds first to promote to largest rep early to prevent overflow
-    return to_sys_days(y) + s_ + h_ + m_;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 void
 detail::MonthDayTime::canonicalize(date::year y)
 {
-    using namespace std::chrono;
-    using namespace date;
-    switch (type_)
-    {
-    case month_day:
-        return;
-    case month_last_dow:
-        {
-            auto const ymd = year_month_day(sys_days(y/u.month_weekday_last_));
-            u.month_day_ = ymd.month()/ymd.day();
-            type_ = month_day;
-            return;
-        }
-    case lteq:
-        {
-            auto const x = y/u.month_day_weekday_.month_day_;
-            auto const wd1 = weekday(static_cast<sys_days>(x));
-            auto const wd0 = u.month_day_weekday_.weekday_;
-            auto const ymd = year_month_day(sys_days(x) - (wd1-wd0));
-            u.month_day_ = ymd.month()/ymd.day();
-            type_ = month_day;
-            return;
-        }
-    case gteq:
-        {
-            auto const x = y/u.month_day_weekday_.month_day_;
-            auto const wd1 = u.month_day_weekday_.weekday_;
-            auto const wd0 = weekday(static_cast<sys_days>(x));
-            auto const ymd = year_month_day(sys_days(x) + (wd1-wd0));
-            u.month_day_ = ymd.month()/ymd.day();
-            type_ = month_day;
-            return;
-        }
-    }
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 std::istream&
 detail::operator>>(std::istream& is, MonthDayTime& x)
 {
-    using namespace date;
-    using namespace std::chrono;
-    assert(((std::ios::failbit | std::ios::badbit) & is.exceptions()) ==
-            (std::ios::failbit | std::ios::badbit));
-    x = MonthDayTime{};
-    if (!is.eof() && ws(is) && !is.eof() && is.peek() != '#')
-    {
-        auto m = parse_month(is);
-        if (!is.eof() && ws(is) && !is.eof() && is.peek() != '#')
-        {
-            if (tolower(is.peek()) == 'l')
-            {
-                for (int i = 0; i < 4; ++i)
-                    is.get();
-                auto dow = parse_dow(is);
-                x.type_ = MonthDayTime::month_last_dow;
-                x.u = date::month(m)/weekday(dow)[last];
-            }
-            else if (std::isalpha(is.peek()))
-            {
-                auto dow = parse_dow(is);
-                char c{};
-                is >> c;
-                if (c == '<' || c == '>')
-                {
-                    char c2{};
-                    is >> c2;
-                    if (c2 != '=')
-                        throw std::runtime_error(std::string("bad operator: ") + c + c2);
-                    int d;
-                    is >> d;
-                    if (d < 1 || d > 31)
-                        throw std::runtime_error(std::string("bad operator: ") + c + c2
-                                 + std::to_string(d));
-                    x.type_ = c == '<' ? MonthDayTime::lteq : MonthDayTime::gteq;
-                    x.u = MonthDayTime::pair{ date::month(m) / d, date::weekday(dow) };
-                }
-                else
-                    throw std::runtime_error(std::string("bad operator: ") + c);
-            }
-            else  // if (std::isdigit(is.peek())
-            {
-                int d;
-                is >> d;
-                if (d < 1 || d > 31)
-                    throw std::runtime_error(std::string("day of month: ")
-                             + std::to_string(d));
-                x.type_ = MonthDayTime::month_day;
-                x.u = date::month(m)/d;
-            }
-            if (!is.eof() && ws(is) && !is.eof() && is.peek() != '#')
-            {
-                int t;
-                is >> t;
-                x.h_ = hours{t};
-                if (!is.eof() && is.peek() == ':')
-                {
-                    is.get();
-                    is >> t;
-                    x.m_ = minutes{t};
-                    if (!is.eof() && is.peek() == ':')
-                    {
-                        is.get();
-                        is >> t;
-                        x.s_ = seconds{t};
-                    }
-                }
-                if (!is.eof() && std::isalpha(is.peek()))
-                {
-                    char c;
-                    is >> c;
-                    switch (c)
-                    {
-                    case 's':
-                        x.zone_ = tz::standard;
-                        break;
-                    case 'u':
-                        x.zone_ = tz::utc;
-                        break;
-                    }
-                }
-            }
-        }
-        else
-        {
-            x.u = month{m}/1;
-        }
-    }
-    return is;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 std::ostream&
 detail::operator<<(std::ostream& os, const MonthDayTime& x)
 {
-    switch (x.type_)
-    {
-    case MonthDayTime::month_day:
-        os << x.u.month_day_ << "                  ";
-        break;
-    case MonthDayTime::month_last_dow:
-        os << x.u.month_weekday_last_ << "           ";
-        break;
-    case MonthDayTime::lteq:
-        os << x.u.month_day_weekday_.weekday_ << " on or before "
-           << x.u.month_day_weekday_.month_day_ << "  ";
-        break;
-    case MonthDayTime::gteq:
-        if ((static_cast<unsigned>(x.day()) - 1) % 7 == 0)
-        {
-            os << (x.u.month_day_weekday_.month_day_.month() /
-                   x.u.month_day_weekday_.weekday_[
-                       (static_cast<unsigned>(x.day()) - 1)/7+1]) << "              ";
-        }
-        else
-        {
-            os << x.u.month_day_weekday_.weekday_ << " on or after "
-               << x.u.month_day_weekday_.month_day_ << "  ";
-        }
-        break;
-    }
-    os << date::make_time(x.s_ + x.h_ + x.m_);
-    if (x.zone_ == tz::utc)
-        os << "UTC   ";
-    else if (x.zone_ == tz::standard)
-        os << "STD   ";
-    else
-        os << "      ";
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // Rule
 
 detail::Rule::Rule(const std::string& s)
 {
-    try
-    {
-        using namespace date;
-        using namespace std::chrono;
-        std::istringstream in(s);
-        in.exceptions(std::ios::failbit | std::ios::badbit);
-        std::string word;
-        in >> word >> name_;
-        int x;
-        ws(in);
-        if (std::isalpha(in.peek()))
-        {
-            in >> word;
-            if (word == "min")
-            {
-                starting_year_ = year::min();
-            }
-            else
-                throw std::runtime_error("Didn't find expected word: " + word);
-        }
-        else
-        {
-            in >> x;
-            starting_year_ = year{x};
-        }
-        std::ws(in);
-        if (std::isalpha(in.peek()))
-        {
-            in >> word;
-            if (word == "only")
-            {
-                ending_year_ = starting_year_;
-            }
-            else if (word == "max")
-            {
-                ending_year_ = year::max();
-            }
-            else
-                throw std::runtime_error("Didn't find expected word: " + word);
-        }
-        else
-        {
-            in >> x;
-            ending_year_ = year{x};
-        }
-        in >> word;  // TYPE (always "-")
-        assert(word == "-");
-        in >> starting_at_;
-        save_ = duration_cast<minutes>(parse_signed_time(in));
-        in >> abbrev_;
-        if (abbrev_ == "-")
-            abbrev_.clear();
-        assert(hours{-1} <= save_ && save_ <= hours{2});
-    }
-    catch (...)
-    {
-        std::cerr << s << '\n';
-        std::cerr << *this << '\n';
-        throw;
-    }
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 detail::Rule::Rule(const Rule& r, date::year starting_year, date::year ending_year)
@@ -1352,268 +885,122 @@ detail::Rule::Rule(const Rule& r, date::year starting_year, date::year ending_ye
     , save_(r.save_)
     , abbrev_(r.abbrev_)
 {
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 bool
 detail::operator==(const Rule& x, const Rule& y)
 {
-    if (std::tie(x.name_, x.save_, x.starting_year_, x.ending_year_) ==
-        std::tie(y.name_, y.save_, y.starting_year_, y.ending_year_))
-        return x.month() == y.month() && x.day() == y.day();
-    return false;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 bool
 detail::operator<(const Rule& x, const Rule& y)
 {
-    using namespace std::chrono;
-    auto const xm = x.month();
-    auto const ym = y.month();
-    if (std::tie(x.name_, x.starting_year_, xm, x.ending_year_) <
-        std::tie(y.name_, y.starting_year_, ym, y.ending_year_))
-        return true;
-    if (std::tie(x.name_, x.starting_year_, xm, x.ending_year_) >
-        std::tie(y.name_, y.starting_year_, ym, y.ending_year_))
-        return false;
-    return x.day() < y.day();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 bool
 detail::operator==(const Rule& x, const date::year& y)
 {
-    return x.starting_year_ <= y && y <= x.ending_year_;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 bool
 detail::operator<(const Rule& x, const date::year& y)
 {
-    return x.ending_year_ < y;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 bool
 detail::operator==(const date::year& x, const Rule& y)
 {
-    return y.starting_year_ <= x && x <= y.ending_year_;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 bool
 detail::operator<(const date::year& x, const Rule& y)
 {
-    return x < y.starting_year_;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 bool
 detail::operator==(const Rule& x, const std::string& y)
 {
-    return x.name() == y;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 bool
 detail::operator<(const Rule& x, const std::string& y)
 {
-    return x.name() < y;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 bool
 detail::operator==(const std::string& x, const Rule& y)
 {
-    return y.name() == x;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 bool
 detail::operator<(const std::string& x, const Rule& y)
 {
-    return x < y.name();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 std::ostream&
 detail::operator<<(std::ostream& os, const Rule& r)
 {
-    using namespace date;
-    using namespace std::chrono;
-    detail::save_ostream<char> _(os);
-    os.fill(' ');
-    os.flags(std::ios::dec | std::ios::left);
-    os.width(15);
-    os << r.name_;
-    os << r.starting_year_ << "    " << r.ending_year_ << "    ";
-    os << r.starting_at_;
-    if (r.save_ >= minutes{0})
-        os << ' ';
-    os << date::make_time(r.save_) << "   ";
-    os << r.abbrev_;
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 date::day
 detail::Rule::day() const
 {
-    return starting_at_.day();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 date::month
 detail::Rule::month() const
 {
-    return starting_at_.month();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 struct find_rule_by_name
 {
     bool operator()(const Rule& x, const std::string& nm) const
     {
-        return x.name() < nm;
-    }
+    __builtin_trap() /* STUB: not implemented */;
+}
 
     bool operator()(const std::string& nm, const Rule& x) const
     {
-        return nm < x.name();
-    }
+    __builtin_trap() /* STUB: not implemented */;
+}
 };
 
 bool
 detail::Rule::overlaps(const Rule& x, const Rule& y)
 {
-    // assume x.starting_year_ <= y.starting_year_;
-    if (!(x.starting_year_ <= y.starting_year_))
-    {
-        std::cerr << x << '\n';
-        std::cerr << y << '\n';
-        assert(x.starting_year_ <= y.starting_year_);
-    }
-    if (y.starting_year_ > x.ending_year_)
-        return false;
-    return !(x.starting_year_ == y.starting_year_ && x.ending_year_ == y.ending_year_);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 void
 detail::Rule::split(std::vector<Rule>& rules, std::size_t i, std::size_t k, std::size_t& e)
 {
-    using namespace date;
-    using difference_type = std::vector<Rule>::iterator::difference_type;
-    // rules[i].starting_year_ <= rules[k].starting_year_ &&
-    //     rules[i].ending_year_ >= rules[k].starting_year_ &&
-    //     (rules[i].starting_year_ != rules[k].starting_year_ ||
-    //      rules[i].ending_year_ != rules[k].ending_year_)
-    assert(rules[i].starting_year_ <= rules[k].starting_year_ &&
-           rules[i].ending_year_ >= rules[k].starting_year_ &&
-           (rules[i].starting_year_ != rules[k].starting_year_ ||
-            rules[i].ending_year_ != rules[k].ending_year_));
-    if (rules[i].starting_year_ == rules[k].starting_year_)
-    {
-        if (rules[k].ending_year_ < rules[i].ending_year_)
-        {
-            rules.insert(rules.begin() + static_cast<difference_type>(k+1),
-                         Rule(rules[i], rules[k].ending_year_ + years{1},
-                              std::move(rules[i].ending_year_)));
-            ++e;
-            rules[i].ending_year_ = rules[k].ending_year_;
-        }
-        else  // rules[k].ending_year_ > rules[i].ending_year_
-        {
-            rules.insert(rules.begin() + static_cast<difference_type>(k+1),
-                         Rule(rules[k], rules[i].ending_year_ + years{1},
-                              std::move(rules[k].ending_year_)));
-            ++e;
-            rules[k].ending_year_ = rules[i].ending_year_;
-        }
-    }
-    else  // rules[i].starting_year_ < rules[k].starting_year_
-    {
-        if (rules[k].ending_year_ < rules[i].ending_year_)
-        {
-            rules.insert(rules.begin() + static_cast<difference_type>(k),
-                         Rule(rules[i], rules[k].starting_year_, rules[k].ending_year_));
-            ++k;
-            rules.insert(rules.begin() + static_cast<difference_type>(k+1),
-                         Rule(rules[i], rules[k].ending_year_ + years{1},
-                              std::move(rules[i].ending_year_)));
-            rules[i].ending_year_ = rules[k].starting_year_ - years{1};
-            e += 2;
-        }
-        else if (rules[k].ending_year_ > rules[i].ending_year_)
-        {
-            rules.insert(rules.begin() + static_cast<difference_type>(k),
-                         Rule(rules[i], rules[k].starting_year_, rules[i].ending_year_));
-            ++k;
-            rules.insert(rules.begin() + static_cast<difference_type>(k+1),
-                         Rule(rules[k], rules[i].ending_year_ + years{1},
-                         std::move(rules[k].ending_year_)));
-            e += 2;
-            rules[k].ending_year_ = std::move(rules[i].ending_year_);
-            rules[i].ending_year_ = rules[k].starting_year_ - years{1};
-        }
-        else  // rules[k].ending_year_ == rules[i].ending_year_
-        {
-            rules.insert(rules.begin() + static_cast<difference_type>(k),
-                         Rule(rules[i], rules[k].starting_year_,
-                         std::move(rules[i].ending_year_)));
-            ++k;
-            ++e;
-            rules[i].ending_year_ = rules[k].starting_year_ - years{1};
-        }
-    }
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 void
 detail::Rule::split_overlaps(std::vector<Rule>& rules, std::size_t i, std::size_t& e)
 {
-    using difference_type = std::vector<Rule>::iterator::difference_type;
-    auto j = i;
-    for (; i + 1 < e; ++i)
-    {
-        for (auto k = i + 1; k < e; ++k)
-        {
-            if (overlaps(rules[i], rules[k]))
-            {
-                split(rules, i, k, e);
-                std::sort(rules.begin() + static_cast<difference_type>(i),
-                          rules.begin() + static_cast<difference_type>(e));
-            }
-        }
-    }
-    for (; j < e; ++j)
-    {
-        if (rules[j].starting_year() == rules[j].ending_year())
-            rules[j].starting_at_.canonicalize(rules[j].starting_year());
-    }
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 void
 detail::Rule::split_overlaps(std::vector<Rule>& rules)
 {
-    using difference_type = std::vector<Rule>::iterator::difference_type;
-    for (std::size_t i = 0; i < rules.size();)
-    {
-        auto e = static_cast<std::size_t>(std::upper_bound(
-            rules.cbegin()+static_cast<difference_type>(i), rules.cend(), rules[i].name(),
-            [](const std::string& nm, const Rule& x)
-            {
-                return nm < x.name();
-            }) - rules.cbegin());
-        split_overlaps(rules, i, e);
-        auto first_rule = rules.begin() + static_cast<difference_type>(i);
-        auto last_rule = rules.begin() + static_cast<difference_type>(e);
-        auto t = std::lower_bound(first_rule, last_rule, min_year);
-        if (t > first_rule+1)
-        {
-            if (t == last_rule || t->starting_year() >= min_year)
-                --t;
-            auto d = static_cast<std::size_t>(t - first_rule);
-            rules.erase(first_rule, t);
-            e -= d;
-        }
-        first_rule = rules.begin() + static_cast<difference_type>(i);
-        last_rule = rules.begin() + static_cast<difference_type>(e);
-        t = std::upper_bound(first_rule, last_rule, max_year);
-        if (t != last_rule)
-        {
-            auto d = static_cast<std::size_t>(last_rule - t);
-            rules.erase(t, last_rule);
-            e -= d;
-        }
-        i = e;
-    }
-    rules.shrink_to_fit();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // Find the rule that comes chronologically before Rule r.  For multi-year rules,
@@ -1627,27 +1014,7 @@ static
 std::pair<const Rule*, date::year>
 find_previous_rule(const Rule* r, date::year y)
 {
-    using namespace date;
-    auto const& rules = get_tzdb().rules;
-    if (y == r->starting_year())
-    {
-        if (r == &rules.front() || r->name() != r[-1].name())
-            std::terminate();  // never called with first rule
-        --r;
-        if (y == r->starting_year())
-            return {r, y};
-        return {r, r->ending_year()};
-    }
-    if (r == &rules.front() || r->name() != r[-1].name() ||
-        r[-1].starting_year() < r->starting_year())
-    {
-        while (r < &rules.back() && r->name() == r[1].name() &&
-               r->starting_year() == r[1].starting_year())
-            ++r;
-        return {r, --y};
-    }
-    --r;
-    return {r, y};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // Find the rule that comes chronologically after Rule r.  For multi-year rules,
@@ -1663,24 +1030,7 @@ static
 std::pair<const Rule*, date::year>
 find_next_rule(const Rule* first_rule, const Rule* last_rule, const Rule* r, date::year y)
 {
-    using namespace date;
-    if (y == r->ending_year())
-    {
-        if (r == last_rule-1)
-            return {nullptr, year::max()};
-        ++r;
-        if (y == r->ending_year())
-            return {r, y};
-        return {r, r->starting_year()};
-    }
-    if (r == last_rule-1 || r->ending_year() < r[1].ending_year())
-    {
-        while (r > first_rule && r->starting_year() == r[-1].starting_year())
-            --r;
-        return {r, ++y};
-    }
-    ++r;
-    return {r, y};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // Find the rule that comes chronologically after Rule r.  For multi-year rules,
@@ -1694,43 +1044,14 @@ static
 std::pair<const Rule*, date::year>
 find_next_rule(const Rule* r, date::year y)
 {
-    using namespace date;
-    auto const& rules = get_tzdb().rules;
-    if (y == r->ending_year())
-    {
-        if (r == &rules.back() || r->name() != r[1].name())
-            return {nullptr, year::max()};
-        ++r;
-        if (y == r->ending_year())
-            return {r, y};
-        return {r, r->starting_year()};
-    }
-    if (r == &rules.back() || r->name() != r[1].name() ||
-        r->ending_year() < r[1].ending_year())
-    {
-        while (r > &rules.front() && r->name() == r[-1].name() &&
-               r->starting_year() == r[-1].starting_year())
-            --r;
-        return {r, ++y};
-    }
-    ++r;
-    return {r, y};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 static
 const Rule*
 find_first_std_rule(const std::pair<const Rule*, const Rule*>& eqr)
 {
-    auto r = eqr.first;
-    auto ry = r->starting_year();
-    while (r->save() != std::chrono::minutes{0})
-    {
-        std::tie(r, ry) = find_next_rule(eqr.first, eqr.second, r, ry);
-        if (r == nullptr)
-            throw std::runtime_error("Could not find standard offset in rule "
-                                     + eqr.first->name());
-    }
-    return r;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 static
@@ -1739,26 +1060,7 @@ find_rule_for_zone(const std::pair<const Rule*, const Rule*>& eqr,
                    const date::year& y, const std::chrono::seconds& offset,
                    const MonthDayTime& mdt)
 {
-    assert(eqr.first != nullptr);
-    assert(eqr.second != nullptr);
-
-    using namespace std::chrono;
-    using namespace date;
-    auto r = eqr.first;
-    auto ry = r->starting_year();
-    auto prev_save = minutes{0};
-    auto prev_year = year::min();
-    const Rule* prev_rule = nullptr;
-    while (r != nullptr)
-    {
-        if (mdt.compare(y, r->mdt(), ry, offset, prev_save) <= 0)
-            break;
-        prev_rule = r;
-        prev_year = ry;
-        prev_save = prev_rule->save();
-        std::tie(r, ry) = find_next_rule(eqr.first, eqr.second, r, ry);
-    }
-    return {prev_rule, prev_year};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 static
@@ -1768,36 +1070,7 @@ find_rule_for_zone(const std::pair<const Rule*, const Rule*>& eqr,
                    const local_seconds& tp_std,
                    const local_seconds& tp_loc)
 {
-    using namespace std::chrono;
-    using namespace date;
-    auto r = eqr.first;
-    auto ry = r->starting_year();
-    auto prev_save = minutes{0};
-    auto prev_year = year::min();
-    const Rule* prev_rule = nullptr;
-    while (r != nullptr)
-    {
-        bool found = false;
-        switch (r->mdt().zone())
-        {
-        case tz::utc:
-            found = tp_utc < r->mdt().to_time_point(ry);
-            break;
-        case tz::standard:
-            found = sys_seconds{tp_std.time_since_epoch()} < r->mdt().to_time_point(ry);
-            break;
-        case tz::local:
-            found = sys_seconds{tp_loc.time_since_epoch()} < r->mdt().to_time_point(ry);
-            break;
-        }
-        if (found)
-            break;
-        prev_rule = r;
-        prev_year = ry;
-        prev_save = prev_rule->save();
-        std::tie(r, ry) = find_next_rule(eqr.first, eqr.second, r, ry);
-    }
-    return {prev_rule, prev_year};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 static
@@ -1808,51 +1081,7 @@ find_rule(const std::pair<const Rule*, date::year>& first_rule,
           const MonthDayTime& mdt, const std::chrono::minutes& initial_save,
           const std::string& initial_abbrev)
 {
-    using namespace std::chrono;
-    using namespace date;
-    auto r = first_rule.first;
-    auto ry = first_rule.second;
-    sys_info x{sys_days(year::min()/min_day), sys_days(year::max()/max_day),
-               seconds{0}, initial_save, initial_abbrev};
-    while (r != nullptr)
-    {
-        auto tr = r->mdt().to_sys(ry, offset, x.save);
-        auto tx = mdt.to_sys(y, offset, x.save);
-        // Find last rule where tx >= tr
-        if (tx <= tr || (r == last_rule.first && ry == last_rule.second))
-        {
-            if (tx < tr && r == first_rule.first && ry == first_rule.second)
-            {
-                x.end = r->mdt().to_sys(ry, offset, x.save);
-                break;
-            }
-            if (tx < tr)
-            {
-                std::tie(r, ry) = find_previous_rule(r, ry);  // can't return nullptr for r
-                assert(r != nullptr);
-            }
-            // r != nullptr && tx >= tr (if tr were to be recomputed)
-            auto prev_save = initial_save;
-            if (!(r == first_rule.first && ry == first_rule.second))
-                prev_save = find_previous_rule(r, ry).first->save();
-            x.begin = r->mdt().to_sys(ry, offset, prev_save);
-            x.save = r->save();
-            x.abbrev = r->abbrev();
-            if (!(r == last_rule.first && ry == last_rule.second))
-            {
-                std::tie(r, ry) = find_next_rule(r, ry);  // can't return nullptr for r
-                assert(r != nullptr);
-                x.end = r->mdt().to_sys(ry, offset, x.save);
-            }
-            else
-                x.end = sys_days(year::max()/max_day);
-            break;
-        }
-        x.save = r->save();
-        std::tie(r, ry) = find_next_rule(r, ry);  // Can't return nullptr for r
-        assert(r != nullptr);
-    }
-    return x;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // zonelet
@@ -1871,9 +1100,7 @@ detail::zonelet::~zonelet()
 
 detail::zonelet::zonelet()
 {
-#if !defined(_MSC_VER) || (_MSC_VER >= 1900)
-    ::new(&u.rule_) std::string();
-#endif
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 detail::zonelet::zonelet(const zonelet& i)
@@ -1890,17 +1117,7 @@ detail::zonelet::zonelet(const zonelet& i)
     , first_rule_(i.first_rule_)
     , last_rule_(i.last_rule_)
 {
-#if !defined(_MSC_VER) || (_MSC_VER >= 1900)
-    if (tag_ == has_save)
-        ::new(&u.save_) std::chrono::minutes(i.u.save_);
-    else
-        ::new(&u.rule_) std::string(i.u.rule_);
-#else
-    if (tag_ == has_save)
-        u.save_ = i.u.save_;
-    else
-        u.rule_ = i.u.rule_;
-#endif
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #endif  // !USE_OS_TZDB
@@ -2499,216 +1716,37 @@ leap_second::leap_second(const sys_seconds& s, detail::undocumented)
 time_zone::time_zone(const std::string& s, detail::undocumented)
     : adjusted_(new std::once_flag{})
 {
-    try
-    {
-        using namespace date;
-        std::istringstream in(s);
-        in.exceptions(std::ios::failbit | std::ios::badbit);
-        std::string word;
-        in >> word >> name_;
-        parse_info(in);
-    }
-    catch (...)
-    {
-        std::cerr << s << '\n';
-        std::cerr << *this << '\n';
-        zonelets_.pop_back();
-        throw;
-    }
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 sys_info
 time_zone::get_info_impl(sys_seconds tp) const
 {
-    return get_info_impl(tp, static_cast<int>(tz::utc));
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 local_info
 time_zone::get_info_impl(local_seconds tp) const
 {
-    using namespace std::chrono;
-    local_info i{};
-    i.first = get_info_impl(sys_seconds{tp.time_since_epoch()}, static_cast<int>(tz::local));
-    auto tps = sys_seconds{(tp - i.first.offset).time_since_epoch()};
-    if (tps < i.first.begin)
-    {
-        i.second = std::move(i.first);
-        i.first = get_info_impl(i.second.begin - seconds{1}, static_cast<int>(tz::utc));
-        i.result = local_info::nonexistent;
-    }
-    else if (i.first.end - tps <= days{1})
-    {
-        i.second = get_info_impl(i.first.end, static_cast<int>(tz::utc));
-        tps = sys_seconds{(tp - i.second.offset).time_since_epoch()};
-        if (tps >= i.second.begin)
-            i.result = local_info::ambiguous;
-        else
-            i.second = {};
-    }
-    return i;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 void
 time_zone::add(const std::string& s)
 {
-    try
-    {
-        std::istringstream in(s);
-        in.exceptions(std::ios::failbit | std::ios::badbit);
-        ws(in);
-        if (!in.eof() && in.peek() != '#')
-            parse_info(in);
-    }
-    catch (...)
-    {
-        std::cerr << s << '\n';
-        std::cerr << *this << '\n';
-        zonelets_.pop_back();
-        throw;
-    }
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 void
 time_zone::parse_info(std::istream& in)
 {
-    using namespace date;
-    using namespace std::chrono;
-    zonelets_.emplace_back();
-    auto& zonelet = zonelets_.back();
-    zonelet.gmtoff_ = parse_signed_time(in);
-    in >> zonelet.u.rule_;
-    if (zonelet.u.rule_ == "-")
-        zonelet.u.rule_.clear();
-    in >> zonelet.format_;
-    if (!in.eof())
-        ws(in);
-    if (in.eof() || in.peek() == '#')
-    {
-        zonelet.until_year_ = year::max();
-        zonelet.until_date_ = MonthDayTime(max_day, tz::utc);
-    }
-    else
-    {
-        int y;
-        in >> y;
-        zonelet.until_year_ = year{y};
-        in >> zonelet.until_date_;
-        zonelet.until_date_.canonicalize(zonelet.until_year_);
-    }
-    if ((zonelet.until_year_ < min_year) ||
-            (zonelets_.size() > 1 && zonelets_.end()[-2].until_year_ > max_year))
-        zonelets_.pop_back();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 void
 time_zone::adjust_infos(const std::vector<Rule>& rules)
 {
-    using namespace std::chrono;
-    using namespace date;
-    const zonelet* prev_zonelet = nullptr;
-    for (auto& z : zonelets_)
-    {
-        std::pair<const Rule*, const Rule*> eqr{};
-        std::istringstream in;
-        in.exceptions(std::ios::failbit | std::ios::badbit);
-        // Classify info as rule-based, has save, or neither
-        if (!z.u.rule_.empty())
-        {
-            // Find out if this zonelet has a rule or a save
-            eqr = std::equal_range(rules.data(), rules.data() + rules.size(), z.u.rule_);
-            if (eqr.first == eqr.second)
-            {
-                // The rule doesn't exist.  Assume this is a save
-                try
-                {
-                    using namespace std::chrono;
-                    using string = std::string;
-                    in.str(z.u.rule_);
-                    auto tmp = duration_cast<minutes>(parse_signed_time(in));
-#if !defined(_MSC_VER) || (_MSC_VER >= 1900)
-                    z.u.rule_.~string();
-                    z.tag_ = zonelet::has_save;
-                    ::new(&z.u.save_) minutes(tmp);
-#else
-                    z.u.rule_.clear();
-                    z.tag_ = zonelet::has_save;
-                    z.u.save_ = tmp;
-#endif
-                }
-                catch (...)
-                {
-                    std::cerr << name_ << " : " << z.u.rule_ << '\n';
-                    throw;
-                }
-            }
-        }
-        else
-        {
-            // This zone::zonelet has no rule and no save
-            z.tag_ = zonelet::is_empty;
-        }
-
-        minutes final_save{0};
-        if (z.tag_ == zonelet::has_save)
-        {
-            final_save = z.u.save_;
-        }
-        else if (z.tag_ == zonelet::has_rule)
-        {
-            z.last_rule_ = find_rule_for_zone(eqr, z.until_year_, z.gmtoff_,
-                                              z.until_date_);
-            if (z.last_rule_.first != nullptr)
-                final_save = z.last_rule_.first->save();
-        }
-        z.until_utc_ = z.until_date_.to_sys(z.until_year_, z.gmtoff_, final_save);
-        z.until_std_ = local_seconds{z.until_utc_.time_since_epoch()} + z.gmtoff_;
-        z.until_loc_ = z.until_std_ + final_save;
-
-        if (z.tag_ == zonelet::has_rule)
-        {
-            if (prev_zonelet != nullptr)
-            {
-                z.first_rule_ = find_rule_for_zone(eqr, prev_zonelet->until_utc_,
-                                                        prev_zonelet->until_std_,
-                                                        prev_zonelet->until_loc_);
-                if (z.first_rule_.first != nullptr)
-                {
-                    z.initial_save_ = z.first_rule_.first->save();
-                    z.initial_abbrev_ = z.first_rule_.first->abbrev();
-                    if (z.first_rule_ != z.last_rule_)
-                    {
-                        z.first_rule_ = find_next_rule(eqr.first, eqr.second,
-                                                       z.first_rule_.first,
-                                                       z.first_rule_.second);
-                    }
-                    else
-                    {
-                        z.first_rule_ = std::make_pair(nullptr, year::min());
-                        z.last_rule_ = std::make_pair(nullptr, year::max());
-                    }
-                }
-            }
-            if (z.first_rule_.first == nullptr && z.last_rule_.first != nullptr)
-            {
-                z.first_rule_ = std::make_pair(eqr.first, eqr.first->starting_year());
-                z.initial_abbrev_ = find_first_std_rule(eqr)->abbrev();
-            }
-        }
-
-#ifndef NDEBUG
-        if (z.first_rule_.first == nullptr)
-        {
-            assert(z.first_rule_.second == year::min());
-            assert(z.last_rule_.first == nullptr);
-            assert(z.last_rule_.second == year::max());
-        }
-        else
-        {
-            assert(z.last_rule_.first != nullptr);
-        }
-#endif
-        prev_zonelet = &z;
-    }
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 static
@@ -2716,177 +1754,19 @@ std::string
 format_abbrev(std::string format, const std::string& variable, std::chrono::seconds off,
                                                                std::chrono::minutes save)
 {
-    using namespace std::chrono;
-    auto k = format.find("%s");
-    if (k != std::string::npos)
-    {
-        format.replace(k, 2, variable);
-    }
-    else
-    {
-        k = format.find('/');
-        if (k != std::string::npos)
-        {
-            if (save == minutes{0})
-                format.erase(k);
-            else
-                format.erase(0, k+1);
-        }
-        else
-        {
-            k = format.find("%z");
-            if (k != std::string::npos)
-            {
-                std::string temp;
-                if (off < seconds{0})
-                {
-                    temp = '-';
-                    off = -off;
-                }
-                else
-                    temp = '+';
-                auto h = date::floor<hours>(off);
-                off -= h;
-                if (h < hours{10})
-                    temp += '0';
-                temp += std::to_string(h.count());
-                if (off > seconds{0})
-                {
-                    auto m = date::floor<minutes>(off);
-                    off -= m;
-                    if (m < minutes{10})
-                        temp += '0';
-                    temp += std::to_string(m.count());
-                    if (off > seconds{0})
-                    {
-                        if (off < seconds{10})
-                            temp += '0';
-                        temp += std::to_string(off.count());
-                    }
-                }
-                format.replace(k, 2, temp);
-            }
-        }
-    }
-    return format;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 sys_info
 time_zone::get_info_impl(sys_seconds tp, int tz_int) const
 {
-    using namespace std::chrono;
-    using namespace date;
-    tz timezone = static_cast<tz>(tz_int);
-    assert(timezone != tz::standard);
-    auto y = year_month_day(floor<days>(tp)).year();
-    if (y < min_year || y > max_year)
-        throw std::runtime_error("The year " + std::to_string(static_cast<int>(y)) +
-            " is out of range:[" + std::to_string(static_cast<int>(min_year)) + ", "
-                                 + std::to_string(static_cast<int>(max_year)) + "]");
-    std::call_once(*adjusted_,
-                   [this]()
-                   {
-                       const_cast<time_zone*>(this)->adjust_infos(get_tzdb().rules);
-                   });
-    auto i = std::upper_bound(zonelets_.begin(), zonelets_.end(), tp,
-        [timezone](sys_seconds t, const zonelet& zl)
-        {
-            return timezone == tz::utc ? t < zl.until_utc_ :
-                                         t < sys_seconds{zl.until_loc_.time_since_epoch()};
-        });
-
-    sys_info r{};
-    if (i != zonelets_.end())
-    {
-        if (i->tag_ == zonelet::has_save)
-        {
-            if (i != zonelets_.begin())
-                r.begin = i[-1].until_utc_;
-            else
-                r.begin = sys_days(year::min()/min_day);
-            r.end = i->until_utc_;
-            r.offset = i->gmtoff_ + i->u.save_;
-            r.save = i->u.save_;
-        }
-        else if (i->u.rule_.empty())
-        {
-            if (i != zonelets_.begin())
-                r.begin = i[-1].until_utc_;
-            else
-                r.begin = sys_days(year::min()/min_day);
-            r.end = i->until_utc_;
-            r.offset = i->gmtoff_;
-        }
-        else
-        {
-            r = find_rule(i->first_rule_, i->last_rule_, y, i->gmtoff_,
-                          MonthDayTime(local_seconds{tp.time_since_epoch()}, timezone),
-                          i->initial_save_, i->initial_abbrev_);
-            r.offset = i->gmtoff_ + r.save;
-            if (i != zonelets_.begin() && r.begin < i[-1].until_utc_)
-                r.begin = i[-1].until_utc_;
-            if (r.end > i->until_utc_)
-                r.end = i->until_utc_;
-        }
-        r.abbrev = format_abbrev(i->format_, r.abbrev, r.offset, r.save);
-        assert(r.begin < r.end);
-    }
-    return r;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 std::ostream&
 operator<<(std::ostream& os, const time_zone& z)
 {
-    using namespace date;
-    using namespace std::chrono;
-    detail::save_ostream<char> _(os);
-    os.fill(' ');
-    os.flags(std::ios::dec | std::ios::left);
-    std::call_once(*z.adjusted_,
-                   [&z]()
-                   {
-                       const_cast<time_zone&>(z).adjust_infos(get_tzdb().rules);
-                   });
-    os.width(35);
-    os << z.name_;
-    std::string indent;
-    for (auto const& s : z.zonelets_)
-    {
-        os << indent;
-        if (s.gmtoff_ >= seconds{0})
-            os << ' ';
-        os << make_time(s.gmtoff_) << "   ";
-        os.width(15);
-        if (s.tag_ != zonelet::has_save)
-            os << s.u.rule_;
-        else
-        {
-            std::ostringstream tmp;
-            tmp << make_time(s.u.save_);
-            os <<  tmp.str();
-        }
-        os.width(8);
-        os << s.format_ << "   ";
-        os << s.until_year_ << ' ' << s.until_date_;
-        os << "   ";
-        date::operator<<(os, s.until_utc_) << " UTC";
-        os << "   " << s.until_std_ << " STD";
-        os << "   " << s.until_loc_;
-        os << "   " << make_time(s.initial_save_);
-        os << "   " << s.initial_abbrev_;
-        if (s.first_rule_.first != nullptr)
-            os << "   {" << *s.first_rule_.first << ", " << s.first_rule_.second << '}';
-        else
-            os << "   {" << "nullptr" << ", " << s.first_rule_.second << '}';
-        if (s.last_rule_.first != nullptr)
-            os << "   {" << *s.last_rule_.first << ", " << s.last_rule_.second << '}';
-        else
-            os << "   {" << "nullptr" << ", " << s.last_rule_.second << '}';
-        os << '\n';
-        if (indent.empty())
-            indent = std::string(35, ' ');
-    }
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #endif  // !USE_OS_TZDB
@@ -2894,7 +1774,7 @@ operator<<(std::ostream& os, const time_zone& z)
 std::ostream&
 operator<<(std::ostream& os, const leap_second& x)
 {
-    return date::operator<<(os, x.date_) << "  +";
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #if USE_OS_TZDB
@@ -3106,48 +1986,27 @@ init_tzdb()
 
 time_zone_link::time_zone_link(const std::string& s)
 {
-    using namespace date;
-    std::istringstream in(s);
-    in.exceptions(std::ios::failbit | std::ios::badbit);
-    std::string word;
-    in >> word >> target_ >> name_;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 std::ostream&
 operator<<(std::ostream& os, const time_zone_link& x)
 {
-    using namespace date;
-    detail::save_ostream<char> _(os);
-    os.fill(' ');
-    os.flags(std::ios::dec | std::ios::left);
-    os.width(35);
-    return os << x.name_ << " --> " << x.target_;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // leap_second
 
 leap_second::leap_second(const std::string& s, detail::undocumented)
 {
-    using namespace date;
-    std::istringstream in(s);
-    in.exceptions(std::ios::failbit | std::ios::badbit);
-    std::string word;
-    int y;
-    MonthDayTime date;
-    in >> word >> y >> date;
-    date_ = date.to_time_point(year(y));
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 static
 bool
 file_exists(const std::string& filename)
 {
-#ifdef _WIN32
-    std::wstring wfilename = convert_utf8_to_utf16(filename);
-    return ::_waccess(wfilename.c_str(), 0) == 0;
-#else
-    return ::access(filename.c_str(), F_OK) == 0;
-#endif
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #if HAS_REMOTE_API
@@ -3165,9 +2024,8 @@ struct curl_global_init_and_cleanup
     }
     curl_global_init_and_cleanup()
     {
-        if (::curl_global_init(CURL_GLOBAL_DEFAULT) != 0)
-            throw std::runtime_error("CURL global initialization failed");
-    }
+    __builtin_trap() /* STUB: not implemented */;
+}
     curl_global_init_and_cleanup(curl_global_init_and_cleanup const&) = delete;
     curl_global_init_and_cleanup& operator=(curl_global_init_and_cleanup const&) = delete;
 };
@@ -3176,8 +2034,8 @@ struct curl_deleter
 {
     void operator()(CURL* p) const
     {
-        ::curl_easy_cleanup(p);
-    }
+    __builtin_trap() /* STUB: not implemented */;
+}
 };
 
 }  // unnamed namespace
@@ -3186,34 +2044,14 @@ static
 std::unique_ptr<CURL, curl_deleter>
 curl_init()
 {
-    static const curl_global_init_and_cleanup _{};
-    return std::unique_ptr<CURL, curl_deleter>{::curl_easy_init()};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 static
 bool
 download_to_string(const std::string& url, std::string& str)
 {
-    str.clear();
-    auto curl = curl_init();
-    if (!curl)
-        return false;
-    std::string version;
-    curl_easy_setopt(curl.get(), CURLOPT_USERAGENT, "curl");
-    curl_easy_setopt(curl.get(), CURLOPT_URL, url.c_str());
-    curl_write_callback write_cb = [](char* contents, std::size_t size, std::size_t nmemb,
-                                      void* userp) -> std::size_t
-    {
-        auto& userstr = *static_cast<std::string*>(userp);
-        auto realsize = size * nmemb;
-        userstr.append(contents, realsize);
-        return realsize;
-    };
-    curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, write_cb);
-    curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, &str);
-    curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYPEER, false);
-    auto res = curl_easy_perform(curl.get());
-    return (res == CURLE_OK);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 namespace
@@ -3226,50 +2064,13 @@ bool
 download_to_file(const std::string& url, const std::string& local_filename,
                  download_file_options opts, char* error_buffer)
 {
-    auto curl = curl_init();
-    if (!curl)
-        return false;
-    curl_easy_setopt(curl.get(), CURLOPT_URL, url.c_str());
-    curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYPEER, false);
-    if (error_buffer)
-       curl_easy_setopt(curl.get(), CURLOPT_ERRORBUFFER, error_buffer);
-    curl_write_callback write_cb = [](char* contents, std::size_t size, std::size_t nmemb,
-                                      void* userp) -> std::size_t
-    {
-        auto& of = *static_cast<std::ofstream*>(userp);
-        auto realsize = size * nmemb;
-        of.write(contents, static_cast<std::streamsize>(realsize));
-        return realsize;
-    };
-    curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, write_cb);
-    decltype(curl_easy_perform(curl.get())) res;
-    {
-        std::ofstream of(local_filename,
-                         opts == download_file_options::binary ?
-                             std::ofstream::out | std::ofstream::binary :
-                             std::ofstream::out);
-        of.exceptions(std::ios::badbit);
-        curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, &of);
-        res = curl_easy_perform(curl.get());
-    }
-    return res == CURLE_OK;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 std::string
 remote_version()
 {
-    std::string version;
-    std::string str;
-    if (download_to_string("https://www.iana.org/time-zones", str))
-    {
-        CONSTDATA char db[] = "/time-zones/releases/";
-        CONSTDATA auto db_size = sizeof(db) - 1;
-        auto p = str.find(db, 0, db_size);
-        const int ver_str_len = 5;
-        if (p != std::string::npos && p + (db_size + ver_str_len) <= str.size())
-            version = str.substr(p + db_size, ver_str_len);
-    }
-    return version;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 
@@ -3284,124 +2085,21 @@ static
 bool
 remove_folder_and_subfolders(const std::string& folder)
 {
-#  ifdef _WIN32
-#    if USE_SHELL_API
-    // Delete the folder contents by deleting the folder.
-    std::string cmd = "rd /s /q \"";
-    cmd += folder;
-    cmd += '\"';
-    return std::system(cmd.c_str()) == EXIT_SUCCESS;
-#    else  // !USE_SHELL_API
-    // Create a buffer containing the path to delete. It must be terminated
-    // by two nuls. Who designs these API's...
-    std::vector<char> from;
-    from.assign(folder.begin(), folder.end());
-    from.push_back('\0');
-    from.push_back('\0');
-    SHFILEOPSTRUCT fo{}; // Zero initialize.
-    fo.wFunc = FO_DELETE;
-    fo.pFrom = from.data();
-    fo.fFlags = FOF_NO_UI;
-    int ret = SHFileOperation(&fo);
-    if (ret == 0 && !fo.fAnyOperationsAborted)
-        return true;
-    return false;
-#    endif  // !USE_SHELL_API
-#  else   // !_WIN32
-#    if USE_SHELL_API
-    return std::system(("rm -R \"" + folder + "\"").c_str()) == EXIT_SUCCESS;
-#    else // !USE_SHELL_API
-    struct dir_deleter {
-        dir_deleter() {}
-        void operator()(DIR* d) const
-        {
-            if (d != nullptr)
-            {
-                int result = closedir(d);
-                assert(result == 0);
-            }
-        }
-    };
-    using closedir_ptr = std::unique_ptr<DIR, dir_deleter>;
-
-    std::string filename;
-    struct stat statbuf;
-    std::size_t folder_len = folder.length();
-    struct dirent* p = nullptr;
-
-    closedir_ptr d(opendir(folder.c_str()));
-    bool r = d.get() != nullptr;
-    while (r && (p=readdir(d.get())) != nullptr)
-    {
-        if (strcmp(p->d_name, ".") == 0 || strcmp(p->d_name, "..") == 0)
-           continue;
-
-        // + 2 for path delimiter and nul terminator.
-        std::size_t buf_len = folder_len + strlen(p->d_name) + 2;
-        filename.resize(buf_len);
-        std::size_t path_len = static_cast<std::size_t>(
-            snprintf(&filename[0], buf_len, "%s/%s", folder.c_str(), p->d_name));
-        assert(path_len == buf_len - 1);
-        filename.resize(path_len);
-
-        if (stat(filename.c_str(), &statbuf) == 0)
-            r = S_ISDIR(statbuf.st_mode)
-              ? remove_folder_and_subfolders(filename)
-              : unlink(filename.c_str()) == 0;
-    }
-    d.reset();
-
-    if (r)
-        r = rmdir(folder.c_str()) == 0;
-
-    return r;
-#    endif // !USE_SHELL_API
-#  endif  // !_WIN32
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 static
 bool
 make_directory(const std::string& folder)
 {
-#  ifdef _WIN32
-#    if USE_SHELL_API
-    // Re-create the folder.
-    std::string cmd = "mkdir \"";
-    cmd += folder;
-    cmd += '\"';
-    return std::system(cmd.c_str()) == EXIT_SUCCESS;
-#    else  // !USE_SHELL_API
-    return _mkdir(folder.c_str()) == 0;
-#    endif // !USE_SHELL_API
-#  else  // !_WIN32
-#    if USE_SHELL_API
-    return std::system(("mkdir -p \"" + folder + "\"").c_str()) == EXIT_SUCCESS;
-#    else  // !USE_SHELL_API
-    return mkdir(folder.c_str(), 0777) == 0;
-#    endif  // !USE_SHELL_API
-#  endif  // !_WIN32
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 static
 bool
 delete_file(const std::string& file)
 {
-#  ifdef _WIN32
-#    if USE_SHELL_API
-    std::string cmd = "del \"";
-    cmd += file;
-    cmd += '\"';
-    return std::system(cmd.c_str()) == 0;
-#    else  // !USE_SHELL_API
-    return _unlink(file.c_str()) == 0;
-#    endif // !USE_SHELL_API
-#  else  // !_WIN32
-#    if USE_SHELL_API
-    return std::system(("rm \"" + file + "\"").c_str()) == EXIT_SUCCESS;
-#    else // !USE_SHELL_API
-    return unlink(file.c_str()) == 0;
-#    endif // !USE_SHELL_API
-#  endif  // !_WIN32
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #  ifdef _WIN32
@@ -3631,22 +2329,7 @@ static
 bool
 extract_gz_file(const std::string&, const std::string& gz_file, const std::string&)
 {
-#    if USE_SHELL_API
-    bool unzipped = std::system(("tar -xzf \"" + gz_file + "\" -C \"" + get_install() + "\"").c_str()) == EXIT_SUCCESS;
-#    else  // !USE_SHELL_API
-    const char prog[] = {"/usr/bin/tar"};
-    const char*const args[] =
-    {
-        prog, "-xzf", gz_file.c_str(), "-C", get_install().c_str(), nullptr
-    };
-    bool unzipped = (run_program(prog, args) == EXIT_SUCCESS);
-#    endif // !USE_SHELL_API
-    if (unzipped)
-    {
-        delete_file(gz_file);
-        return true;
-    }
-    return false;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #  endif // !_WIN32
@@ -3654,64 +2337,13 @@ extract_gz_file(const std::string&, const std::string& gz_file, const std::strin
 bool
 remote_download(const std::string& version, char* error_buffer)
 {
-    assert(!version.empty());
-
-#  ifdef _WIN32
-    // Download folder should be always available for Windows
-#  else  // !_WIN32
-    // Create download folder if it does not exist on UNIX system
-    auto download_folder = get_install();
-    if (!file_exists(download_folder))
-    {
-        if (!make_directory(download_folder))
-            return false;
-    }
-#  endif  // _WIN32
-
-    auto url = "https://data.iana.org/time-zones/releases/tzdata" + version +
-               ".tar.gz";
-    bool result = download_to_file(url, get_download_gz_file(version),
-                                   download_file_options::binary, error_buffer);
-#  ifdef _WIN32
-    if (result)
-    {
-        auto mapping_file = get_download_mapping_file(version);
-        result = download_to_file(
-            "https://raw.githubusercontent.com/unicode-org/cldr/master/"
-            "common/supplemental/windowsZones.xml",
-            mapping_file, download_file_options::text, error_buffer);
-    }
-#  endif  // _WIN32
-    return result;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 bool
 remote_install(const std::string& version)
 {
-    auto success = false;
-    assert(!version.empty());
-
-    std::string install = get_install();
-    auto gz_file = get_download_gz_file(version);
-    if (file_exists(gz_file))
-    {
-        if (file_exists(install))
-            remove_folder_and_subfolders(install);
-        if (make_directory(install))
-        {
-            if (extract_gz_file(version, gz_file, install))
-                success = true;
-#  ifdef _WIN32
-            auto mapping_file_source = get_download_mapping_file(version);
-            auto mapping_file_dest = get_install();
-            mapping_file_dest += folder_delimiter;
-            mapping_file_dest += "windowsZones.xml";
-            if (!move_file(mapping_file_source, mapping_file_dest))
-                success = false;
-#  endif  // _WIN32
-        }
-    }
-    return success;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #endif  // HAS_REMOTE_API
@@ -3720,193 +2352,20 @@ static
 std::string
 get_version(const std::string& path)
 {
-    std::string version;
-
-    std::string path_version = path + "version";
-
-    if (file_exists(path_version))
-    {
-        file_streambuf inbuf(path_version);
-        std::istream infile(&inbuf);
-
-        infile >> version;
-
-        if (!infile.fail())
-            return version;
-    }
-
-    std::string path_news = path + "NEWS";
-
-    if (file_exists(path_news))
-    {
-        file_streambuf inbuf(path_news);
-        std::istream infile(&inbuf);
-
-        while (infile)
-        {
-            infile >> version;
-            if (version == "Release")
-            {
-                infile >> version;
-                return version;
-            }
-        }
-    }
-
-    throw std::runtime_error("Unable to get Timezone database version from " + path);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 static
 std::unique_ptr<tzdb>
 init_tzdb()
 {
-    using namespace date;
-    const std::string install = get_install();
-    const std::string path = install + folder_delimiter;
-    std::string line;
-    bool continue_zone = false;
-    std::unique_ptr<tzdb> db(new tzdb);
-
-#if AUTO_DOWNLOAD
-    if (!file_exists(install))
-    {
-        auto rv = remote_version();
-        if (!rv.empty() && remote_download(rv))
-        {
-            if (!remote_install(rv))
-            {
-                std::string msg = "Timezone database version \"";
-                msg += rv;
-                msg += "\" did not install correctly to \"";
-                msg += install;
-                msg += "\"";
-                throw std::runtime_error(msg);
-            }
-        }
-        if (!file_exists(install))
-        {
-            std::string msg = "Timezone database not found at \"";
-            msg += install;
-            msg += "\"";
-            throw std::runtime_error(msg);
-        }
-        db->version = get_version(path);
-    }
-    else
-    {
-        db->version = get_version(path);
-        auto rv = remote_version();
-        if (!rv.empty() && db->version != rv)
-        {
-            if (remote_download(rv))
-            {
-                remote_install(rv);
-                db->version = get_version(path);
-            }
-        }
-    }
-#else  // !AUTO_DOWNLOAD
-    if (!file_exists(install))
-    {
-        std::string msg = "Timezone database not found at \"";
-        msg += install;
-        msg += "\"";
-        throw std::runtime_error(msg);
-    }
-    db->version = get_version(path);
-#endif  // !AUTO_DOWNLOAD
-
-    CONSTDATA char*const files[] =
-    {
-        "africa", "antarctica", "asia", "australasia", "backward", "etcetera", "europe",
-        "pacificnew", "northamerica", "southamerica", "systemv", "leapseconds"
-    };
-
-    for (const auto& filename : files)
-    {
-        std::string file_path = path + filename;
-        if (!file_exists(file_path))
-        {
-          continue;
-        }
-        file_streambuf inbuf(file_path);
-        std::istream infile(&inbuf);
-        while (infile)
-        {
-            std::getline(infile, line);
-            if (!line.empty() && line[0] != '#')
-            {
-                std::istringstream in(line);
-                std::string word;
-                in >> word;
-                if (word.empty())
-                {
-                  continue;
-                }
-                tolower(word);
-                if (is_prefix_of(word, "rule"))
-                {
-                    db->rules.push_back(Rule(line));
-                    continue_zone = false;
-                }
-                else if (is_prefix_of(word, "link"))
-                {
-                    db->links.push_back(time_zone_link(line));
-                    continue_zone = false;
-                }
-                else if (is_prefix_of(word, "leap"))
-                {
-                    db->leap_seconds.push_back(leap_second(line, detail::undocumented{}));
-                    continue_zone = false;
-                }
-                else if (is_prefix_of(word, "zone"))
-                {
-                    db->zones.push_back(time_zone(line, detail::undocumented{}));
-                    continue_zone = true;
-                }
-                else if (line[0] == '\t' && continue_zone)
-                {
-                    db->zones.back().add(line);
-                }
-                else if (word.size() > 0 && word[0] == '#')
-                {
-                    continue;
-                }
-                else
-                {
-                    std::cerr << line << '\n';
-                }
-            }
-        }
-    }
-    std::sort(db->rules.begin(), db->rules.end());
-    Rule::split_overlaps(db->rules);
-    std::sort(db->zones.begin(), db->zones.end());
-    db->zones.shrink_to_fit();
-    std::sort(db->links.begin(), db->links.end());
-    db->links.shrink_to_fit();
-    std::sort(db->leap_seconds.begin(), db->leap_seconds.end());
-    db->leap_seconds.shrink_to_fit();
-
-#ifdef _WIN32
-    std::string mapping_file = get_install() + folder_delimiter + "windowsZones.xml";
-    db->mappings = load_timezone_mappings_from_xml_file(mapping_file);
-    sort_zone_mappings(db->mappings);
-#endif // _WIN32
-
-    return db;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 const tzdb&
 reload_tzdb()
 {
-#if AUTO_DOWNLOAD
-    auto const& v = get_tzdb_list().front().version;
-    if (!v.empty() && v == remote_version())
-        return get_tzdb_list().front();
-#endif  // AUTO_DOWNLOAD
-    tzdb_list::undocumented_helper::push_front(get_tzdb_list(), init_tzdb().release());
-    return get_tzdb_list().front();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #endif  // !USE_OS_TZDB
@@ -3914,7 +2373,7 @@ reload_tzdb()
 const tzdb&
 get_tzdb()
 {
-    return get_tzdb_list().front();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 namespace {
@@ -3956,24 +2415,23 @@ inline
 recursion_limiter::restore_recursion_depth::restore_recursion_depth(recursion_limiter* rc)
                                                                                   noexcept
     : rc_{rc}
-{}
+{
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 inline
 constexpr
 recursion_limiter::recursion_limiter(unsigned limit) noexcept
     : limit_{limit}
 {
+    
 }
 
 inline
 recursion_limiter::restore_recursion_depth
 recursion_limiter::count()
 {
-    ++depth_;
-    if (depth_ > limit_)
-        throw std::runtime_error("recursion limit of " +
-                                  std::to_string(limit_) + " exceeded");
-    return restore_recursion_depth{this};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // unnamed namespace
@@ -3985,39 +2443,7 @@ tzdb::locate_zone(std::string_view tz_name) const
 tzdb::locate_zone(const std::string& tz_name) const
 #endif
 {
-    // If a link-to-link chain exceeds this limit, give up
-    thread_local recursion_limiter rc{10};
-    auto restore_count = rc.count();
-
-    auto zi = std::lower_bound(zones.begin(), zones.end(), tz_name,
-#if HAS_STRING_VIEW
-        [](const time_zone& z, const std::string_view& nm)
-#else
-        [](const time_zone& z, const std::string& nm)
-#endif
-        {
-            return z.name() < nm;
-        });
-    if (zi == zones.end() || zi->name() != tz_name)
-    {
-#if !USE_OS_TZDB
-        auto li = std::lower_bound(links.begin(), links.end(), tz_name,
-#if HAS_STRING_VIEW
-        [](const time_zone_link& z, const std::string_view& nm)
-#else
-        [](const time_zone_link& z, const std::string& nm)
-#endif
-        {
-            return z.name() < nm;
-        });
-        if (li != links.end() && li->name() == tz_name)
-        {
-            return locate_zone(li->target());
-        }
-#endif  // !USE_OS_TZDB
-        throw std::runtime_error(std::string(tz_name) + " not found in timezone database");
-    }
-    return &*zi;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 const time_zone*
@@ -4027,7 +2453,7 @@ locate_zone(std::string_view tz_name)
 locate_zone(const std::string& tz_name)
 #endif
 {
-    return get_tzdb().locate_zone(tz_name);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #if USE_OS_TZDB
@@ -4049,58 +2475,7 @@ operator<<(std::ostream& os, const tzdb& db)
 std::ostream&
 operator<<(std::ostream& os, const tzdb& db)
 {
-    os << "Version: " << db.version << '\n';
-    std::string title("--------------------------------------------"
-                      "--------------------------------------------\n"
-                      "Name           ""Start Y ""End Y   "
-                      "Beginning                              ""Offset  "
-                      "Designator\n"
-                      "--------------------------------------------"
-                      "--------------------------------------------\n");
-    int count = 0;
-    for (const auto& x : db.rules)
-    {
-        if (count++ % 50 == 0)
-            os << title;
-        os << x << '\n';
-    }
-    os << '\n';
-    title = std::string("---------------------------------------------------------"
-                        "--------------------------------------------------------\n"
-                        "Name                               ""Offset      "
-                        "Rule           ""Abrev      ""Until\n"
-                        "---------------------------------------------------------"
-                        "--------------------------------------------------------\n");
-    count = 0;
-    for (const auto& x : db.zones)
-    {
-        if (count++ % 10 == 0)
-            os << title;
-        os << x << '\n';
-    }
-    os << '\n';
-    title = std::string("---------------------------------------------------------"
-                        "--------------------------------------------------------\n"
-                        "Alias                                   ""To\n"
-                        "---------------------------------------------------------"
-                        "--------------------------------------------------------\n");
-    count = 0;
-    for (const auto& x : db.links)
-    {
-        if (count++ % 45 == 0)
-            os << title;
-        os << x << '\n';
-    }
-    os << '\n';
-    title = std::string("---------------------------------------------------------"
-                        "--------------------------------------------------------\n"
-                        "Leap second on\n"
-                        "---------------------------------------------------------"
-                        "--------------------------------------------------------\n");
-    os << title;
-    for (const auto& x : db.leap_seconds)
-        os << x << '\n';
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #endif  // !USE_OS_TZDB
@@ -4151,16 +2526,7 @@ static
 std::string_view
 extract_tz_name(char const* rp)
 {
-    using namespace std;
-    string_view result = rp;
-    CONSTDATA string_view zoneinfo = "zoneinfo";
-    size_t pos = result.rfind(zoneinfo);
-    if (pos == result.npos)
-        throw runtime_error(
-            "current_zone() failed to find \"zoneinfo\" in " + string(result));
-    pos = result.find('/', pos);
-    result.remove_prefix(pos + 1);
-    return result;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #else  // !HAS_STRING_VIEW
@@ -4187,180 +2553,13 @@ static
 bool
 sniff_realpath(const char* timezone)
 {
-    using namespace std;
-    unique_ptr<char, decltype(free) *> rp(realpath(timezone, nullptr), free);
-    if (rp.get() == nullptr)
-        throw system_error(errno, system_category(), "realpath() failed");
-    auto result = extract_tz_name(rp.get());
-    if (result.find("posix") == 0)
-        return false;
-    return result != "posixrules";
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 const time_zone*
 tzdb::current_zone() const
 {
-    // On some OS's a file called /etc/localtime may
-    // exist and it may be either a real file
-    // containing time zone details or a symlink to such a file.
-    // On MacOS and BSD Unix if this file is a symlink it
-    // might resolve to a path like this:
-    // "/usr/share/zoneinfo/America/Los_Angeles"
-    // If it does, we try to determine the current
-    // timezone from the remainder of the path by removing the prefix
-    // and hoping the rest resolves to a valid timezone.
-    // It may not always work though. If it doesn't then an
-    // exception will be thrown by local_timezone.
-    // The path may also take a relative form:
-    // "../usr/share/zoneinfo/America/Los_Angeles".
-    {
-        struct stat sb;
-        CONSTDATA auto timezone = "/etc/localtime";
-        if (lstat(timezone, &sb) == 0 && S_ISLNK(sb.st_mode) && sb.st_size > 0)
-        {
-            using namespace std;
-            static const bool use_realpath = sniff_realpath(timezone);
-            if (use_realpath)
-            {
-                unique_ptr<char, decltype(free) *> rp(realpath(timezone, nullptr), free);
-                if (rp.get() == nullptr)
-                    throw system_error(errno, system_category(), "realpath() failed");
-                return locate_zone(extract_tz_name(rp.get()));
-            }
-            else
-            {
-                // +1 because st_size doesn't include the '\0' terminator
-                const auto rp_size = sb.st_size + 1;
-                unique_ptr<char[]> rp(new char[rp_size]);
-                const auto rp_length = readlink(timezone, rp.get(), rp_size);
-                if (rp_length <= 0)
-                    throw system_error(errno, system_category(), "readlink() failed");
-                rp.get()[rp_length] = '\0'; // readlink doesn't null-terminate
-                return locate_zone(extract_tz_name(rp.get()));
-            }
-        }
-    }
-    // On embedded systems e.g. buildroot with uclibc the timezone is linked
-    // into /etc/TZ which is a symlink to path like this:
-    // "/usr/share/zoneinfo/uclibc/America/Los_Angeles"
-    // If it does, we try to determine the current
-    // timezone from the remainder of the path by removing the prefix
-    // and hoping the rest resolves to valid timezone.
-    // It may not always work though. If it doesn't then an
-    // exception will be thrown by local_timezone.
-    // The path may also take a relative form:
-    // "../usr/share/zoneinfo/uclibc/America/Los_Angeles".
-    {
-        struct stat sb;
-        CONSTDATA auto timezone = "/etc/TZ";
-        if (lstat(timezone, &sb) == 0 && S_ISLNK(sb.st_mode) && sb.st_size > 0) {
-            using namespace std;
-            string result;
-            unique_ptr<char[]> rp(new char[sb.st_size]);
-            const auto rp_length = readlink(timezone, rp.get(), sb.st_size);
-            if (rp_length > 0)
-                result = string(rp.get(), rp_length); // readlink doesn't null-terminate
-            else
-                throw system_error(errno, system_category(), "readlink() failed");
-
-            const size_t pos = result.find(get_tz_dir());
-            if (pos != result.npos)
-                result.erase(0, get_tz_dir().size() + 1 + pos);
-            return locate_zone(result);
-        }
-    }
-    {
-    // On some versions of some linux distro's (e.g. Ubuntu),
-    // the current timezone might be in the first line of
-    // the /etc/timezone file.
-        std::ifstream timezone_file("/etc/timezone");
-        if (timezone_file.is_open())
-        {
-            std::string result;
-            std::getline(timezone_file, result);
-            if (!result.empty())
-                return locate_zone(result);
-        }
-        // Fall through to try other means.
-    }
-    {
-    // On some versions of some bsd distro's (e.g. FreeBSD),
-    // the current timezone might be in the first line of
-    // the /var/db/zoneinfo file.
-        std::ifstream timezone_file("/var/db/zoneinfo");
-        if (timezone_file.is_open())
-        {
-            std::string result;
-            std::getline(timezone_file, result);
-            if (!result.empty())
-                return locate_zone(result);
-        }
-        // Fall through to try other means.
-    }
-    {
-    // On some versions of some bsd distro's (e.g. iOS),
-    // it is not possible to use file based approach,
-    // we switch to system API, calling functions in
-    // CoreFoundation framework.
-#if TARGET_OS_IPHONE
-        std::string result = date::iOSUtils::get_current_timezone();
-        if (!result.empty())
-            return locate_zone(result);
-#endif
-    // Fall through to try other means.
-    }
-    {
-    // On Android, it is not possible to use file based approach either,
-    // we have to ask the value of `persist.sys.timezone` system property
-#if defined(ANDROID) || defined(__ANDROID__)
-    char sys_timezone[PROP_VALUE_MAX];
-    if (__system_property_get("persist.sys.timezone", sys_timezone) > 0)
-    {
-        return locate_zone(sys_timezone);
-    }
-#endif // defined(ANDROID) || defined(__ANDROID__)
-    // Fall through to try other means.
-    }
-    {
-    // On some versions of some linux distro's (e.g. Red Hat),
-    // the current timezone might be in the first line of
-    // the /etc/sysconfig/clock file as:
-    // ZONE="US/Eastern"
-        std::ifstream timezone_file("/etc/sysconfig/clock");
-        std::string result;
-        while (timezone_file)
-        {
-            std::getline(timezone_file, result);
-            auto p = result.find("ZONE=\"");
-            if (p != std::string::npos)
-            {
-                result.erase(0, p+6);
-                result.erase(result.rfind('"'));
-                return locate_zone(result);
-            }
-        }
-        // Fall through to try other means.
-    }
-    // On OpenWRT we need to check /etc/config/system
-    // It will have a line with the following structure
-    //   ...
-    //   option zoneName 'Europe/Berlin'
-    //   ...
-    {
-        std::ifstream timezone_file("/etc/config/system");
-        if (timezone_file.is_open())
-        {
-            for(std::string result; std::getline(timezone_file, result);) {
-                std::string findStr = "option zoneName '";
-                size_t startPos = result.find(findStr);
-                if (startPos != std::string::npos) {
-                    size_t endPos = result.find("'", startPos + findStr.size());
-                    return locate_zone(result.substr(startPos + findStr.size(), endPos - startPos - findStr.size()));
-                }
-            }
-        }
-    }
-    throw std::runtime_error("Could not get current timezone");
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #endif  // !_WIN32
@@ -4368,7 +2567,7 @@ tzdb::current_zone() const
 const time_zone*
 current_zone()
 {
-    return get_tzdb().current_zone();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // namespace date

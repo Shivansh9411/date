@@ -1,3 +1,4 @@
+#include <cstdlib>
 #ifndef TZ_H
 #define TZ_H
 
@@ -173,12 +174,7 @@ template<class CharT, class Traits>
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const sys_info& r)
 {
-    os << r.begin << '\n';
-    os << r.end << '\n';
-    os << make_time(r.offset) << "\n";
-    os << make_time(r.save) << "\n";
-    os << r.abbrev << '\n';
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 struct local_info
@@ -192,17 +188,7 @@ template<class CharT, class Traits>
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const local_info& r)
 {
-    if (r.result == local_info::nonexistent)
-        os << "nonexistent between\n";
-    else if (r.result == local_info::ambiguous)
-        os << "ambiguous between\n";
-    os << r.first;
-    if (r.result != local_info::unique)
-    {
-        os << "and\n";
-        os << r.second;
-    }
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 class nonexistent_local_time
@@ -225,22 +211,14 @@ nonexistent_local_time::nonexistent_local_time(local_time<Duration> tp,
                                                const local_info& i)
     : std::runtime_error(make_msg(tp, i))
 {
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
 std::string
 nonexistent_local_time::make_msg(local_time<Duration> tp, const local_info& i)
 {
-    assert(i.result == local_info::nonexistent);
-    std::ostringstream os;
-    os << tp << " is in a gap between\n"
-       << local_seconds{i.first.end.time_since_epoch()} + i.first.offset << ' '
-       << i.first.abbrev << " and\n"
-       << local_seconds{i.second.begin.time_since_epoch()} + i.second.offset << ' '
-       << i.second.abbrev
-       << " which are both equivalent to\n";
-    date::operator<<(os, i.first.end) << " UTC";
-    return os.str();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 class ambiguous_local_time
@@ -262,20 +240,14 @@ inline
 ambiguous_local_time::ambiguous_local_time(local_time<Duration> tp, const local_info& i)
     : std::runtime_error(make_msg(tp, i))
 {
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
 std::string
 ambiguous_local_time::make_msg(local_time<Duration> tp, const local_info& i)
 {
-    assert(i.result == local_info::ambiguous);
-    std::ostringstream os;
-    os << tp << " is ambiguous.  It could be\n"
-       << tp << ' ' << i.first.abbrev << " == "
-       << tp - i.first.offset << " UTC or\n"
-       << tp << ' ' << i.second.abbrev  << " == "
-       << tp - i.second.offset  << " UTC";
-    return os.str();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 class time_zone;
@@ -300,8 +272,8 @@ struct zoned_traits<const time_zone*>
     const time_zone*
     default_zone()
     {
-        return date::locate_zone("Etc/UTC");
-    }
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 #if HAS_STRING_VIEW
 
@@ -309,8 +281,8 @@ struct zoned_traits<const time_zone*>
     const time_zone*
     locate_zone(std::string_view name)
     {
-        return date::locate_zone(name);
-    }
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 #else  // !HAS_STRING_VIEW
 
@@ -755,7 +727,7 @@ bool
 operator==(const zoned_time<Duration1, TimeZonePtr>& x,
            const zoned_time<Duration2, TimeZonePtr>& y)
 {
-    return x.zone_ == y.zone_ && x.tp_ == y.tp_;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration1, class Duration2, class TimeZonePtr>
@@ -764,7 +736,7 @@ bool
 operator!=(const zoned_time<Duration1, TimeZonePtr>& x,
            const zoned_time<Duration2, TimeZonePtr>& y)
 {
-    return !(x == y);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #if !defined(_MSC_VER) || (_MSC_VER >= 1900)
@@ -892,7 +864,7 @@ inline
 const std::string&
 time_zone::name() const NOEXCEPT
 {
-    return name_;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -900,7 +872,7 @@ inline
 sys_info
 time_zone::get_info(sys_time<Duration> st) const
 {
-    return get_info_impl(date::floor<std::chrono::seconds>(st));
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -908,7 +880,7 @@ inline
 local_info
 time_zone::get_info(local_time<Duration> tp) const
 {
-    return get_info_impl(date::floor<std::chrono::seconds>(tp));
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -916,7 +888,7 @@ inline
 sys_time<typename std::common_type<Duration, std::chrono::seconds>::type>
 time_zone::to_sys(local_time<Duration> tp) const
 {
-    return to_sys_impl(tp, choose{}, std::true_type{});
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -924,7 +896,7 @@ inline
 sys_time<typename std::common_type<Duration, std::chrono::seconds>::type>
 time_zone::to_sys(local_time<Duration> tp, choose z) const
 {
-    return to_sys_impl(tp, z, std::false_type{});
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -932,46 +904,41 @@ inline
 local_time<typename std::common_type<Duration, std::chrono::seconds>::type>
 time_zone::to_local(sys_time<Duration> tp) const
 {
-    using LT = local_time<typename std::common_type<Duration, std::chrono::seconds>::type>;
-    auto i = get_info(tp);
-    return LT{(tp + i.offset).time_since_epoch()};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
-inline bool operator==(const time_zone& x, const time_zone& y) NOEXCEPT {return x.name_ == y.name_;}
-inline bool operator< (const time_zone& x, const time_zone& y) NOEXCEPT {return x.name_ < y.name_;}
+inline bool operator==(const time_zone& x, const time_zone& y) NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator< (const time_zone& x, const time_zone& y) NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
-inline bool operator!=(const time_zone& x, const time_zone& y) NOEXCEPT {return !(x == y);}
-inline bool operator> (const time_zone& x, const time_zone& y) NOEXCEPT {return   y < x;}
-inline bool operator<=(const time_zone& x, const time_zone& y) NOEXCEPT {return !(y < x);}
-inline bool operator>=(const time_zone& x, const time_zone& y) NOEXCEPT {return !(x < y);}
+inline bool operator!=(const time_zone& x, const time_zone& y) NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator> (const time_zone& x, const time_zone& y) NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator<=(const time_zone& x, const time_zone& y) NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator>=(const time_zone& x, const time_zone& y) NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 template <class Duration>
 sys_time<typename std::common_type<Duration, std::chrono::seconds>::type>
 time_zone::to_sys_impl(local_time<Duration> tp, choose z, std::false_type) const
 {
-    auto i = get_info(tp);
-    if (i.result == local_info::nonexistent)
-    {
-        return i.first.end;
-    }
-    else if (i.result == local_info::ambiguous)
-    {
-        if (z == choose::latest)
-            return sys_time<Duration>{tp.time_since_epoch()} - i.second.offset;
-    }
-    return sys_time<Duration>{tp.time_since_epoch()} - i.first.offset;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
 sys_time<typename std::common_type<Duration, std::chrono::seconds>::type>
 time_zone::to_sys_impl(local_time<Duration> tp, choose, std::true_type) const
 {
-    auto i = get_info(tp);
-    if (i.result == local_info::nonexistent)
-        throw nonexistent_local_time(tp, i);
-    else if (i.result == local_info::ambiguous)
-        throw ambiguous_local_time(tp, i);
-    return sys_time<Duration>{tp.time_since_epoch()} - i.first.offset;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #if !USE_OS_TZDB
@@ -984,21 +951,37 @@ private:
 public:
     DATE_API explicit time_zone_link(const std::string& s);
 
-    const std::string& name() const {return name_;}
-    const std::string& target() const {return target_;}
+    const std::string& name() const {
+    __builtin_trap() /* STUB: not implemented */;
+}
+    const std::string& target() const {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
-    friend bool operator==(const time_zone_link& x, const time_zone_link& y) {return x.name_ == y.name_;}
-    friend bool operator< (const time_zone_link& x, const time_zone_link& y) {return x.name_ < y.name_;}
+    friend bool operator==(const time_zone_link& x, const time_zone_link& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+    friend bool operator< (const time_zone_link& x, const time_zone_link& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
     friend DATE_API std::ostream& operator<<(std::ostream& os, const time_zone_link& x);
 };
 
 using link = time_zone_link;
 
-inline bool operator!=(const time_zone_link& x, const time_zone_link& y) {return !(x == y);}
-inline bool operator> (const time_zone_link& x, const time_zone_link& y) {return   y < x;}
-inline bool operator<=(const time_zone_link& x, const time_zone_link& y) {return !(y < x);}
-inline bool operator>=(const time_zone_link& x, const time_zone_link& y) {return !(x < y);}
+inline bool operator!=(const time_zone_link& x, const time_zone_link& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator> (const time_zone_link& x, const time_zone_link& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator<=(const time_zone_link& x, const time_zone_link& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator>=(const time_zone_link& x, const time_zone_link& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 #endif  // !USE_OS_TZDB
 
@@ -1017,47 +1000,59 @@ public:
     constexpr sys_seconds date() const noexcept {return date_;}
     constexpr std::chrono::seconds value() const noexcept {return std::chrono::seconds{1};}
 
-    friend bool operator==(const leap_second& x, const leap_second& y) {return x.date_ == y.date_;}
-    friend bool operator< (const leap_second& x, const leap_second& y) {return x.date_ < y.date_;}
+    friend bool operator==(const leap_second& x, const leap_second& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+    friend bool operator< (const leap_second& x, const leap_second& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
     template <class Duration>
     friend
     bool
     operator==(const leap_second& x, const sys_time<Duration>& y)
     {
-        return x.date_ == y;
-    }
+    __builtin_trap() /* STUB: not implemented */;
+}
 
     template <class Duration>
     friend
     bool
     operator< (const leap_second& x, const sys_time<Duration>& y)
     {
-        return x.date_ < y;
-    }
+    __builtin_trap() /* STUB: not implemented */;
+}
 
     template <class Duration>
     friend
     bool
     operator< (const sys_time<Duration>& x, const leap_second& y)
     {
-        return x < y.date_;
-    }
+    __builtin_trap() /* STUB: not implemented */;
+}
 
     friend DATE_API std::ostream& operator<<(std::ostream& os, const leap_second& x);
 };
 
-inline bool operator!=(const leap_second& x, const leap_second& y) {return !(x == y);}
-inline bool operator> (const leap_second& x, const leap_second& y) {return   y < x;}
-inline bool operator<=(const leap_second& x, const leap_second& y) {return !(y < x);}
-inline bool operator>=(const leap_second& x, const leap_second& y) {return !(x < y);}
+inline bool operator!=(const leap_second& x, const leap_second& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator> (const leap_second& x, const leap_second& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator<=(const leap_second& x, const leap_second& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline bool operator>=(const leap_second& x, const leap_second& y) {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 template <class Duration>
 inline
 bool
 operator==(const sys_time<Duration>& x, const leap_second& y)
 {
-    return y == x;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -1065,7 +1060,7 @@ inline
 bool
 operator!=(const leap_second& x, const sys_time<Duration>& y)
 {
-    return !(x == y);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -1073,7 +1068,7 @@ inline
 bool
 operator!=(const sys_time<Duration>& x, const leap_second& y)
 {
-    return !(x == y);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -1081,7 +1076,7 @@ inline
 bool
 operator> (const leap_second& x, const sys_time<Duration>& y)
 {
-    return y < x;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -1089,7 +1084,7 @@ inline
 bool
 operator> (const sys_time<Duration>& x, const leap_second& y)
 {
-    return y < x;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -1097,7 +1092,7 @@ inline
 bool
 operator<=(const leap_second& x, const sys_time<Duration>& y)
 {
-    return !(y < x);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -1105,7 +1100,7 @@ inline
 bool
 operator<=(const sys_time<Duration>& x, const leap_second& y)
 {
-    return !(y < x);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -1113,7 +1108,7 @@ inline
 bool
 operator>=(const leap_second& x, const sys_time<Duration>& y)
 {
-    return !(x < y);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -1121,7 +1116,7 @@ inline
 bool
 operator>=(const sys_time<Duration>& x, const leap_second& y)
 {
-    return !(x < y);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 using leap = leap_second;
@@ -1230,8 +1225,12 @@ public:
     tzdb_list() = default;
     DATE_API tzdb_list(tzdb_list&& x) NOEXCEPT;
 
-    const tzdb& front() const NOEXCEPT {return *head_;}
-          tzdb& front()       NOEXCEPT {return *head_;}
+    const tzdb& front() const NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
+          tzdb& front()       NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
     class const_iterator;
 
@@ -1252,7 +1251,9 @@ class tzdb_list::const_iterator
 {
     tzdb* p_ = nullptr;
 
-    explicit const_iterator(tzdb* p) NOEXCEPT : p_{p} {}
+    explicit const_iterator(tzdb* p) NOEXCEPT : p_{p} {
+    __builtin_trap() /* STUB: not implemented */;
+}
 public:
     const_iterator() = default;
 
@@ -1262,21 +1263,33 @@ public:
     using pointer           = const value_type*;
     using difference_type   = std::ptrdiff_t;
 
-    reference operator*() const NOEXCEPT {return *p_;}
-    pointer  operator->() const NOEXCEPT {return p_;}
+    reference operator*() const NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
+    pointer  operator->() const NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
-    const_iterator& operator++() NOEXCEPT {p_ = p_->next; return *this;}
-    const_iterator  operator++(int) NOEXCEPT {auto t = *this; ++(*this); return t;}
+    const_iterator& operator++() NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
+    const_iterator  operator++(int) NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
     friend
     bool
     operator==(const const_iterator& x, const const_iterator& y) NOEXCEPT
-        {return x.p_ == y.p_;}
+        {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
     friend
     bool
     operator!=(const const_iterator& x, const const_iterator& y) NOEXCEPT
-        {return !(x == y);}
+        {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
     friend class tzdb_list;
 };
@@ -1285,28 +1298,28 @@ inline
 tzdb_list::const_iterator
 tzdb_list::begin() const NOEXCEPT
 {
-    return const_iterator{head_};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 tzdb_list::const_iterator
 tzdb_list::end() const NOEXCEPT
 {
-    return const_iterator{nullptr};
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 tzdb_list::const_iterator
 tzdb_list::cbegin() const NOEXCEPT
 {
-    return begin();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 tzdb_list::const_iterator
 tzdb_list::cend() const NOEXCEPT
 {
-    return end();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 DATE_API tzdb_list& get_tzdb_list();
@@ -1337,7 +1350,7 @@ inline
 T*
 to_raw_pointer(T* p) NOEXCEPT
 {
-    return p;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Pointer>
@@ -1346,7 +1359,7 @@ auto
 to_raw_pointer(Pointer p) NOEXCEPT
     -> decltype(detail::to_raw_pointer(p.operator->()))
 {
-    return detail::to_raw_pointer(p.operator->());
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // namespace detail
@@ -1357,10 +1370,7 @@ inline
 TimeZonePtr2&&
 zoned_time<Duration, TimeZonePtr>::check(TimeZonePtr2&& p)
 {
-    if (detail::to_raw_pointer(p) == nullptr)
-        throw std::runtime_error(
-            "zoned_time constructed with a time zone pointer == nullptr");
-    return std::forward<TimeZonePtr2>(p);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration, class TimeZonePtr>
@@ -1370,7 +1380,9 @@ template <class T, class>
 inline
 zoned_time<Duration, TimeZonePtr>::zoned_time()
     : zone_(check(zoned_traits<TimeZonePtr>::default_zone()))
-    {}
+    {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 template <class Duration, class TimeZonePtr>
 #if !defined(_MSC_VER) || (_MSC_VER > 1916)
@@ -1380,13 +1392,17 @@ inline
 zoned_time<Duration, TimeZonePtr>::zoned_time(const sys_time<Duration>& st)
     : zone_(check(zoned_traits<TimeZonePtr>::default_zone()))
     , tp_(st)
-    {}
+    {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 template <class Duration, class TimeZonePtr>
 inline
 zoned_time<Duration, TimeZonePtr>::zoned_time(TimeZonePtr z)
     : zone_(check(std::move(z)))
-    {}
+    {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 #if HAS_STRING_VIEW
 
@@ -1395,7 +1411,9 @@ template <class T, class>
 inline
 zoned_time<Duration, TimeZonePtr>::zoned_time(std::string_view name)
     : zoned_time(zoned_traits<TimeZonePtr>::locate_zone(name))
-    {}
+    {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 #else  // !HAS_STRING_VIEW
 
@@ -1416,14 +1434,18 @@ inline
 zoned_time<Duration, TimeZonePtr>::zoned_time(const zoned_time<Duration2, TimeZonePtr>& zt) NOEXCEPT
     : zone_(zt.zone_)
     , tp_(zt.tp_)
-    {}
+    {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 template <class Duration, class TimeZonePtr>
 inline
 zoned_time<Duration, TimeZonePtr>::zoned_time(TimeZonePtr z, const sys_time<Duration>& st)
     : zone_(check(std::move(z)))
     , tp_(st)
-    {}
+    {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 template <class Duration, class TimeZonePtr>
 #if !defined(_MSC_VER) || (_MSC_VER > 1916)
@@ -1433,7 +1455,9 @@ inline
 zoned_time<Duration, TimeZonePtr>::zoned_time(TimeZonePtr z, const local_time<Duration>& t)
     : zone_(check(std::move(z)))
     , tp_(zone_->to_sys(t))
-    {}
+    {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 template <class Duration, class TimeZonePtr>
 #if !defined(_MSC_VER) || (_MSC_VER > 1916)
@@ -1444,7 +1468,9 @@ zoned_time<Duration, TimeZonePtr>::zoned_time(TimeZonePtr z, const local_time<Du
                                               choose c)
     : zone_(check(std::move(z)))
     , tp_(zone_->to_sys(t, c))
-    {}
+    {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 template <class Duration, class TimeZonePtr>
 template <class Duration2, class TimeZonePtr2, class>
@@ -1453,7 +1479,9 @@ zoned_time<Duration, TimeZonePtr>::zoned_time(TimeZonePtr z,
                                               const zoned_time<Duration2, TimeZonePtr2>& zt)
     : zone_(check(std::move(z)))
     , tp_(zt.tp_)
-    {}
+    {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 template <class Duration, class TimeZonePtr>
 template <class Duration2, class TimeZonePtr2, class>
@@ -1461,7 +1489,9 @@ inline
 zoned_time<Duration, TimeZonePtr>::zoned_time(TimeZonePtr z,
                                       const zoned_time<Duration2, TimeZonePtr2>& zt, choose)
     : zoned_time(std::move(z), zt)
-    {}
+    {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 #if HAS_STRING_VIEW
 
@@ -1471,7 +1501,9 @@ inline
 zoned_time<Duration, TimeZonePtr>::zoned_time(std::string_view name,
                                               detail::nodeduct_t<const sys_time<Duration>&> st)
     : zoned_time(zoned_traits<TimeZonePtr>::locate_zone(name), st)
-    {}
+    {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 template <class Duration, class TimeZonePtr>
 template <class T, class>
@@ -1479,7 +1511,9 @@ inline
 zoned_time<Duration, TimeZonePtr>::zoned_time(std::string_view name,
                                               detail::nodeduct_t<const local_time<Duration>&> t)
     : zoned_time(zoned_traits<TimeZonePtr>::locate_zone(name), t)
-    {}
+    {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 template <class Duration, class TimeZonePtr>
 template <class T, class>
@@ -1487,7 +1521,9 @@ inline
 zoned_time<Duration, TimeZonePtr>::zoned_time(std::string_view name,
                                               detail::nodeduct_t<const local_time<Duration>&> t, choose c)
     : zoned_time(zoned_traits<TimeZonePtr>::locate_zone(name), t, c)
-    {}
+    {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 template <class Duration, class TimeZonePtr>
 template <class Duration2, class TimeZonePtr2, class, class>
@@ -1495,7 +1531,9 @@ inline
 zoned_time<Duration, TimeZonePtr>::zoned_time(std::string_view name,
                                               const zoned_time<Duration2, TimeZonePtr2>& zt)
     : zoned_time(zoned_traits<TimeZonePtr>::locate_zone(name), zt)
-    {}
+    {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 template <class Duration, class TimeZonePtr>
 template <class Duration2, class TimeZonePtr2, class, class>
@@ -1504,7 +1542,9 @@ zoned_time<Duration, TimeZonePtr>::zoned_time(std::string_view name,
                                               const zoned_time<Duration2, TimeZonePtr2>& zt,
                                               choose c)
     : zoned_time(zoned_traits<TimeZonePtr>::locate_zone(name), zt, c)
-    {}
+    {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 #else  // !HAS_STRING_VIEW
 
@@ -1625,8 +1665,7 @@ inline
 zoned_time<Duration, TimeZonePtr>&
 zoned_time<Duration, TimeZonePtr>::operator=(const sys_time<Duration>& st)
 {
-    tp_ = st;
-    return *this;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration, class TimeZonePtr>
@@ -1634,8 +1673,7 @@ inline
 zoned_time<Duration, TimeZonePtr>&
 zoned_time<Duration, TimeZonePtr>::operator=(const local_time<Duration>& ut)
 {
-    tp_ = zone_->to_sys(ut);
-    return *this;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration, class TimeZonePtr>
@@ -2710,7 +2748,7 @@ inline
 sys_time<typename std::common_type<Duration, std::chrono::seconds>::type>
 to_sys_time(const utc_time<Duration>& t)
 {
-    return utc_clock::to_sys(t);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -2718,7 +2756,7 @@ inline
 sys_time<typename std::common_type<Duration, std::chrono::seconds>::type>
 to_sys_time(const tai_time<Duration>& t)
 {
-    return utc_clock::to_sys(tai_clock::to_utc(t));
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -2726,7 +2764,7 @@ inline
 sys_time<typename std::common_type<Duration, std::chrono::seconds>::type>
 to_sys_time(const gps_time<Duration>& t)
 {
-    return utc_clock::to_sys(gps_clock::to_utc(t));
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 
@@ -2735,7 +2773,7 @@ inline
 utc_time<typename std::common_type<Duration, std::chrono::seconds>::type>
 to_utc_time(const sys_time<Duration>& t)
 {
-    return utc_clock::from_sys(t);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -2743,7 +2781,7 @@ inline
 utc_time<typename std::common_type<Duration, std::chrono::seconds>::type>
 to_utc_time(const tai_time<Duration>& t)
 {
-    return tai_clock::to_utc(t);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -2751,7 +2789,7 @@ inline
 utc_time<typename std::common_type<Duration, std::chrono::seconds>::type>
 to_utc_time(const gps_time<Duration>& t)
 {
-    return gps_clock::to_utc(t);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 
@@ -2760,7 +2798,7 @@ inline
 tai_time<typename std::common_type<Duration, std::chrono::seconds>::type>
 to_tai_time(const sys_time<Duration>& t)
 {
-    return tai_clock::from_utc(utc_clock::from_sys(t));
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -2768,7 +2806,7 @@ inline
 tai_time<typename std::common_type<Duration, std::chrono::seconds>::type>
 to_tai_time(const utc_time<Duration>& t)
 {
-    return tai_clock::from_utc(t);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -2776,7 +2814,7 @@ inline
 tai_time<typename std::common_type<Duration, std::chrono::seconds>::type>
 to_tai_time(const gps_time<Duration>& t)
 {
-    return tai_clock::from_utc(gps_clock::to_utc(t));
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 
@@ -2785,7 +2823,7 @@ inline
 gps_time<typename std::common_type<Duration, std::chrono::seconds>::type>
 to_gps_time(const sys_time<Duration>& t)
 {
-    return gps_clock::from_utc(utc_clock::from_sys(t));
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -2793,7 +2831,7 @@ inline
 gps_time<typename std::common_type<Duration, std::chrono::seconds>::type>
 to_gps_time(const utc_time<Duration>& t)
 {
-    return gps_clock::from_utc(t);
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 template <class Duration>
@@ -2801,7 +2839,7 @@ inline
 gps_time<typename std::common_type<Duration, std::chrono::seconds>::type>
 to_gps_time(const tai_time<Duration>& t)
 {
-    return gps_clock::from_utc(tai_clock::to_utc(t));
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 }  // namespace date

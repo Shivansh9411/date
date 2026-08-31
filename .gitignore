@@ -192,3 +192,5 @@ nbproject/*
 *.cd
 a.out
 cmake-build-debug/*
+
+compile_commands.json

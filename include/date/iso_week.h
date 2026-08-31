@@ -1,3 +1,5 @@
+#include <stdexcept>
+#include <cstdlib>
 #ifndef ISO_WEEK_H
 #define ISO_WEEK_H
 
@@ -448,45 +450,59 @@ CONSTCD11
 inline
 weekday::weekday(unsigned wd) NOEXCEPT
     : wd_(static_cast<decltype(wd_)>(wd))
-    {}
+    {
+    
+}
 
 CONSTCD11
 inline
 weekday::weekday(date::weekday wd) NOEXCEPT
     : wd_(wd.iso_encoding())
-    {}
+    {
+    
+}
 
 CONSTCD11
 inline
 weekday::weekday(const sys_days& dp) NOEXCEPT
     : wd_(weekday_from_days(dp.time_since_epoch().count()))
-    {}
+    {
+    
+}
 
 CONSTCD11
 inline
 weekday::weekday(const local_days& dp) NOEXCEPT
     : wd_(weekday_from_days(dp.time_since_epoch().count()))
-    {}
+    {
+    
+}
 
-inline weekday& weekday::operator++() NOEXCEPT {if (++wd_ == 8) wd_ = 1; return *this;}
-inline weekday weekday::operator++(int) NOEXCEPT {auto tmp(*this); ++(*this); return tmp;}
-inline weekday& weekday::operator--() NOEXCEPT {if (wd_-- == 1) wd_ = 7; return *this;}
-inline weekday weekday::operator--(int) NOEXCEPT {auto tmp(*this); --(*this); return tmp;}
+inline weekday& weekday::operator++() NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline weekday weekday::operator++(int) NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline weekday& weekday::operator--() NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline weekday weekday::operator--(int) NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 inline
 weekday&
 weekday::operator+=(const days& d) NOEXCEPT
 {
-    *this = *this + d;
-    return *this;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 weekday&
 weekday::operator-=(const days& d) NOEXCEPT
 {
-    *this = *this - d;
-    return *this;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 CONSTCD11
@@ -561,45 +577,32 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const weekday& wd)
 {
-    switch (static_cast<unsigned>(wd))
-    {
-    case 7:
-        os << "Sun";
-        break;
-    case 1:
-        os << "Mon";
-        break;
-    case 2:
-        os << "Tue";
-        break;
-    case 3:
-        os << "Wed";
-        break;
-    case 4:
-        os << "Thu";
-        break;
-    case 5:
-        os << "Fri";
-        break;
-    case 6:
-        os << "Sat";
-        break;
-    default:
-        os << static_cast<unsigned>(wd) << " is not a valid weekday";
-        break;
-    }
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // year
 
-CONSTCD11 inline year::year(int y) NOEXCEPT : y_(static_cast<decltype(y_)>(y)) {}
-inline year& year::operator++() NOEXCEPT {++y_; return *this;}
-inline year year::operator++(int) NOEXCEPT {auto tmp(*this); ++(*this); return tmp;}
-inline year& year::operator--() NOEXCEPT {--y_; return *this;}
-inline year year::operator--(int) NOEXCEPT {auto tmp(*this); --(*this); return tmp;}
-inline year& year::operator+=(const years& y) NOEXCEPT {*this = *this + y; return *this;}
-inline year& year::operator-=(const years& y) NOEXCEPT {*this = *this - y; return *this;}
+CONSTCD11 inline year::year(int y) NOEXCEPT : y_(static_cast<decltype(y_)>(y)) {
+    
+}
+inline year& year::operator++() NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline year year::operator++(int) NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline year& year::operator--() NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline year year::operator--(int) NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline year& year::operator+=(const years& y) NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline year& year::operator-=(const years& y) NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 CONSTCD14
 inline
@@ -732,12 +735,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const year& y)
 {
-    date::detail::save_ostream<CharT, Traits> _(os);
-    os.fill('0');
-    os.flags(std::ios::dec | std::ios::internal);
-    os.width(4 + (y < year{0}));
-    os << static_cast<int>(y);
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 #if !defined(_MSC_VER) || (_MSC_VER >= 1900)
@@ -782,27 +780,35 @@ CONSTCD11
 inline
 weeknum::weeknum(unsigned wn) NOEXCEPT
     : wn_(static_cast<decltype(wn_)>(wn))
-    {}
+    {
+    
+}
 
-inline weeknum& weeknum::operator++() NOEXCEPT {++wn_; return *this;}
-inline weeknum weeknum::operator++(int) NOEXCEPT {auto tmp(*this); ++(*this); return tmp;}
-inline weeknum& weeknum::operator--() NOEXCEPT {--wn_; return *this;}
-inline weeknum weeknum::operator--(int) NOEXCEPT {auto tmp(*this); --(*this); return tmp;}
+inline weeknum& weeknum::operator++() NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline weeknum weeknum::operator++(int) NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline weeknum& weeknum::operator--() NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
+inline weeknum weeknum::operator--(int) NOEXCEPT {
+    __builtin_trap() /* STUB: not implemented */;
+}
 
 inline
 weeknum&
 weeknum::operator+=(const weeks& y) NOEXCEPT
 {
-    *this = *this + y;
-    return *this;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 weeknum&
 weeknum::operator-=(const weeks& y) NOEXCEPT
 {
-    *this = *this - y;
-    return *this;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 CONSTCD11 inline weeknum::operator unsigned() const NOEXCEPT {return wn_;}
@@ -894,13 +900,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const weeknum& wn)
 {
-    date::detail::save_ostream<CharT, Traits> _(os);
-    os << 'W';
-    os.fill('0');
-    os.flags(std::ios::dec | std::ios::right);
-    os.width(2);
-    os << static_cast<unsigned>(wn);
-    return os;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // year_weeknum
@@ -910,7 +910,9 @@ inline
 year_weeknum::year_weeknum(const iso_week::year& y, const iso_week::weeknum& wn) NOEXCEPT
     : y_(y)
     , wn_(wn)
-    {}
+    {
+    
+}
 
 CONSTCD11 inline year year_weeknum::year() const NOEXCEPT {return y_;}
 CONSTCD11 inline weeknum year_weeknum::weeknum() const NOEXCEPT {return wn_;}
@@ -923,16 +925,14 @@ inline
 year_weeknum&
 year_weeknum::operator+=(const years& dy) NOEXCEPT
 {
-    *this = *this + dy;
-    return *this;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 year_weeknum&
 year_weeknum::operator-=(const years& dy) NOEXCEPT
 {
-    *this = *this - dy;
-    return *this;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 CONSTCD11
@@ -1014,7 +1014,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const year_weeknum& ywn)
 {
-    return os << ywn.year() << '-' << ywn.weeknum();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 
@@ -1024,7 +1024,9 @@ CONSTCD11
 inline
 year_lastweek::year_lastweek(const iso_week::year& y) NOEXCEPT
     : y_(y)
-    {}
+    {
+    
+}
 
 CONSTCD11 inline year year_lastweek::year() const NOEXCEPT {return y_;}
 
@@ -1042,16 +1044,14 @@ inline
 year_lastweek&
 year_lastweek::operator+=(const years& dy) NOEXCEPT
 {
-    *this = *this + dy;
-    return *this;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 year_lastweek&
 year_lastweek::operator-=(const years& dy) NOEXCEPT
 {
-    *this = *this - dy;
-    return *this;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 CONSTCD11
@@ -1131,7 +1131,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const year_lastweek& ywn)
 {
-    return os << ywn.year() << "-W last";
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // weeknum_weekday
@@ -1142,7 +1142,9 @@ weeknum_weekday::weeknum_weekday(const iso_week::weeknum& wn,
                                  const iso_week::weekday& wd) NOEXCEPT
     : wn_(wn)
     , wd_(wd)
-    {}
+    {
+    
+}
 
 CONSTCD11 inline weeknum weeknum_weekday::weeknum() const NOEXCEPT {return wn_;}
 CONSTCD11 inline weekday weeknum_weekday::weekday() const NOEXCEPT {return wd_;}
@@ -1210,7 +1212,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const weeknum_weekday& md)
 {
-    return os << md.weeknum() << '-' << md.weekday();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // lastweek_weekday
@@ -1219,7 +1221,9 @@ CONSTCD11
 inline
 lastweek_weekday::lastweek_weekday(const iso_week::weekday& wd) NOEXCEPT
     : wd_(wd)
-    {}
+    {
+    
+}
 
 CONSTCD11 inline weekday lastweek_weekday::weekday() const NOEXCEPT {return wd_;}
 
@@ -1284,7 +1288,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const lastweek_weekday& md)
 {
-    return os << "W last-" << md.weekday();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // year_lastweek_weekday
@@ -1295,22 +1299,22 @@ year_lastweek_weekday::year_lastweek_weekday(const iso_week::year& y,
                                              const iso_week::weekday& wd) NOEXCEPT
     : y_(y)
     , wd_(wd)
-    {}
+    {
+    
+}
 
 inline
 year_lastweek_weekday&
 year_lastweek_weekday::operator+=(const years& y) NOEXCEPT
 {
-    *this = *this + y;
-    return *this;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 year_lastweek_weekday&
 year_lastweek_weekday::operator-=(const years& y) NOEXCEPT
 {
-    *this = *this - y;
-    return *this;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 CONSTCD11 inline year year_lastweek_weekday::year() const NOEXCEPT {return y_;}
@@ -1428,7 +1432,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const year_lastweek_weekday& ywnwd)
 {
-    return os << ywnwd.year() << "-W last-" << ywnwd.weekday();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // year_weeknum_weekday
@@ -1441,7 +1445,9 @@ year_weeknum_weekday::year_weeknum_weekday(const iso_week::year& y,
     : y_(y)
     , wn_(wn)
     , wd_(wd)
-    {}
+    {
+    
+}
 
 CONSTCD14
 inline
@@ -1449,34 +1455,38 @@ year_weeknum_weekday::year_weeknum_weekday(const year_lastweek_weekday& ylwwd) N
     : y_(ylwwd.year())
     , wn_(ylwwd.weeknum())
     , wd_(ylwwd.weekday())
-    {}
+    {
+    
+}
 
 CONSTCD14
 inline
 year_weeknum_weekday::year_weeknum_weekday(const sys_days& dp) NOEXCEPT
     : year_weeknum_weekday(from_days(dp.time_since_epoch()))
-    {}
+    {
+    
+}
 
 CONSTCD14
 inline
 year_weeknum_weekday::year_weeknum_weekday(const local_days& dp) NOEXCEPT
     : year_weeknum_weekday(from_days(dp.time_since_epoch()))
-    {}
+    {
+    
+}
 
 inline
 year_weeknum_weekday&
 year_weeknum_weekday::operator+=(const years& y) NOEXCEPT
 {
-    *this = *this + y;
-    return *this;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 inline
 year_weeknum_weekday&
 year_weeknum_weekday::operator-=(const years& y) NOEXCEPT
 {
-    *this = *this - y;
-    return *this;
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 CONSTCD11 inline year year_weeknum_weekday::year() const NOEXCEPT {return y_;}
@@ -1607,7 +1617,7 @@ inline
 std::basic_ostream<CharT, Traits>&
 operator<<(std::basic_ostream<CharT, Traits>& os, const year_weeknum_weekday& ywnwd)
 {
-    return os << ywnwd.year() << '-' << ywnwd.weeknum() << '-' << ywnwd.weekday();
+    __builtin_trap() /* STUB: not implemented */;
 }
 
 // date composition operators
